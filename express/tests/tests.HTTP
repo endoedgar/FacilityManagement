@@ -1,6 +1,7 @@
-GET http://localhost:4000/users
+GET http://localhost:4000/api/v1/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyIkX18iOnsic3RyaWN0TW9kZSI6dHJ1ZSwic2VsZWN0ZWQiOnt9LCJnZXR0ZXJzIjp7fSwiX2lkIjoiNWU2YWIwNDIyMzFiYzgyNjMxMzg1MGIzIiwid2FzUG9wdWxhdGVkIjpmYWxzZSwiYWN0aXZlUGF0aHMiOnsicGF0aHMiOnsicGFzc3dvcmQiOiJpbml0IiwiX2lkIjoiaW5pdCIsIm5hbWUiOiJpbml0IiwidXNlcm5hbWUiOiJpbml0IiwiYWRtaW4iOiJpbml0IiwiX192IjoiaW5pdCJ9LCJzdGF0ZXMiOnsiaWdub3JlIjp7fSwiZGVmYXVsdCI6e30sImluaXQiOnsiX2lkIjp0cnVlLCJuYW1lIjp0cnVlLCJ1c2VybmFtZSI6dHJ1ZSwicGFzc3dvcmQiOnRydWUsImFkbWluIjp0cnVlLCJfX3YiOnRydWV9LCJtb2RpZnkiOnt9LCJyZXF1aXJlIjp7fX0sInN0YXRlTmFtZXMiOlsicmVxdWlyZSIsIm1vZGlmeSIsImluaXQiLCJkZWZhdWx0IiwiaWdub3JlIl19LCJwYXRoc1RvU2NvcGVzIjp7fSwiY2FjaGVkUmVxdWlyZWQiOnt9LCIkc2V0Q2FsbGVkIjp7fSwiZW1pdHRlciI6eyJfZXZlbnRzIjp7fSwiX2V2ZW50c0NvdW50IjowLCJfbWF4TGlzdGVuZXJzIjowfSwiJG9wdGlvbnMiOnsic2tpcElkIjp0cnVlLCJpc05ldyI6ZmFsc2UsIndpbGxJbml0Ijp0cnVlfX0sImlzTmV3IjpmYWxzZSwiX2RvYyI6eyJfaWQiOiI1ZTZhYjA0MjIzMWJjODI2MzEzODUwYjMiLCJuYW1lIjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIiwicGFzc3dvcmQiOiJhZG1pbiIsImFkbWluIjp0cnVlLCJfX3YiOjB9LCIkbG9jYWxzIjp7fSwiJG9wIjpudWxsLCIkaW5pdCI6dHJ1ZSwiaWF0IjoxNTg0MDU1OTc1fQ.X7rAFuspalVdhWZxrSmqh8ou0scBtxxgCEJXhwbigr0
 ###
-POST http://localhost:4000/users
+POST http://localhost:4000/api/v1/users
 Content-Type: application/json
 
 {
@@ -8,10 +9,10 @@ Content-Type: application/json
     "password": "helloworld"
 }
 ###
-POST http://localhost:4000/login/
+POST http://localhost:4000/api/v1/login
 Content-Type: application/json
 
 {
-    "name": "helloWorld",
-    "password": "helloworld"
+    "username": "admin",
+    "password": "admin"
 }

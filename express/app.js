@@ -1,6 +1,6 @@
 const express = require('express');
 
-const cfg = require('./config.json');
+const { apiPath, port } = require('./config.json');
 
 const app = express();
 
@@ -13,14 +13,14 @@ async function main() {
     try {
         await db.connect();
         
-        app.use('/users', userRouter);
-        app.use('/login', loginRouter);
+        app.use(`${apiPath}/users`, userRouter);
+        app.use(`${apiPath}/login`, loginRouter);
 
         app.use(logErrors);
         app.use(handleRequestErrors);
         app.use(handleErrors);
 
-        app.listen(cfg, _ => console.log(`Listening on port ${cfg.port}`));
+        app.listen(port, _ => console.log(`Listening on port ${port}`));
     } catch(err) {
         console.error(err);
     }
