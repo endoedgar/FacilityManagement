@@ -6,11 +6,8 @@ const { accessTokenSecret } = require('../config.json');
 const User = require('../schemas/user');
 const router = Router();
 
-router.post("/", json(), (req, res) => {
-    const {username, password} = req.body;
-
-    console.log("trying")
-    const user = User.findOne({username, password})
+router.post("/", json(), async(req, res) => {
+    const user = await User.findOne(req.body);
 
     if(user) {
         const {password, ...userObject} = user;
