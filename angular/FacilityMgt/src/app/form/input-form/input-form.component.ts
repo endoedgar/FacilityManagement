@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-input-form',
@@ -6,8 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./input-form.component.scss']
 })
 export class InputFormComponent implements OnInit {
+ 
+  control: FormControl;
+  control1: FormControl;
 
-  constructor() { }
+  constructor(private fb: FormBuilder) {
+    this.control = fb.control({value: 'my val', disabled: false});
+  }
 
   ngOnInit(): void {
   }

@@ -1,15 +1,14 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
-import { MatSliderModule } from '@angular/material/slider';
 import { AppComponent } from "./app.component";
-import { GeoMapModule } from "./geo-map/geo-map.module";
 
 import { AppRoutingModule, routingComponents } from "./app-routing.module";
+import { BodyModule } from './body/body.module';
 
 
 @NgModule({
   declarations: [AppComponent, routingComponents],
-  imports: [ BrowserModule, MatSliderModule, GeoMapModule, AppRoutingModule],
+  imports: [BrowserModule, AppRoutingModule, BodyModule],
   providers: [],
   bootstrap: [AppComponent]
 })
