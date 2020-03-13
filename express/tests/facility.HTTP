@@ -1,0 +1,31 @@
+GET http://localhost:4000/api/v1/facilities
+
+###
+
+GET http://localhost:4000/api/v1/facilities/5e6b22cd1f2e2101ee32b0a
+
+###
+
+POST  http://localhost:4000/api/v1/facilities/
+Content-Type: application/json
+
+{
+    "name": "Waterworks Park",
+    "type": "Park",
+    "location": [1234, 5678]
+}
+
+###
+
+PATCH http://localhost:4000/api/v1/facilities/5e6ba22cd1f2e2101ee32b0a
+Content-Type: application/json
+
+{
+    "name": "Hildenbrand Hall",
+    "type": "Dorm",
+    "location": [4321, 1234]
+}
+
+###
+
+DELETE  http://localhost:4000/api/v1/facilities/5e6ba4b4ccf48f132d0f66fa
