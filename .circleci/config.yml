@@ -1,54 +1,21 @@
 version: 2.1
-attach_workspace: &attach_workspace
-  attach_workspace:
-    at: ~/working-dir/workspace
-executors:
-  node_executor:
-    docker:
-      - image: circleci/node:latest
-      - image: circleci/mongo:latest
-        port: 27017:27017
-        environment:
-          MONGODB_USERNAME: "test"
-          MONGODB_PASSWORD: "test"
-    working_directory: ~/working-dir
-commands:
-  test_express:
-    description: "A command that tests express."
-    steps:
-      - *attach_workspace
-      - restore_cache:
-          keys:
-            - v1-dependencies-express {{ checksum "workspace/express/package-lock.json" }}
-      - run: |
-          cd workspace/express
-          npm install
-      - save_cache:
-          paths:
-            - workspace/express/node_modules
-          key: v1-dependencies-maven {{ checksum "workspace/express/package-lock.json" }}
-      - run: |
-          cd workspace/express
-          npm test
+orbs:
+  node: circleci/node@1.1.6
 jobs:
-  checkout_code:
-    executor: node_executor
+  build-and-test:
+    executor:
+      name: node/default
     steps:
-      - checkout:
-          path: workspace/repo
-      - persist_to_workspace:
-          root: workspace
-          paths:
-            - repo
-  test:
-    executor: node_executor
-    steps:
-      - test_express
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: |
+              cd workspace/express
+              npm install
+            - run: |
+              cd workspace/express
+              npm test
 workflows:
-  version: 2
-  main:
-    jobs:
-      - checkout_code
-      - test:
-          requires:
-            - checkout_code
+    build-and-test:
+      jobs:
+        - build-and-test
