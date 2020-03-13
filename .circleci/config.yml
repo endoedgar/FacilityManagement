@@ -19,6 +19,8 @@ commands:
       - restore_cache:
           keys:
             - v1-dependencies-express {{ checksum "workspace/express/package-lock.json" }}
+      - run: apt-get install tree
+      - run: tree
       - run: |
           cd workspace/express
           npm install
