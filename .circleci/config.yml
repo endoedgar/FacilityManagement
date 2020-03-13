@@ -12,6 +12,8 @@ jobs:
       - node/with-cache:
           steps:
             - run: npm install
+            - run: |
+              echo '{"port": 4000, "mongoDB": "mongodb://test:test@localhost/test?retryWrites=true", "accessTokenSecret": "What is it my dears?", "apiPath": "/api/v1" }' > config.json
             - run: npm test
 workflows:
     build-and-test:
