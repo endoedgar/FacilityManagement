@@ -14,7 +14,7 @@ executors:
     working_directory: ~/working-dir
 commands:
   test_express:
-    description: "A command that tests express"
+    description: "A command that tests express."
     steps:
       - *attach_workspace
       - restore_cache:
