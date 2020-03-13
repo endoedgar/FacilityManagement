@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "npx nodemon app.js"
+    "start": "npx nodemon app.js",
+    "test": "mocha --exit"
   },
   "author": "",
   "license": "ISC",
@@ -12,5 +13,9 @@
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.4"
+  },
+  "devDependencies": {
+    "mocha": "^7.1.0",
+    "supertest": "^4.0.2"
   }
 }
