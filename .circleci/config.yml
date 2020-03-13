@@ -7,7 +7,6 @@ executors:
     docker:
       - image: circleci/node:latest
       - image: circleci/mongo:latest
-        port: 27017:27017
         environment:
             MONGODB_USERNAME: "test"
             MONGODB_PASSWORD: "test"
