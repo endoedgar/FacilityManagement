@@ -7,7 +7,7 @@ executors:
     docker:
       - image: circleci/node:latest
       - image: circleci/mongo:latest
-          environment:
+        environment:
             MONGODB_USERNAME: "test"
             MONGODB_PASSWORD: "test"
     working_directory: ~/working-dir
