@@ -10,10 +10,10 @@ jobs:
       - node/with-cache:
           steps:
             - run: |
-              cd workspace/express
+              cd workspace/express/
               npm install
             - run: |
-              cd workspace/express
+              cd workspace/express/
               npm test
 workflows:
     build-and-test:
