@@ -22,16 +22,16 @@ commands:
       - run: sudo apt-get install tree
       - run: tree
       - run: |
-          cd workspace/express
+          cd workspace/repo/express
           npm install
       - save_cache:
           paths:
-            - workspace/express/node_modules
-          key: v1-dependencies-maven {{ checksum "workspace/express/package-lock.json" }}
+            - workspace/repo/express/node_modules
+          key: v1-dependencies-maven {{ checksum "workspace/repo/express/package-lock.json" }}
       - run: >
-               echo '{"port": 4000, "mongoDB": "mongodb://test:test@localhost/test?retryWrites=true", "accessTokenSecret": "What is it my dears?", "apiPath": "/api/v1" }' > config.json
+               echo '{"port": 4000, "mongoDB": "mongodb://test:test@localhost/test?retryWrites=true", "accessTokenSecret": "What is it my dears?", "apiPath": "/api/v1" }' > workspace/repo/express/config.json
       - run: |
-          cd workspace/express
+          cd workspace/repo/express
           npm test
 jobs:
   checkout_code:
