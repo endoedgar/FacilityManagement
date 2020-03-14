@@ -3,46 +3,55 @@ const Facility = require('../schemas/facility');
 
 const router = Router();
 
-/* GET facilities listing. */
+/* GET facilities listing */
 router.get('/', async (req, res, next) => {
     try {
         res.status(200).send({ status: "success", data: await Facility.find() });
-    } catch (error) {
-        return next(error)
+    } catch (err) {
+        return next(err);
     }
 });
 
-/* GET one facility. */
+/* GET one facility */
 router.get('/:id', async (req, res, next) => {
-    const facility = await Facility.findOne({ "_id": req.params.id });
-    facility ? res.status(200).send(facility) : res.status(404).send({ message: "Facility not found." });
+    try {
+        const facility = await Facility.findOne({ "_id": req.params.id });
+        facility ? res.status(200).send(facility) : res.status(404).send({ message: "Facility not found." });
+    } catch (err) {
+        return next(err);
+    }
+
 });
 
-/* POST one facility. */
+/* POST one facility */
 router.post('/', json(), async (req, res, next) => {
-    new Facility(req.body).save((err, data) => {
-        if (err) return next(err);
-        res.status(201).json({ status: "success", message: "Created Successfully!", data: data });
-    });
+    try {
+        const data = await new Facility(req.body).save();
+        res.status(201).json({ status: "success", message: "Created Successfully!", data });
+    } catch (error) {
+        return next(err);
+    }
+
 });
 
-/* PATCH one facility. */
+/* PATCH one facility */
 router.patch('/:id', json(), async (req, res, next) => {
-    Facility.updateOne({ "_id": req.params.id },
-        { "$set": req.body },
-        (err, data) => {
-            if (err) return next(err);
-            res.status(202).json({ status: "success", message: "Updated Successfully!", data: data });
-        });
+    try {
+        const data = await Facility.updateOne({ "_id": req.params.id }, { "$set": req.body });
+        res.status(202).json({ status: "success", message: "Updated Successfully!", data });
+    } catch (error) {
+        return next(err);
+    }
 });
 
-/* DELETE one facility. */
+/* DELETE one facility */
 router.delete('/:id', async (req, res, next) => {
-    Facility.deleteOne({ "_id": req.params.id }, (err) => {
-        if (err)
-            next(err)
+    try {
+        await Facility.deleteOne({ "_id": req.params.id });
         res.status(202).json({ status: "success", message: "Deleted Successfully!" });
-    });
+    } catch (err) {
+        return next(err);
+    }
 });
 
 
