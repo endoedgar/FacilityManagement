@@ -3,7 +3,7 @@
 The server uses the following routes to access the resources.
 Make sure to prepend ```/api/v1``` to each request.
 
-[TOCM]
+[TOC]
 
 ## USER
 
@@ -29,7 +29,6 @@ Returns an array of users on success.
     "password": "helloworld",
     "__v": 0
   }
-  ...
 ]
 ```
 
