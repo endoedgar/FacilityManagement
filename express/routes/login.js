@@ -10,7 +10,7 @@ router.post("/", json(), async(req, res) => {
     const user = await User.findOne(req.body);
 
     if(user) {
-        const {password, ...userObject} = user;
+        const {password, ...userObject} = user.toObject();
         const accessToken = jwt.sign(userObject, accessTokenSecret);
         res.send({accessToken});
     } else {

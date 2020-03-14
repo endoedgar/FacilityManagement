@@ -1,0 +1,13 @@
+.reservedSpace {
+    height: 80px;
+}
+
+.fixed-header {
+    position: fixed;
+    z-index: 5;
+    top: 0;
+}
+
+.active {
+    background-color: darkblue;
+}

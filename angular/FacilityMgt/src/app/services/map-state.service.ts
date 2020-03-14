@@ -1,13 +1,11 @@
-
-import { Injectable } from '@angular/core';
-import {MapStore} from '../map-store.class';
-import { Observable } from 'rxjs';
+import { Injectable } from "@angular/core";
+import { MapStore } from "../map-store.class";
+import { Observable } from "rxjs";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class MapStateService extends MapStore<any[]> {
-
   getPoints(): Observable<__esri.Graphic[]> {
     return this.getState();
   }
@@ -15,15 +13,13 @@ export class MapStateService extends MapStore<any[]> {
   addPoint(point: __esri.Graphic) {
     const c = this.getValue();
 
-    if(typeof c !== 'undefined'){
-      this.setState([...this.getValue(), point]);  
+    if (typeof c !== "undefined") {
+      this.setState([...this.getValue(), point]);
+    } else {
+      this.setState([point]);
     }
-    else {
-      this.setState([point]);  
-    }
-
   }
-  constructor() { 
+  constructor() {
     // Important ;-) MapStore needs an initial value of any empty []
     super([]);
   }

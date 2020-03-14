@@ -1,0 +1,10 @@
+<mat-toolbar  color="primary"  class="fixed-header">
+    <mat-toolbar-row>
+        <button mat-button [routerLink]="['/home']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:
+            true}"><img src="./assets/nyan2.svg" style="width:50px;"> Home</button>
+        <button mat-button [routerLink]="['/inspection']" routerLinkActive="active">Inspection</button>
+        <button *ngIf="!(isAuthenticated)" mat-button [routerLink]="['/login']" routerLinkActive="active">Login</button>
+        <button *ngIf="user && isAuthenticated" mat-button (click)="onLogout()">Logout ({{user?.username}})</button>
+    </mat-toolbar-row>
+</mat-toolbar>
+<div class="reservedSpace"></div>

@@ -1,0 +1,64 @@
+<mat-card class="row">
+  <mat-card-header>
+    <mat-card-title>Sign up</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form (ngSubmit)="onSubmit()" ngNativeValidate>
+      <div>
+        <mat-form-field class="form-group">
+          <mat-label for="name">Name</mat-label>
+          <input
+            matInput
+            [(ngModel)]="user.name"
+            name="name"
+            type="name"
+            required
+            class="form-control"
+            id="name"
+            placeholder="enter your name"
+          />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="form-group">
+          <mat-label for="username">Username</mat-label>
+          <input
+            matInput
+            [(ngModel)]="user.username"
+            name="username"
+            type="username"
+            required
+            class="form-control"
+            id="username"
+            placeholder="enter your username"
+          />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="form-group">
+          <mat-label for="password">Password</mat-label>
+          <input
+            matInput
+            [(ngModel)]="user.password"
+            name="password"
+            type="password"
+            required
+            class="form-control"
+            id="password"
+            placeholder="enter a password"
+          />
+        </mat-form-field>
+      </div>
+      <div>
+        <button mat-button type="submit" color="primary">Submit</button>
+        <button mat-button [routerLink]="['/']" class="btn btn-success">
+          Cancel
+        </button>
+      </div>
+    </form>
+    <p>
+      <span>Already have an account?&nbsp;</span>
+      <button mat-button [routerLink]="['/login']">Log in!</button>
+    </p>
+  </mat-card-content>
+</mat-card>

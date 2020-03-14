@@ -5,7 +5,7 @@ import {
   ElementRef
 } from "@angular/core";
 import { loadModules } from "esri-loader";
-import { MapStateService } from '../../services/map-state.service';
+import { MapStateService } from '../../../services/map-state.service';
 import { Subscription } from 'rxjs';
 
 @Component({
