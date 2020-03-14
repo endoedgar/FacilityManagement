@@ -1,0 +1,36 @@
+GET http://localhost:4000/api/v1/inspections
+
+###
+
+GET http://localhost:4000/api/v1/inspections/5e6d6a188a489e21525699af
+
+###
+
+GET http://localhost:4000/api/v1/inspections/facility/5e6d380d16ad027734cee0c7
+
+###
+
+POST  http://localhost:4000/api/v1/inspections
+Content-Type: application/json
+
+{
+    "facility_id": "5e6ac55b61295e04f44774c3",
+    "inspector_id": "5e6ab6ace51c3a2f1f1a1b1b",
+    "type": "Health",
+    "report": "Peter has Corona", 
+    "rating": "0.5"
+}
+
+###
+
+PATCH http://localhost:4000/api/v1/inspections/5e6d6a368a489e21525699b0
+Content-Type: application/json
+
+{
+    "report": "Sink is broken and Chairs are broken",
+    "rating": "2.5"
+}
+
+###
+
+DELETE  http://localhost:4000/api/v1/inspections/5e6d674fffe1501aae2a24dc
