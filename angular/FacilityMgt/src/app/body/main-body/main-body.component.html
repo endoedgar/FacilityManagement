@@ -1,0 +1,20 @@
+<mat-slider min="1" max="100" step="1" value="1"></mat-slider>
+
+<mat-grid-list cols="2" rowHeight="90%">
+  <mat-grid-tile>
+    <div class='esri-map-div'><app-esri-map
+      [center]="mapCenter"
+      [basemap]="basemapType"
+      [zoom]="mapZoomLevel"
+      (mapLoadedEvent)="mapLoadedEvent($event)"
+      >
+      </app-esri-map></div>
+    
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <app-input-form></app-input-form>
+  </mat-grid-tile>
+  
+</mat-grid-list>
+
+
