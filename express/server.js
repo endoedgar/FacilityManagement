@@ -10,6 +10,7 @@ const { handleErrors, handleRequestErrors, logErrors } = require('./middlewares/
 const userRouter = require('./routes/users');
 const loginRouter = require('./routes/login');
 const facilityRouter = require('./routes/facilities');
+const inspectionRouter = require('./routes/inspections');
 
 async function main() {
     await db.connect();
@@ -18,6 +19,7 @@ async function main() {
     app.use(`${apiPath}/users`, userRouter);
     app.use(`${apiPath}/login`, loginRouter);
     app.use(`${apiPath}/facilities`, facilityRouter);
+    app.use(`${apiPath}/inspections`, inspectionRouter);
 
     app.use(logErrors);
     app.use(handleRequestErrors);
