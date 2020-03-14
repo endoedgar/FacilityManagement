@@ -1,4 +1,7 @@
 const { Router, json } = require('express');
+const jwt = require('jsonwebtoken');
+
+const { accessTokenSecret } = require('../config.json');
 
 const authenticateJWT = require('../middlewares/authenticateJWT');
 
@@ -15,10 +18,12 @@ router.get('/:username', authenticateJWT, async (req, res,next) => {
     user ? res.send(user) : res.status(404).send({ message: "User not found." });
 });
 
-router.post('/', authenticateJWT, json(), async (req, res,next) => {
+router.post('/', json(), async (req, res,next) => {
     new User(req.body).save((err) => {
         if(err) return next(err);
-        res.status(201).send({message: "User created successfully."});
+        const {password, ...userObject} = req.body;
+        const accessToken = jwt.sign(userObject, accessTokenSecret);
+        res.status(201).send({message: "User created successfully.", accessToken});
     });
 });
 

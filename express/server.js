@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 
 const app = express();
 
@@ -13,6 +14,7 @@ const facilityRouter = require('./routes/facilities');
 async function main() {
     await db.connect();
         
+    app.use(cors());
     app.use(`${apiPath}/users`, userRouter);
     app.use(`${apiPath}/login`, loginRouter);
     app.use(`${apiPath}/facilities`, facilityRouter);
