@@ -1,7 +1,11 @@
-import { FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MapStateService } from '../../../services/map-state.service';
 import { Observable, Subscription } from 'rxjs';
+import { Store } from "@ngrx/store";
+import { Facility } from 'src/app/models/Facility';
+import { AppState, selectFacilityState } from 'src/app/store/app.states';
+import { addFacility, ClearErrorMessage } from 'src/app/store/actions/facility.actions';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -10,68 +14,71 @@ import { Observable, Subscription } from 'rxjs';
   styleUrls: ['./input-form.component.scss']
 })
 export class InputFormComponent implements OnInit {
- 
-  coordx: FormControl;
-  coordy: FormControl;
+  @ViewChild('locationX') locationX: ElementRef;
+  @ViewChild('locationY') locationY: ElementRef;
+
+
+  facility: Facility = new Facility();
+  getState: Observable<any>;
+
   public points$: Observable<__esri.Graphic[]>
   public list: Subscription;
   public pMessage: any[] = [];
+  public mapPoint = [0, 0];
 
-  
-  constructor(public fb: FormBuilder, private msService: MapStateService, private changeDetect: ChangeDetectorRef) {
-    this.coordx = fb.control({value: 'my val', disabled: false});
-    this.coordy = fb.control({value: 'my val1', disabled: false});
+  constructor(private store: Store<AppState>, private msService: MapStateService, private _snackBar: MatSnackBar) {
+    this.getState = this.store.select(selectFacilityState);
   }
-
-
-  // If you want, you could also use this function to parse out the value
-  // and call this function from the component *cdkVirtualFor="let point of findPointValue(points$)"
-  public findPointValue(product: any) {
-    let finalValue: object;
-    if(product.source.value.length){
-      finalValue = product.source.value.map((val) => {
-        return [val.geometry.latitude + ", " + val.geometry.longitude]
-      });
-    }
-
-    return finalValue;
-  }
-
 
   ngOnInit(): void {
-    console.log("onInit")
-    // deactivate change detection component and children
-    this.changeDetect.detach();     
+
+    this.getState.subscribe(state => {
+      console.log(state);
+      if (state.facility) {
+        if (state.errorMessage) {
+          this._snackBar.open(state.facility.errorMessage, "Failed", {
+            duration: 5000
+          });
+          this.store.dispatch(new ClearErrorMessage);
+        }else if (state.facility){
+          this._snackBar.open(state.facility.result.message, state.facility.result.status, {
+            duration: 5000
+          });
+          this.store.dispatch(new ClearErrorMessage);
+        }
+      }
+    });
+
     this.points$ = this.msService.getPoints();
     this.list = this.points$.subscribe({
-      next: x => { 
-        let finalValue: any[];
+      next: x => {
         if (x.length) {
-          finalValue = x.map((val:any) => {
-            return val.geometry.latitude + ", " + val.geometry.longitude;
-          });
-
-          // TODO: remove this testing code ...
-          const cdX = x.map((val:any) => {
-            return val.geometry.longitude;
-          });
-          const cdY = x.map((val:any) => {
-            return val.geometry.latitude;
-          });
-          this.coordx = this.fb.control({value: cdX, disabled: false});
-          this.coordy = this.fb.control({value: cdY, disabled: false});
-  
+          this.mapPoint = this.findPointValue(x)
+          this.locationX.nativeElement.value = this.mapPoint[0]; // Longtitude
+          this.locationY.nativeElement.value = this.mapPoint[1]; // Latitude
         }
-        this.pMessage = finalValue;
-        this.changeDetect.detectChanges();
       },
       error: err => console.error('error in subscriber', err),
       complete: () => console.log('complete')
     })
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.list.unsubscribe();
+  }
+
+  onSubmit(): void {
+    const payload = {
+      name: this.facility.name,
+      type: this.facility.type,
+      location : [this.locationX.nativeElement.value,this.locationY.nativeElement.value]
+    };
+
+    this.store.dispatch(new addFacility(payload));
+  }
+
+  public findPointValue(point: any) {
+    return [point[0].geometry.longitude, point[0].geometry.latitude];
   }
 
 }

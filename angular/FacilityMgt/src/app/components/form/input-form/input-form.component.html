@@ -1,13 +1,71 @@
-<h3>Add Incpection</h3>
-<hr>
-<label>Input field X: </label>
-<input matInput [formControl]="coordx" placeholder="coord-x">
-<label>Input field Y: </label>
-<input matInput [formControl]="coordy" placeholder="coord-y">
-
-<mat-slider min="1" max="100" step="1" value="1"></mat-slider>
-
-
-  
-
-
+<mat-card class="row">
+  <mat-card-header>
+    <mat-card-title>Add Facility</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form (ngSubmit)="onSubmit()" ngNativeValidate>
+      <mat-form-field class="form-group">
+        <mat-label for="name">Name</mat-label>
+        <input
+          matInput
+          [(ngModel)]="facility.name"
+          name="name"
+          type="text"
+          required
+          class="form-control"
+          id="name"
+          placeholder="Enter Facility Name"
+        />
+      </mat-form-field>
+      <mat-form-field class="form-group">
+        <mat-label for="type">Type</mat-label>
+        <input
+          matInput
+          [(ngModel)]="facility.type"
+          name="type"
+          type="text"
+          required
+          class="form-control"
+          id="type"
+          placeholder="Enter Facility Type"
+        />
+      </mat-form-field>
+      <mat-form-field class="form-group">
+        <mat-label for="locationX">Longtitude</mat-label>
+        <input #locationX
+          matInput
+          [(ngModel)]="facility.locationX"
+          name="locationX"
+          type="text"
+          required
+          disabled
+          class="form-control"
+          id="locationX"
+          placeholder="Enter X Coordinate"
+        />
+      </mat-form-field>
+      <mat-form-field class="form-group">
+        <mat-label for="locationY">Latitude</mat-label>
+        <input #locationY
+          matInput
+          [(ngModel)]="facility.locationY"
+          name="locationY"
+          type="text"
+          required
+          disabled
+          class="form-control"
+          id="locationY"
+          placeholder="Enter Y Coordinate"
+        />
+      </mat-form-field>
+     
+      <div>
+        <button mat-button type="submit" color="primary">Submit</button>
+        <button mat-button [routerLink]="['/']" class="btn btn-success">
+          Cancel
+        </button>
+      </div>
+    </form>
+    
+  </mat-card-content>
+</mat-card>
