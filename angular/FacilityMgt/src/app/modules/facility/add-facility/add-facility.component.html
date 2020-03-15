@@ -1,6 +1,20 @@
 <mat-card class="row">
   <mat-card-header>
-    <mat-card-title>Add Facility</mat-card-title>
+    <mat-card-title>1. Pick Location</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <button mat-button color="primary" class="btn btn-primary" (click)="OnAddBtn()">
+     <img class="addFacilityIcon" src="../../../../assets/images/facility.png">
+     <br>
+     <mat-label >Add </mat-label>
+    </button>
+  </mat-card-content>
+</mat-card>
+
+
+<mat-card class="row">
+  <mat-card-header>
+    <mat-card-title>2. Add Facility</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <form (ngSubmit)="onSubmit()" ngNativeValidate>
@@ -58,14 +72,12 @@
           placeholder="Enter Y Coordinate"
         />
       </mat-form-field>
-     
-      <div>
-        <button mat-button type="submit" color="primary">Submit</button>
-        <button mat-button [routerLink]="['/']" class="btn btn-success">
+      <div> 
+        <button mat-button [disabled]="!editmode ? 'disabled': null"  type="submit" class="btn btn-primary">Submit</button>
+        <button mat-button [routerLink]="['/']" class="btn btn-default">
           Cancel
         </button>
       </div>
     </form>
-    
   </mat-card-content>
 </mat-card>
