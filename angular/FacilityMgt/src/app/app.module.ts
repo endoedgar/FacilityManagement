@@ -16,19 +16,18 @@ import { MyMaterialModule } from './modules/material.module';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FacilityEffects } from './store/effects/facility.effects';
 import { reducers } from './store/app.states';
+import { DummyComponent } from './components/dummyComponent/dummy.component';
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent],
+  declarations: [AppComponent, NavbarComponent, DummyComponent],
   imports: [
     BrowserModule, 
-    BodyModule,
     FooterModule,
     StoreModule.forRoot(reducers, {}), 
     EffectsModule.forRoot([AuthEffects, FacilityEffects]),
     MyMaterialModule,
     RouterModule.forRoot([
-      { path: '', redirectTo: '/home', pathMatch: 'full' },
-      { path: 'home', component: AppComponent },
+      { path: '', component: DummyComponent, pathMatch: 'full' },
       { path: 'login', loadChildren: () => import('./modules/login/login.module').then(m => m.LoginModule) },
       { path: 'signup', loadChildren: () => import('./modules/signup/signup.module').then(m => m.SignupModule) },
       { path: 'inspection', component: MainBodyComponent },
