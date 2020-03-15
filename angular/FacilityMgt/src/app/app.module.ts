@@ -12,7 +12,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MyMaterialModule } from './modules/material.module';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FacilityEffects } from './store/effects/facility.effects';
-import { reducers } from './store/app.states';
+import { reducers } from './store/states/app.states';
 import { DummyComponent } from './components/dummyComponent/dummy.component';
 import { httpInterceptProviders } from './http-interceptors';
 import { UsersEffects } from './store/effects/users.effects';

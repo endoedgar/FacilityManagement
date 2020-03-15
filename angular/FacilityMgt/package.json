@@ -25,6 +25,7 @@
     "@material/form-field": "^5.1.0",
     "@ngrx/core": "^1.2.0",
     "@ngrx/effects": "^9.0.0",
+    "@ngrx/entity": "^9.0.0",
     "@ngrx/store": "^9.0.0",
     "@types/arcgis-js-api": "^4.14.0",
     "esri-loader": "^2.13.0",

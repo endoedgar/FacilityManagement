@@ -1,17 +1,7 @@
-import { Facility } from "src/app/models/Facility";
 import { ALL, FacilityActionTypes } from "../actions/facility.actions";
+import { initialFacilityState, FacilityState } from '../states/facility.state';
 
-export interface State {
-  facility: Facility | null;
-  errorMessage: string | null;
-}
-
-export const initialState: State = {
-  facility: null,
-  errorMessage: null
-};
-
-export function reducer(state = initialState, action: ALL): State {
+export function reducer(state = initialFacilityState, action: ALL): FacilityState {
   switch (action.type) {
     case FacilityActionTypes.ADD_FACILITY: {
       return {

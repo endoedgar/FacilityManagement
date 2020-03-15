@@ -1,19 +1,7 @@
-import { User } from "src/app/models/User";
 import { ALL, AuthActionTypes } from "../actions/auth.actions";
+import { initialAuthState, AuthState } from "../states/auth.state";
 
-export interface State {
-  isAuthenticated: boolean;
-  user: User | null;
-  errorMessage: string | null;
-}
-
-export const initialState: State = {
-  isAuthenticated: false,
-  user: null,
-  errorMessage: null
-};
-
-export function reducer(state = initialState, action: ALL): State {
+export function reducer(state = initialAuthState, action: ALL): AuthState {
   switch (action.type) {
     case AuthActionTypes.LOGIN_SUCCESS: {
       return {
@@ -49,14 +37,11 @@ export function reducer(state = initialState, action: ALL): State {
       };
     case AuthActionTypes.LOAD_TOKEN: {
       const token = action.payload.token;
-      console.log("LOAD TOKEN");
       if (token) {
         const tokenData = token
           .split(".")
           .slice(0, 2)
           .map(e => JSON.parse(atob(e)));
-
-          console.log(state);
 
         return {
           ...state,
@@ -67,10 +52,10 @@ export function reducer(state = initialState, action: ALL): State {
           },
           errorMessage: null
         };
-      } else return {...state};
+      } else return { ...state };
     }
     case AuthActionTypes.LOGOUT:
-      return initialState;
+      return initialAuthState;
     default:
       return state;
   }

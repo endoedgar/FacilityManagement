@@ -9,6 +9,7 @@ import {
   LoadUsersSuccess,
   LoadUsersFailure
 } from "../actions/users.actions";
+import { User } from 'src/app/models/User';
 
 @Injectable()
 export class UsersEffects {
@@ -23,8 +24,8 @@ export class UsersEffects {
     //map((action: LoadUsers) => action.payload),
     switchMap(_ => {
       return this.usersService.find().pipe(
-        map(data => {
-          return new LoadUsersSuccess({ data });
+        map((users : User[]) => {
+          return new LoadUsersSuccess( users );
         }),
         catchError(error => {
           return of(new LoadUsersFailure({ error }));

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../store/app.states';
+import { AppState } from '../../store/states/app.states';
 import { ReloadToken } from '../../store/actions/auth.actions';
 
 @Component({

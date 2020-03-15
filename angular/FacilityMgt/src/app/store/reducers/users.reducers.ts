@@ -1,28 +1,26 @@
-import { User } from "src/app/models/User";
 import { ALL, AuthActionTypes } from "../actions/users.actions";
+import {
+  initialUsersState,
+  UsersState,
+  usersAdapter
+} from "../states/users.state";
 
-export interface State {
-  users: User[] | null;
-  errorMessage: string | null;
-}
-
-export const initialState: State = {
-  users: null,
-  errorMessage: null
-};
-
-export function reducer(state = initialState, action: ALL): State {
+export function reducer(state = initialUsersState, action: ALL): UsersState {
   switch (action.type) {
+    case AuthActionTypes.LOAD_USERS: {
+      return { ...state, loading: true };
+    }
     case AuthActionTypes.LOAD_USERS_SUCCESS: {
-      return {
+      return usersAdapter.addMany(action.users, {
         ...state,
-        users: action.payload.data,
-        errorMessage: null
-      };
+        errorMessage: null,
+        loading: false
+      });
     }
     case AuthActionTypes.LOAD_USERS_FAILURE:
       return {
-        ...initialState,
+        ...initialUsersState,
+        loading: false,
         errorMessage: action.payload.error.error.message
           ? action.payload.error.error.message
           : action.payload.error.message

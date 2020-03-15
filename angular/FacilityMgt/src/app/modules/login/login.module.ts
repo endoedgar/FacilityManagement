@@ -10,7 +10,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 import { RouterModule, Routes } from '@angular/router';
-import { reducers } from '../../store/app.states';
+import { reducers } from '../../store/states/app.states';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from '../../store/effects/auth.effects';
 

@@ -2,9 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { User } from "src/app/models/User";
 import { Observable } from "rxjs";
-import { AppState, selectAuthState } from "src/app/store/app.states";
+import { AppState } from "src/app/store/states/app.states";
 import { LogIn, ClearErrorMessage } from "src/app/store/actions/auth.actions";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { selectAuthState } from "src/app/store/selectors/auth.selectors";
 
 @Component({
   selector: "app-user-login",
@@ -25,7 +26,7 @@ export class UserLoginComponent implements OnInit {
         this._snackBar.open(state.errorMessage, "Okay", {
           duration: 5000
         });
-        this.store.dispatch(new ClearErrorMessage);
+        this.store.dispatch(new ClearErrorMessage());
       }
     });
   }

@@ -1,10 +1,12 @@
 import { Component, OnInit } from "@angular/core";
-import { Store } from "@ngrx/store";
+import { Store, select } from "@ngrx/store";
 import { User } from "src/app/models/User";
 import { Observable } from "rxjs";
-import { AppState, selectUsersState } from "src/app/store/app.states";
+import { AppState } from "src/app/store/states/app.states";
 import { LoadUsers, ClearErrorMessage } from "src/app/store/actions/users.actions";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatTableDataSource } from '@angular/material/table';
+import { selectUsersState, selectAllUsers } from 'src/app/store/selectors/users.selectors';
 
 @Component({
   selector: "app-user-list",
@@ -14,6 +16,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 export class UserListComponent implements OnInit {
   users: User[] = null;
   getState: Observable<any>;
+  dataSource: MatTableDataSource<User>;
   displayedColumns: string[] = ['username', 'name', 'admin', 'id'];
 
   constructor(private store: Store<AppState>, private _snackBar: MatSnackBar) {
@@ -22,6 +25,11 @@ export class UserListComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new LoadUsers);
+
+    this.store.pipe(select(selectAllUsers)).subscribe(users => {
+      this.dataSource = new MatTableDataSource(users);
+    })
+
     this.getState.subscribe(state => {
       if (state.errorMessage) {
         this._snackBar.open(state.errorMessage, "Okay", {
@@ -29,7 +37,7 @@ export class UserListComponent implements OnInit {
         });
         this.store.dispatch(new ClearErrorMessage);
       }
-      this.users = state.users;
+      
     });
   }
 
