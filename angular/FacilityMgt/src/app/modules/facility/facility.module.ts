@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InputFormComponent } from './input-form/input-form.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from "@angular/material/button";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -12,13 +11,15 @@ import { StoreModule } from '@ngrx/store';
 import { reducers } from 'src/app/store/app.states';
 import { EffectsModule } from '@ngrx/effects';
 import { FacilityEffects } from 'src/app/store/effects/facility.effects';
+import { AddFacilityComponent } from './add-facility/add-facility.component';
+import { BodyComponent } from 'src/app/components/body/body.component';
 
 const MY_ROUTES : Routes = [
-  {path: '', component: InputFormComponent}
+  {path: '', component: BodyComponent}
 ];
 
 @NgModule({
-  declarations: [InputFormComponent],
+  declarations: [AddFacilityComponent],
   imports: [
     CommonModule,
     StoreModule.forFeature('facility', reducers.facility),
@@ -33,7 +34,7 @@ const MY_ROUTES : Routes = [
     MatSnackBarModule
   ],
   exports:[
-    InputFormComponent,
+    AddFacilityComponent,
   ]
 })
-export class FormModule { }
+export class FacilityModule { }
