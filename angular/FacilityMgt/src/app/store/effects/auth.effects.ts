@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Actions, Effect, ofType } from "@ngrx/effects";
-import { map, switchMap, catchError, tap } from "rxjs/operators";
+import { map, switchMap, catchError, tap, mapTo } from "rxjs/operators";
 
 import { AuthService } from "../../services/auth.service";
 import { Observable, of } from "rxjs";
@@ -13,6 +13,8 @@ import {
   SignUp,
   SignUpSuccess,
   SignUpFailure,
+  LoadToken,
+  ReloadToken,
 } from "../actions/auth.actions";
 
 @Injectable()
@@ -43,7 +45,7 @@ export class AuthEffects {
   LogInSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN_SUCCESS),
     tap(user => {
-      localStorage.setItem("token", user.payload.token);
+      this.authService.setToken(user.payload.token);
       this.router.navigateByUrl("/");
     })
   );
@@ -77,7 +79,7 @@ export class AuthEffects {
   SignUpSuccess: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.SIGNUP_SUCCESS),
     tap(user => {
-      localStorage.setItem("token", user.payload.token);
+      this.authService.setToken(user.payload.token);
       this.router.navigateByUrl("/");
     })
   );
@@ -91,16 +93,24 @@ export class AuthEffects {
   LogOut: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGOUT),
     tap(_ => {
-      localStorage.removeItem("token");
+      this.authService.setToken(null);
       this.router.navigateByUrl("/");
     })
   )
 
-  /*@Effect({ dispatch: false })
-  ReloadTokenx: Observable<any> = this.actions.pipe(
+  @Effect({ dispatch: true })
+  ReloadToken: Observable<any> = this.actions.pipe(
+    ofType(AuthActionTypes.RELOAD_TOKEN),
+    switchMap(_ => {
+      return of(new LoadToken({token: this.authService.getToken()}))
+    })
+  );
+
+  @Effect({ dispatch: true })
+  TriggerReloadToken: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN_SUCCESS, AuthActionTypes.SIGNUP_SUCCESS),
-    mapTo(
-      new LoadToken({token: localStorage.getItem('token')})
-    )
-  );*/
+    switchMap(_ => {
+      return of(new ReloadToken())
+    })
+  );
 }

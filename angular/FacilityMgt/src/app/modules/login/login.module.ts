@@ -14,17 +14,15 @@ import { reducers } from '../../store/app.states';
 import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from '../../store/effects/auth.effects';
 
-const MY_ROUTES : Routes = [
-  {path: '', component: UserLoginComponent}
-];
-
 @NgModule({
   declarations: [UserLoginComponent],
   imports: [
     CommonModule,
-    StoreModule.forFeature('auth', reducers.auth),
+    StoreModule.forFeature('auth', reducers.auth ),
     EffectsModule.forFeature([AuthEffects]),
-    RouterModule.forChild(MY_ROUTES),
+    RouterModule.forChild([
+      {path: '', component: UserLoginComponent}
+    ]),
     FormsModule,
     ReactiveFormsModule,
     MatButtonModule,
