@@ -3,8 +3,8 @@ import * as facility from "./reducers/facility.reducers";
 import { createFeatureSelector } from "@ngrx/store";
 
 export interface AppState {
-  authState: auth.State;
-  facilityState: facility.State;
+  auth: auth.State;
+  facility: facility.State;
 }
 
 export const reducers = {

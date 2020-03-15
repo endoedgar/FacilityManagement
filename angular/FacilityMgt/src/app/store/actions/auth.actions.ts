@@ -2,6 +2,7 @@ import { Action } from "@ngrx/store";
 
 export enum AuthActionTypes {
   LOAD_TOKEN = "[Auth] Load Token",
+  RELOAD_TOKEN = "[Auth] Reload Token",
   LOGIN = "[Auth] Login",
   LOGIN_SUCCESS = "[Auth] Login Success",
   LOGIN_FAILURE = "[Auth] Login Failure",
@@ -15,6 +16,11 @@ export enum AuthActionTypes {
 export class LoadToken implements Action {
   readonly type = AuthActionTypes.LOAD_TOKEN;
   constructor(public payload: any) {}
+}
+
+export class ReloadToken implements Action {
+  readonly type = AuthActionTypes.RELOAD_TOKEN;
+  constructor() {}
 }
 
 export class LogIn implements Action {
@@ -59,6 +65,7 @@ export class LogOut implements Action {
 
 export type ALL =
   | LoadToken
+  | ReloadToken
   | LogIn
   | LogInSuccess
   | LogInFailure

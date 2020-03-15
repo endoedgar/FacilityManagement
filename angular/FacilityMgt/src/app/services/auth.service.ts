@@ -8,6 +8,13 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
+  setToken(token : string): void {
+    if(token)
+      localStorage.setItem("token", token);
+    else
+      localStorage.removeItem("token");
+  }
+
   getToken(): string {
     return localStorage.getItem("token");
   }
