@@ -14,7 +14,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FacilityEffects } from './store/effects/facility.effects';
 import { reducers } from './store/app.states';
 import { DummyComponent } from './components/dummyComponent/dummy.component';
-import { FacilityModule } from './modules/facility/facility.module';
+import { httpInterceptProviders } from './http-interceptors';
 
 @NgModule({
   declarations: [AppComponent, NavbarComponent, DummyComponent, FooterComponent],
@@ -32,7 +32,7 @@ import { FacilityModule } from './modules/facility/facility.module';
     ]), 
     HttpClientModule, BrowserAnimationsModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, httpInterceptProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
