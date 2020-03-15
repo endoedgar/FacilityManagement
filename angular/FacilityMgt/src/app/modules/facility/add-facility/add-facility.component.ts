@@ -9,11 +9,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
-  selector: 'app-input-form',
-  templateUrl: './input-form.component.html',
-  styleUrls: ['./input-form.component.scss']
+  selector: 'app-add-facility',
+  templateUrl: './add-facility.component.html',
+  styleUrls: ['./add-facility.component.scss']
 })
-export class InputFormComponent implements OnInit {
+export class AddFacilityComponent implements OnInit {
   @ViewChild('locationX') locationX: ElementRef;
   @ViewChild('locationY') locationY: ElementRef;
 

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-main-body',
-  templateUrl: './main-body.component.html',
-  styleUrls: ['./main-body.component.scss']
+  selector: 'app-body',
+  templateUrl: './body.component.html',
+  styleUrls: ['./body.component.scss']
 })
-export class MainBodyComponent  {
+export class BodyComponent  {
 
  // Set our map properties
  mapCenter = [-91.9672633, 41.01768];
