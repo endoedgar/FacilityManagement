@@ -9,7 +9,10 @@ import {
   FacilityActionTypes,
   addFacility,
   addFacilitySuccess,
-  addFacilityFailure
+  addFacilityFailure,
+  GetFacilities,
+  GetFacilitiesSuccess,
+  GetFacilitiesFailure
 } from "../actions/facility.actions";
 
 @Injectable()
@@ -26,10 +29,25 @@ export class FacilityEffects {
     switchMap(payload => {
         return this.facilityService.addFacility(payload.name, payload.type,payload.location).pipe(
         map(facility => {
-          return new addFacilitySuccess({'result':facility});
+          return new addFacilitySuccess({'addFacility':facility});
         }),
         catchError(error => {
           return of(new addFacilityFailure({ error }));
+        })
+      );
+    })
+  );
+
+  @Effect()
+  GetFacilities: Observable<any> = this.actions.pipe(
+    ofType(FacilityActionTypes.GET_FACILITIES),
+    switchMap(_ => {
+        return this.facilityService.getFacilities().pipe(
+        map(facility => {
+          return new GetFacilitiesSuccess({'getFacilities':facility});
+        }),
+        catchError(error => {
+          return of(new GetFacilitiesFailure({ error }));
         })
       );
     })
