@@ -70,6 +70,10 @@ export class AddFacilityComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.msService.setMapOpsMode("");
     this.list.unsubscribe();
+    this.points$ = null;
+    this.pMessage = [];
+    this.mapPoint = [0, 0];
+    this.editmode = false;
   }
 
   onSubmit(): void {
