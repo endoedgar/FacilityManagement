@@ -49,11 +49,14 @@ export function reducer(state = initialState, action: ALL): State {
       };
     case AuthActionTypes.LOAD_TOKEN: {
       const token = action.payload.token;
+      console.log("LOAD TOKEN");
       if (token) {
         const tokenData = token
           .split(".")
           .slice(0, 2)
           .map(e => JSON.parse(atob(e)));
+
+          console.log(state);
 
         return {
           ...state,

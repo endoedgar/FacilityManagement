@@ -15,6 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MyMaterialModule } from './modules/material.module';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FacilityEffects } from './store/effects/facility.effects';
+import { reducers } from './store/app.states';
 
 @NgModule({
   declarations: [AppComponent, NavbarComponent],
@@ -22,7 +23,7 @@ import { FacilityEffects } from './store/effects/facility.effects';
     BrowserModule, 
     BodyModule,
     FooterModule,
-    StoreModule.forRoot({}), 
+    StoreModule.forRoot(reducers, {}), 
     EffectsModule.forRoot([AuthEffects, FacilityEffects]),
     MyMaterialModule,
     RouterModule.forRoot([
