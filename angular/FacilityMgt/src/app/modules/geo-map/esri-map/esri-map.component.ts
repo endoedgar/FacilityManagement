@@ -22,8 +22,9 @@ export class EsriMapComponent implements OnInit {
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
 
-  constructor(private msService: MapStateService) {}
+  constructor(private msService: MapStateService) { }
 
+  // TODO : chenge it to async/await 
   public ngOnInit() {
     // use esri-loader to load JSAPI modules
     return loadModules([
@@ -48,7 +49,7 @@ export class EsriMapComponent implements OnInit {
             const points = this.msService.getPoints();
             console.log('first load', points);
             this.sub = points.subscribe(value => {
-              if(value.length) {
+              if (value.length) {
                 this.mapView.graphics.addMany(value);
                 this.sub.unsubscribe(); // we only want this once
               }
@@ -60,6 +61,15 @@ export class EsriMapComponent implements OnInit {
         );
 
         this.mapView.on('click', (event: __esri.MapViewClickEvent) => {
+
+          let url = null;
+          let addGraphicFlag = false;
+          if (this.msService.getMapOpsMode() == "addFacility") {
+            this.mapView.graphics.removeAll();
+            url = "../../../../assets/images/facility.png";
+            addGraphicFlag = true;
+          }
+
           const pointGraphic: __esri.Graphic = new Graphic({
             attributes: {
               time: new Date().getTime()
@@ -71,17 +81,18 @@ export class EsriMapComponent implements OnInit {
               spatialReference: event.mapPoint.spatialReference
             },
             symbol: {
-              type: 'simple-marker',
-              color: [119, 40, 119],
-              outline: {
-                color: [255, 255, 255],
-                width: 1
-              }
+              type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
+              url: url,
+              width: "64px",
+              height: "64px"
             }
           });
 
-          this.mapView.graphics.add(pointGraphic);
-          this.msService.addPoint(pointGraphic);
+          if (addGraphicFlag) {
+            this.mapView.graphics.add(pointGraphic);
+            this.msService.addPoint(pointGraphic);
+            this.msService.setMapOpsMode("");
+          }
         });
       })
       .catch(err => {
