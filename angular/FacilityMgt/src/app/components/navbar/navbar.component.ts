@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { Store } from "@ngrx/store";
-import { AppState } from "src/app/store/states/app.states";
+import { AppState } from "src/app/store/states/app.state";
 import { Observable } from "rxjs";
 import { LogOut } from "src/app/store/actions/auth.actions";
 import { selectAuthState } from "src/app/store/selectors/auth.selectors";

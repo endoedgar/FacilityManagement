@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { StoreModule } from "@ngrx/store";
-import { reducers } from "src/app/store/states/app.states";
+import { reducers } from "src/app/store";
 import { EffectsModule } from "@ngrx/effects";
 import { FacilityEffects } from "src/app/store/effects/facility.effects";
 import { AddFacilityComponent } from "./add-facility/add-facility.component";

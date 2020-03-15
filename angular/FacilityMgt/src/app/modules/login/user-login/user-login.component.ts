@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { User } from "src/app/models/User";
 import { Observable } from "rxjs";
-import { AppState } from "src/app/store/states/app.states";
+import { AppState } from "src/app/store/states/app.state";
 import { LogIn, ClearErrorMessage } from "src/app/store/actions/auth.actions";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { selectAuthState } from "src/app/store/selectors/auth.selectors";

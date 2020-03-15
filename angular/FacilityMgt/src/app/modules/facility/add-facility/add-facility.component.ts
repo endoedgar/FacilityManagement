@@ -3,7 +3,7 @@ import { MapStateService } from '../../../services/map-state.service';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from "@ngrx/store";
 import { Facility } from 'src/app/models/Facility';
-import { AppState } from 'src/app/store/states/app.states';
+import { AppState } from 'src/app/store/states/app.state';
 import { addFacility, ClearErrorMessage } from 'src/app/store/actions/facility.actions';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { selectFacilityState } from 'src/app/store/selectors/facility.selectors';
