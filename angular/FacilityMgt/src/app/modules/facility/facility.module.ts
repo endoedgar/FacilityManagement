@@ -13,9 +13,12 @@ import { EffectsModule } from '@ngrx/effects';
 import { FacilityEffects } from 'src/app/store/effects/facility.effects';
 import { AddFacilityComponent } from './add-facility/add-facility.component';
 import { BodyComponent } from 'src/app/components/body/body.component';
+import { AppComponent } from 'src/app/components/app/app.component';
 
 const MY_ROUTES : Routes = [
-  {path: '', component: BodyComponent}
+  {path: '', component: BodyComponent},
+  {path: './', component: AppComponent},
+
 ];
 
 @NgModule({

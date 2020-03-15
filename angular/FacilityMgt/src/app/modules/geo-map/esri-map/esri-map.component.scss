@@ -2,5 +2,13 @@
 @import url('https://js.arcgis.com/4.12/esri/css/main.css');
 
 .esri-view {
-  height: 100%;
+  cursor: pointer;
+  min-height: 700px;
 }
+
+.mat-card {
+  min-width: 700px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
