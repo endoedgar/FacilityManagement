@@ -1,27 +1,35 @@
 import { Injectable } from "@angular/core";
 import { MapStore } from "../map-store.class";
 import { Observable } from "rxjs";
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: "root"
 })
 export class MapStateService extends MapStore<any[]> {
-   currentMapOpsMode:string = ""; 
+  currentMapOpsMode:string = ""; 
+  private BASE_URL = "http://localhost:4000/api/v1";
+
+  constructor(private http: HttpClient) {
+    super([]);
+  }
+
+  getPoint(): Observable<__esri.Graphic[]> {
+    return this.getState();
+  }
 
   getPoints(): Observable<__esri.Graphic[]> {
     return this.getState();
   }
 
   addPoint(point: __esri.Graphic) {
-    const c = this.getValue();
+    const current = this.getValue();
 
-    this.setState([point]);
-    
-    // if (typeof c !== "undefined") {
-    //   this.setState([...this.getValue(), point]);
-    // } else {
-    //   this.setState([point]);
-    // }
+    if (typeof current !== "undefined") {
+      this.setState([...this.getValue(), point]);
+    } else {
+      this.setState([point]);
+    }
   }
 
   /**
@@ -39,8 +47,8 @@ export class MapStateService extends MapStore<any[]> {
     this.currentMapOpsMode = mode;
   }
 
-  constructor() {
-    // Important ;-) MapStore needs an initial value of any empty []
-    super([]);
+  public getFacilities(): Observable<any> {
+    return this.http.get(`${this.BASE_URL}/facilities/`);
   }
+
 }

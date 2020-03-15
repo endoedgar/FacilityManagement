@@ -23,6 +23,26 @@ export function reducer(state = initialFacilityState, action: ALL): FacilityStat
         : action.payload.error.message
       };
     }
+    case FacilityActionTypes.GET_FACILITIES: {
+      return {
+        ...state,
+        errorMessage: null
+      };
+    }
+    case FacilityActionTypes.GET_FACILITIES_SUCCESS:
+      return {
+        ...state,
+        facility: action.payload, 
+        errorMessage: null
+      };
+    case FacilityActionTypes.GET_FACILITIES_FAILURE: {
+      return {
+        ...state,
+        errorMessage: action.payload.error.error.message
+        ? action.payload.error.error.message
+        : action.payload.error.message
+      };
+    }
     default:
       return state;
   }

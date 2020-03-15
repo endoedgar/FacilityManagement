@@ -18,4 +18,8 @@ export class FacilityService {
     return this.http.post(`${this.BASE_URL}/facilities/`, { name, type, location });
   }
 
+  public getFacilities(): Observable<any> { 
+    return this.http.get(`${this.BASE_URL}/facilities/`);
+  }
+
 }
