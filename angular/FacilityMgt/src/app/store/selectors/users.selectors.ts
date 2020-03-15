@@ -11,3 +11,8 @@ export const selectAllUsers = createSelector(
     selectUsersState,
     _selectAllUsers
 );
+
+export const selectUsersError = createSelector(
+    selectUsersState,
+    state => state.errorMessage
+);
