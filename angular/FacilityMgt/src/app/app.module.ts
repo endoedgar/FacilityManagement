@@ -12,27 +12,31 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MyMaterialModule } from './modules/material.module';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FacilityEffects } from './store/effects/facility.effects';
-import { reducers } from './store/app.states';
+import { reducers } from './store/states/app.states';
 import { DummyComponent } from './components/dummyComponent/dummy.component';
-import { FacilityModule } from './modules/facility/facility.module';
+import { httpInterceptProviders } from './http-interceptors';
+import { UsersEffects } from './store/effects/users.effects';
+import { ApplicationPipesModule } from './modules/pipes.module';
 
 @NgModule({
   declarations: [AppComponent, NavbarComponent, DummyComponent, FooterComponent],
   imports: [
     BrowserModule,
     StoreModule.forRoot(reducers, {}), 
-    EffectsModule.forRoot([AuthEffects, FacilityEffects]),
+    EffectsModule.forRoot([AuthEffects, FacilityEffects, UsersEffects]),
     MyMaterialModule,
+    ApplicationPipesModule,
     RouterModule.forRoot([
       { path: '', component: DummyComponent, pathMatch: 'full' },
       { path: 'login', loadChildren: () => import('./modules/login/login.module').then(m => m.LoginModule) },
       { path: 'signup', loadChildren: () => import('./modules/signup/signup.module').then(m => m.SignupModule) },
       { path: 'facilities', loadChildren: () => import('./modules/facility/facility.module').then(m => m.FacilityModule) },
+      { path: 'users', loadChildren: () => import('./modules/users/users.module').then(m => m.UsersModule) },
       { path: '**', component: DummyComponent }
     ]), 
     HttpClientModule, BrowserAnimationsModule
   ],
-  providers: [AuthService],
+  providers: [AuthService, httpInterceptProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

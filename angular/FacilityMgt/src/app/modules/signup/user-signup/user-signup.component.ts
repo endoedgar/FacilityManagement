@@ -2,9 +2,10 @@ import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { User } from "src/app/models/User";
 import { Observable } from "rxjs";
-import { AppState, selectAuthState } from "src/app/store/app.states";
+import { AppState } from "src/app/store/states/app.states";
 import { SignUp, ClearErrorMessage } from "src/app/store/actions/auth.actions";
-import {MatSnackBar} from '@angular/material/snack-bar';
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { selectAuthState } from "src/app/store/selectors/auth.selectors";
 
 @Component({
   selector: "app-signup-login",
@@ -20,13 +21,13 @@ export class UserSignupComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getState.subscribe((state) => {
-      if(state.errorMessage) {
+    this.getState.subscribe(state => {
+      if (state.errorMessage) {
         this._snackBar.open(state.errorMessage, "Okay", { duration: 5000 });
-        this.store.dispatch(new ClearErrorMessage);
+        this.store.dispatch(new ClearErrorMessage());
       }
     });
-  };
+  }
 
   onSubmit(): void {
     const payload = {

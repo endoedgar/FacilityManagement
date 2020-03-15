@@ -1,12 +1,52 @@
-<mat-toolbar  color="primary"  class="fixed-header">
-    <mat-toolbar-row>
-        <button mat-button [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{exact:
-            true}"><img src="./assets/nyan2.svg" style="width:50px;"> Home</button>
-        <button mat-button [routerLink]="['/inspection']" routerLinkActive="active">Inspection</button>
-        <button mat-button [routerLink]="['/facilities']" routerLinkActive="active">Facilities</button>
-        <button *ngIf="!isAuthenticated" mat-button [routerLink]="['/login']" routerLinkActive="active">Login</button>
-        <div class="flex-spacer"></div>
-        <button *ngIf="isAuthenticated" mat-button (click)="onLogout()"><img class="mat-card-avatar" src="./assets/nyan2.svg"> Logout ({{user?.username}})</button>
-    </mat-toolbar-row>
+<mat-toolbar color="primary" class="fixed-header">
+  <mat-toolbar-row>
+    <button
+      mat-button
+      [routerLink]="['/']"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <img src="./assets/nyan2.svg" style="width:50px;" /> Home
+    </button>
+    <button mat-button [routerLink]="['/inspection']" routerLinkActive="active">
+      Inspection
+    </button>
+    <button mat-button [routerLink]="['/facilities']" routerLinkActive="active">
+      Facilities
+    </button>
+    <button *ngIf="isAuthenticated" mat-button [routerLink]="['/users']" routerLinkActive="active">
+      Users
+    </button>
+    <div class="flex-spacer"></div>
+    <div *ngIf="!isAuthenticated">
+      <button mat-button [routerLink]="['/login']" routerLinkActive="active">
+        Login
+      </button>
+      <button mat-button [routerLink]="['/signup']" routerLinkActive="active">
+        Signup
+      </button>
+    </div>
+    <div *ngIf="isAuthenticated">
+      <button mat-mini-fab color="primary" [matMenuTriggerFor]="appMenu">
+        <img
+          [title]="user?.username"
+          src="./assets/nyan2.svg"
+        />
+      </button>
+      <mat-menu #appMenu="matMenu" yPosition="below" xPosition="before">
+        <mat-action-list>
+          <mat-list-item
+            >Signed in as {{
+              user?.username
+            }}</mat-list-item
+          >
+          <mat-divider></mat-divider>
+
+          <button mat-list-item (click)="onLogout()">
+            Logout
+          </button>
+        </mat-action-list>
+      </mat-menu>
+    </div>
+  </mat-toolbar-row>
 </mat-toolbar>
-<div class="reservedSpace"></div>

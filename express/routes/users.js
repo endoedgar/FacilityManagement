@@ -10,7 +10,7 @@ const User = require('../schemas/user');
 const router = Router();
 
 router.get('/', authenticateJWT, async (req, res) => {
-    res.send(await User.find())
+    res.send(await User.find({}, "name username admin"))
 });
 
 router.get('/:username', authenticateJWT, async (req, res,next) => {
