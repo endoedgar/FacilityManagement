@@ -1,49 +1,38 @@
-import { Action } from "@ngrx/store";
-import { User } from 'src/app/models/User';
+import { createAction, props } from "@ngrx/store";
+import { Inspection } from 'src/app/models/Inspection';
 
-export enum InspectionsActionTypes {
-  LOAD_INSPECTIONS = "[Inspections] Load Inspections",
-  LOAD_INSPECTIONS_SUCCESS = "[Inspections] Load Inspections Success",
-  LOAD_INSPECTIONS_FAILURE = "[Inspections] Load Inspections Failure",
-  LOAD_INSPECTION = "[Inspections] Load Inspection",
-  LOAD_INSPECTION_SUCCESS = "[Inspections] Load Inspection Success",
-  LOAD_INSPECTION_FAILURE = "[Inspections] Load Inspection Failure"
-}
+export const LoadInspections = createAction("[Inspections] Load Inspections");
 
-export class LoadInspections implements Action {
-  readonly type = InspectionsActionTypes.LOAD_INSPECTIONS;
-  constructor() {}
-}
+export const LoadInspectionsSuccess = createAction(
+  "[Inspections] Load Inspections Success",
+  props<{ inspections: Inspection[] }>()
+);
 
-export class LoadInspectionsSuccess implements Action {
-  readonly type = InspectionsActionTypes.LOAD_INSPECTIONS_SUCCESS;
-  constructor(public users: User[]) {}
-}
+export const LoadInspectionsFailure = createAction(
+  "[Inspections] Load Inspections Failure",
+  props<{ err: any }>()
+);
 
-export class LoadInspectionsFailure implements Action {
-  readonly type = InspectionsActionTypes.LOAD_INSPECTIONS_FAILURE;
-  constructor(public readonly err: any) {}
-}
+export const LoadInspection = createAction(
+  "[Inspections] Load Inspection",
+  props<{ inspection_id: string }>()
+);
 
-export class LoadInspection implements Action {
-  readonly type = InspectionsActionTypes.LOAD_INSPECTION;
-  constructor(public inspection_id: string) {}
-}
+export const LoadInspectionSuccess = createAction(
+  "[Inspections] Load Inspection Success",
+  props<{ inspection: Inspection }>()
+);
 
-export class LoadInspectionSuccess implements Action {
-  readonly type = InspectionsActionTypes.LOAD_INSPECTION_SUCCESS;
-  constructor(public inspection: User) {}
-}
+export const LoadInspectionFailure = createAction(
+  "[Inspections] Load Inspection Failure",
+  props<{ err: any }>()
+);
 
-export class LoadInspectionFailure implements Action {
-  readonly type = InspectionsActionTypes.LOAD_INSPECTION_FAILURE;
-  constructor(public readonly err: any) {}
-}
-
-export type AllInspectionActions =
-  | LoadInspections
-  | LoadInspectionsSuccess
-  | LoadInspectionsFailure
-  | LoadInspection
-  | LoadInspectionSuccess
-  | LoadInspectionFailure;
+export const AllUserActions = {
+  LoadInspections,
+  LoadInspectionsSuccess,
+  LoadInspectionsFailure,
+  LoadInspection,
+  LoadInspectionSuccess,
+  LoadInspectionFailure
+};
