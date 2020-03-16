@@ -25,6 +25,11 @@ const routes: Routes = [
       import("./modules/facility/facility.module").then(m => m.FacilityModule)
   },
   {
+    path: "inspection",
+    loadChildren: () =>
+      import("./modules/inspection/inspection.module").then(m => m.InspectionModule)
+  },
+  {
     path: "users",
     loadChildren: () =>
       import("./modules/users/users.module").then(m => m.UsersModule)
