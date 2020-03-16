@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { Actions, Effect, ofType } from "@ngrx/effects";
-import { map, switchMap, catchError, tap, mapTo } from "rxjs/operators";
+import { map, switchMap, catchError, tap } from "rxjs/operators";
 
 import { AuthService } from "../../services/auth.service";
 import { Observable, of } from "rxjs";
@@ -16,15 +16,13 @@ import {
   LoadToken,
   ReloadToken
 } from "../actions/auth.actions";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { ShowMessage } from '../actions/ui.actions';
+import { ShowMessage } from "../actions/ui.actions";
 
 @Injectable()
 export class AuthEffects {
   constructor(
     private actions: Actions,
     private authService: AuthService,
-    private snackbar: MatSnackBar,
     private router: Router
   ) {}
 
@@ -32,16 +30,12 @@ export class AuthEffects {
   LogIn$: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN),
     map((action: LogIn) => action.payload),
-    switchMap(payload => {
-      return this.authService.logIn(payload.username, payload.password).pipe(
-        map(user => {
-          return new LogInSuccess({ accessToken: user.accessToken });
-        }),
-        catchError(err => {
-          return of(new LogInFailure(err));
-        })
-      );
-    })
+    switchMap(payload =>
+      this.authService.logIn(payload.username, payload.password).pipe(
+        map(user => new LogInSuccess({ accessToken: user.accessToken })),
+        catchError(err => of(new LogInFailure(err)))
+      )
+    )
   );
 
   @Effect({ dispatch: false })
@@ -53,29 +47,21 @@ export class AuthEffects {
     })
   );
 
-  @Effect({ dispatch: false })
-  LogInFailure$: Observable<any> = this.actions.pipe(
-    ofType(AuthActionTypes.LOGIN_FAILURE)
-  );
-
   @Effect()
   SignUp$: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.SIGNUP),
     map((action: SignUp) => action.payload),
-    switchMap(payload => {
-      return this.authService
-        .signUp(payload.name, payload.username, payload.password)
-        .pipe(
-          map(response => {
-            return new SignUpSuccess({
+    switchMap(user =>
+      this.authService.signUp(user.name, user.username, user.password).pipe(
+        map(
+          response =>
+            new SignUpSuccess({
               accessToken: response.accessToken
-            });
-          }),
-          catchError(err => {
-            return of(new SignUpFailure(err));
-          })
-        );
-    })
+            })
+        ),
+        catchError(err => of(new SignUpFailure(err)))
+      )
+    )
   );
 
   @Effect({ dispatch: false })
@@ -91,9 +77,7 @@ export class AuthEffects {
   showMessageOnFailures$: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.SIGNUP_FAILURE, AuthActionTypes.LOGIN_FAILURE),
     map((action: SignUpFailure | LogInFailure) => action.err),
-    switchMap(err => {
-      return of(new ShowMessage(err.error.message || err.message));
-    })
+    switchMap(err => of(new ShowMessage(err.error.message || err.message)))
   );
 
   @Effect({ dispatch: false })
@@ -122,8 +106,6 @@ export class AuthEffects {
   @Effect({ dispatch: true })
   TriggerReloadToken$: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN_SUCCESS, AuthActionTypes.SIGNUP_SUCCESS),
-    switchMap(_ => {
-      return of(new ReloadToken());
-    })
+    switchMap(_ => of(new ReloadToken()))
   );
 }
