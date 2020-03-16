@@ -1,11 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { Store, select } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { AppState } from "src/app/store/states/app.state";
+import { LoadUser } from "src/app/store/actions/users.actions";
 import {
-  LoadUser
-} from "src/app/store/actions/users.actions";
-import {
-  getCurrentUser, selectUsersLoading
+  getCurrentUser,
+  selectUsersLoading
 } from "src/app/store/selectors/users.selectors";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 
@@ -22,7 +21,7 @@ export class UserDetailComponent implements OnInit {
 
   ngOnInit() {
     this.route.paramMap.subscribe((params: ParamMap) =>
-      this.store.dispatch(new LoadUser(params.get("username")))
+      this.store.dispatch(LoadUser({ username: params.get("username") }))
     );
   }
 }

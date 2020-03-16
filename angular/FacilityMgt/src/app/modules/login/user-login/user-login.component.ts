@@ -19,7 +19,7 @@ export class UserLoginComponent implements OnInit {
   ngOnInit() { }
 
   onSubmit(): void {
-    this.store.dispatch(new LogIn({
+    this.store.dispatch(LogIn({
       username: this.user.username,
       password: this.user.password
     }));

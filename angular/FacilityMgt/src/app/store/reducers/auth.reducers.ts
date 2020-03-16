@@ -1,48 +1,53 @@
-import { AuthActionTypes, AllAuthActions } from "../actions/auth.actions";
-import { initialAuthState, AuthState } from "../states/auth.state";
+import { createReducer, on } from "@ngrx/store";
 
-export function reducer(state = initialAuthState, action: AllAuthActions): AuthState {
-  switch (action.type) {
-    case AuthActionTypes.SIGNUP:
-    case AuthActionTypes.LOGIN: {
+import {
+  SignUp,
+  LogIn,
+  SignUpSuccess,
+  LogInSuccess,
+  SignUpFailure,
+  LogInFailure,
+  LoadToken,
+  LogOut
+} from "../actions/auth.actions";
+import { initialAuthState } from "../states/auth.state";
+
+export const reducer = createReducer(
+  initialAuthState,
+  on(SignUp, LogIn, (state, action) => {
+    return {
+      ...state,
+      error: null,
+      loading: true
+    };
+  }),
+  on(SignUpSuccess, LogInSuccess, (state, action) => {
+    return {
+      ...state,
+      error: null,
+      loading: false
+    };
+  }),
+  on(SignUpFailure, LogInFailure, (state, action) => {
+    return {
+      ...state,
+      user: null,
+      error: action.err,
+      loading: false
+    };
+  }),
+  on(LoadToken, (state, action) => {
+    const token = action.payload.accessToken;
+    if (token) {
       return {
         ...state,
-        error: null,
-        loading: true
+        user: {
+          token: action.payload.accessToken,
+          ...action.payload.userData
+        },
+        error: null
       };
-    }
-    case AuthActionTypes.SIGNUP_SUCCESS:
-    case AuthActionTypes.LOGIN_SUCCESS: {
-      return {
-        ...state,
-        error: null,
-        loading: false
-      };
-    }
-    case AuthActionTypes.LOGIN_FAILURE:
-    case AuthActionTypes.SIGNUP_FAILURE:
-      return {
-        ...state,
-        user: null,
-        error: action.err,
-        loading: false
-      };
-    case AuthActionTypes.LOAD_TOKEN: {
-      const token = action.payload.accessToken;
-      if (token) {
-        return {
-          ...state,
-          user: {
-            token: action.payload.accessToken,
-            ...action.payload.userData
-          },
-          error: null
-        };
-      } else return { ...state };
-    }
-    case AuthActionTypes.LOGOUT:
-      return initialAuthState;
-    default:
-      return state;
-  }
-}
+    } else return { ...state };
+  }),
+  on(LogOut, (state, action) => initialAuthState)
+);

@@ -4,7 +4,10 @@ import { User } from "src/app/models/User";
 import { AppState } from "src/app/store/states/app.state";
 import { LoadUsers } from "src/app/store/actions/users.actions";
 import { MatTableDataSource } from "@angular/material/table";
-import { selectAllUsers, selectUsersLoading } from "src/app/store/selectors/users.selectors";
+import {
+  selectAllUsers,
+  selectUsersLoading
+} from "src/app/store/selectors/users.selectors";
 
 @Component({
   selector: "app-user-list",
@@ -19,7 +22,7 @@ export class UserListComponent implements OnInit {
   constructor(private store: Store<AppState>) {}
 
   ngOnInit() {
-    this.store.dispatch(new LoadUsers());
+    this.store.dispatch(LoadUsers());
 
     this.store.pipe(select(selectAllUsers)).subscribe(users => {
       this.dataSource = new MatTableDataSource(users);

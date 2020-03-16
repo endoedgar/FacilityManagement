@@ -25,6 +25,6 @@ export class UserSignupComponent implements OnInit {
       password: this.user.password,
       email: this.user.email
     };
-    this.store.dispatch(new SignUp(payload));
+    this.store.dispatch(SignUp(payload));
   }
 }

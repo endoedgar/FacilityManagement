@@ -25,7 +25,7 @@ export class UserSettingsComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.store.dispatch(new UpdateProfile(this.user));
+    this.store.dispatch(UpdateProfile({ user: this.user }));
   }
 
   addGroup(event: MatChipInputEvent) {
