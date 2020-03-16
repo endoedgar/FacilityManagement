@@ -9,8 +9,8 @@ const mongoose = require('mongoose');
  */
 
 const inspectionSchema = mongoose.Schema({
-    facility_id: mongoose.Schema.Types.ObjectId,
-    inspector_id: mongoose.Schema.Types.ObjectId,
+    facility: { type: mongoose.Schema.Types.ObjectId, ref: "Facility" },
+    inspector: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     type: String,
     report: String,
     rating: Number

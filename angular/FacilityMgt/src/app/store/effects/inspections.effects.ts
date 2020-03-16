@@ -27,8 +27,10 @@ export class InspectionsEffects {
     ofType(LoadInspections),
     switchMap(_ => {
       return this.inspectionsService.find().pipe(
-        map((inspections: Inspection[]) =>
-          LoadInspectionsSuccess({ inspections })
+        map((response) => response.data),
+        map((inspections: Inspection[]) => {
+          return LoadInspectionsSuccess({ inspections })
+        }
         ),
         catchError(err => of(LoadInspectionsFailure({ err })))
       );
