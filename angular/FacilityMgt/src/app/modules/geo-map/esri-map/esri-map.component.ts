@@ -3,7 +3,6 @@ import {
   OnInit,
   ViewChild,
   ElementRef,
-  AfterViewChecked
 } from "@angular/core";
 import { loadModules } from "esri-loader";
 import { MapStateService } from '../../../services/map-state.service';
@@ -11,7 +10,6 @@ import { Subscription, Observable } from 'rxjs';
 import { selectFacilityState } from 'src/app/store/selectors/facility.selectors';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/states/app.state';
-import { ClearErrorMessage } from 'src/app/store/actions/facility.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { ThrowStmt } from '@angular/compiler';
@@ -90,9 +88,6 @@ export class EsriMapComponent implements OnInit {
           }
         );
 
-
-
-
         this.mapView.on('click', async (event: __esri.MapViewClickEvent) => {
 
           if (this.msService.getMapOpsMode() == "addFacility") {
@@ -133,10 +128,7 @@ export class EsriMapComponent implements OnInit {
         this.getState.subscribe(state => {
 
           if (state.facility) {
-            if (state.errorMessage) {
-              showSnackBar(state.facility.errorMessage, "Failed");
-              this.store.dispatch(new ClearErrorMessage);
-            } else if (state.facility.getFacilities) {
+              if (state.facility.getFacilities) {
 
               if (state.facility.getFacilities.status == "success") {
                 let mPoint = null;
@@ -151,10 +143,11 @@ export class EsriMapComponent implements OnInit {
                 showSnackBar("Unexpected Error !", state.facility.getFacilities.status);
               }
 
-
             } else if (state.facility.addFacility) {
               // this.showSnackBar(state.facility.addFacility.message, state.facility.addFacility.status);
               // this.store.dispatch(new addFacilitySuccess(state));
+            } else if (state.facility.deleteFacility){
+              console.log(state);
             }
           }
         });
