@@ -38,7 +38,7 @@ router.patch(
         message: "User updated successfully!"
       };
       if (req.user.username === req.params.username) {
-        response = { ...response, ...getJWT(updatedUser) };
+        response = { ...response, ...getJWT(updatedUser.toObject()) };
       }
 
       res.status(202).json(response);
