@@ -23,7 +23,7 @@ export function reducer(state = initialAuthState, action: AllAuthActions): AuthS
     case AuthActionTypes.SIGNUP_FAILURE:
       return {
         ...state,
-        isAuthenticated: false,
+        user: null,
         error: action.err,
         loading: false
       };
@@ -32,7 +32,6 @@ export function reducer(state = initialAuthState, action: AllAuthActions): AuthS
       if (token) {
         return {
           ...state,
-          isAuthenticated: true,
           user: {
             token: action.payload.accessToken,
             ...action.payload.userData

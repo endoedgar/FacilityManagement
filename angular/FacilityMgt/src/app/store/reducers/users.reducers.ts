@@ -1,4 +1,4 @@
-import { ALL, AuthActionTypes } from "../actions/users.actions";
+import { ALL, UserActionTypes } from "../actions/users.actions";
 import {
   initialUsersState,
   UsersState,
@@ -7,28 +7,20 @@ import {
 
 export function reducer(state = initialUsersState, action: ALL): UsersState {
   switch (action.type) {
-    case AuthActionTypes.LOAD_USERS: {
+    case UserActionTypes.LOAD_USERS: {
       return { ...state, loading: true };
     }
-    case AuthActionTypes.LOAD_USERS_SUCCESS: {
-      return usersAdapter.addMany(action.users, {
+    case UserActionTypes.LOAD_USERS_SUCCESS: {
+      return usersAdapter.setAll(action.users, {
         ...state,
         errorMessage: null,
         loading: false
       });
     }
-    case AuthActionTypes.LOAD_USERS_FAILURE:
+    case UserActionTypes.LOAD_USERS_FAILURE:
       return {
         ...initialUsersState,
-        loading: false,
-        errorMessage: action.payload.error.error.message
-          ? action.payload.error.error.message
-          : action.payload.error.message
-      };
-    case AuthActionTypes.CLEAR_ERROR_MESSAGE:
-      return {
-        ...state,
-        errorMessage: null
+        loading: false
       };
     default:
       return state;

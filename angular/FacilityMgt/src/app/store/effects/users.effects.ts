@@ -5,11 +5,12 @@ import { map, switchMap, catchError, tap, mapTo } from "rxjs/operators";
 import { UsersService } from "../../services/users.service";
 import { Observable, of } from "rxjs";
 import {
-  AuthActionTypes,
+  UserActionTypes,
   LoadUsersSuccess,
   LoadUsersFailure
 } from "../actions/users.actions";
 import { User } from 'src/app/models/User';
+import { ShowMessage } from '../actions/ui.actions';
 
 @Injectable()
 export class UsersEffects {
@@ -20,8 +21,7 @@ export class UsersEffects {
 
   @Effect()
   Load: Observable<any> = this.actions.pipe(
-    ofType(AuthActionTypes.LOAD_USERS),
-    //map((action: LoadUsers) => action.payload),
+    ofType(UserActionTypes.LOAD_USERS),
     switchMap(_ => {
       return this.usersService.find().pipe(
         map((users : User[]) => {
@@ -31,6 +31,15 @@ export class UsersEffects {
           return of(new LoadUsersFailure({ error }));
         })
       );
+    })
+  );
+
+  @Effect()
+  showMessageOnFailures$: Observable<any> = this.actions.pipe(
+    ofType(UserActionTypes.LOAD_USERS_FAILURE),
+    map((action: LoadUsersFailure) => action.err),
+    switchMap(err => {
+      return of(new ShowMessage(err.error.message || err.message));
     })
   );
 }

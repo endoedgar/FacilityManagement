@@ -14,11 +14,11 @@
     <button mat-button [routerLink]="['/facilities']" routerLinkActive="active">
       Facilities
     </button>
-    <button *ngIf="isAuthenticated" mat-button [routerLink]="['/users']" routerLinkActive="active">
+    <button *ngIf="loggedInUser$ | async" mat-button [routerLink]="['/users']" routerLinkActive="active">
       Users
     </button>
     <div class="flex-spacer"></div>
-    <div *ngIf="!isAuthenticated">
+    <div *ngIf="!(loggedInUser$ | async)">
       <button mat-button [routerLink]="['/login']" routerLinkActive="active">
         Login
       </button>
@@ -26,10 +26,10 @@
         Signup
       </button>
     </div>
-    <div *ngIf="isAuthenticated">
+    <div *ngIf="loggedInUser$ | async">
       <button mat-mini-fab color="primary" [matMenuTriggerFor]="appMenu">
         <img
-          [title]="user?.username"
+          [title]="(loggedInUser$ | async)?.username"
           src="./assets/nyan2.svg"
         />
       </button>
@@ -37,7 +37,7 @@
         <mat-action-list>
           <mat-list-item
             >Signed in as {{
-              user?.username
+              (loggedInUser$ | async)?.username
             }}</mat-list-item
           >
           <mat-divider></mat-divider>
