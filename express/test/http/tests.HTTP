@@ -5,8 +5,10 @@ POST http://localhost:4000/api/v1/users
 Content-Type: application/json
 
 {
-    "name": "helloWorld",
-    "password": "helloworld"
+    "name": "admin",
+    "username": "admin",
+    "password": "admin",
+    "admin": true
 }
 ###
 POST http://localhost:4000/api/v1/login
@@ -15,4 +17,15 @@ Content-Type: application/json
 {
     "username": "admin",
     "password": "admin"
+}
+
+###
+
+PATCH http://localhost:4000/api/v1/users/admin
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTZhYjA0MjIzMWJjODI2MzEzODUwYjMiLCJuYW1lIjoiYWRtaW4iLCJ1c2VybmFtZSI6ImFkbWluIiwiYWRtaW4iOnRydWUsIl9fdiI6MCwiaWF0IjoxNTg0MzM5MTQ0fQ.MjsnfJ9g1r_pN6RqU0YZFtH-RUsbuSTZ5JbjMndDHXw
+Content-Type: application/json
+
+{
+    "username": "admin",
+    "name": "Administrator"
 }
