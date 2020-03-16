@@ -9,11 +9,12 @@ import { InspectionsEffects } from './effects/inspections.effects';
 import { UIEffects } from './effects/ui.effects';
 import { environment } from 'src/environments/environment';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { InspectionEffects } from './effects/inspection.effects';
 
 @NgModule({
     imports: [
         StoreModule.forRoot(reducers, {}), 
-        EffectsModule.forRoot([AuthEffects, FacilityEffects, UsersEffects, InspectionsEffects, UIEffects]),
+        EffectsModule.forRoot([AuthEffects, FacilityEffects, UsersEffects, InspectionsEffects, InspectionEffects, UIEffects]),
         environment.production ? [] : StoreDevtoolsModule.instrument()
     ],
     exports: [
