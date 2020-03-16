@@ -8,14 +8,21 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  setToken(token : string): void {
+  public setToken(token : string): void {
     if(token)
       localStorage.setItem("token", token);
     else
       localStorage.removeItem("token");
   }
 
-  getToken(): string {
+  public getUserDataFromJWT(token : string) {
+    return token
+      ?.split(".")
+      .slice(0, 2)
+      .map(e => JSON.parse(atob(e)))[1];
+  }
+
+  public getToken(): string {
     return localStorage.getItem("token");
   }
 

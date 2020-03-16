@@ -5,5 +5,10 @@ export const selectAuthState = createFeatureSelector<AuthState>("auth");
 
 export const selectAuthError = createSelector(
     selectAuthState,
-    state => state.errorMessage
+    state => state.error
+);
+
+export const selectAuthLoading = createSelector(
+    selectAuthState,
+    state => state.loading
 );

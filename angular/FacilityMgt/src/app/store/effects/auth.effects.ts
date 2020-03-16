@@ -26,71 +26,71 @@ export class AuthEffects {
   ) {}
 
   @Effect()
-  LogIn: Observable<any> = this.actions.pipe(
+  LogIn$: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN),
     map((action: LogIn) => action.payload),
     switchMap(payload => {
       return this.authService.logIn(payload.username, payload.password).pipe(
         map(user => {
-          return new LogInSuccess({ token: user.accessToken });
+          return new LogInSuccess({ accessToken: user.accessToken });
         }),
-        catchError(error => {
-          return of(new LogInFailure({ error }));
+        catchError(err => {
+          return of(new LogInFailure(err));
         })
       );
     })
   );
 
   @Effect({ dispatch: false })
-  LogInSuccess: Observable<any> = this.actions.pipe(
+  LogInSuccess$: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN_SUCCESS),
-    tap(user => {
-      this.authService.setToken(user.payload.token);
+    tap((action : LogInSuccess) => {
+      this.authService.setToken(action.payload.accessToken);
       this.router.navigateByUrl("/");
     })
   );
 
   @Effect({ dispatch: false })
-  LogInFailure: Observable<any> = this.actions.pipe(
+  LogInFailure$: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN_FAILURE)
   );
 
   @Effect()
-  SignUp: Observable<any> = this.actions.pipe(
+  SignUp$: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.SIGNUP),
     map((action: SignUp) => action.payload),
     switchMap(payload => {
       return this.authService
         .signUp(payload.name, payload.username, payload.password)
         .pipe(
-          map(user => {
+          map(response => {
             return new SignUpSuccess({
-              token: user.accessToken
+              accessToken: response.accessToken
             });
           }),
-          catchError(error => {
-            return of(new SignUpFailure({ error }));
+          catchError(err => {
+            return of(new SignUpFailure(err));
           })
         );
     })
   );
 
   @Effect({ dispatch: false })
-  SignUpSuccess: Observable<any> = this.actions.pipe(
+  SignUpSuccess$: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.SIGNUP_SUCCESS),
-    tap(user => {
-      this.authService.setToken(user.payload.token);
+    tap((response : SignUpSuccess) => {
+      this.authService.setToken(response.payload.accessToken);
       this.router.navigateByUrl("/");
     })
   );
 
   @Effect({ dispatch: false })
-  SignUpFailure: Observable<any> = this.actions.pipe(
+  SignUpFailure$: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.SIGNUP_FAILURE)
   );
 
   @Effect({ dispatch: false })
-  LogOut: Observable<any> = this.actions.pipe(
+  LogOut$: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGOUT),
     tap(_ => {
       this.authService.setToken(null);
@@ -99,15 +99,16 @@ export class AuthEffects {
   )
 
   @Effect({ dispatch: true })
-  ReloadToken: Observable<any> = this.actions.pipe(
+  ReloadToken$: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.RELOAD_TOKEN),
     switchMap(_ => {
-      return of(new LoadToken({token: this.authService.getToken()}))
+      const token = this.authService.getToken();
+      return of(new LoadToken({accessToken: token, userData: this.authService.getUserDataFromJWT(token)}))
     })
   );
 
   @Effect({ dispatch: true })
-  TriggerReloadToken: Observable<any> = this.actions.pipe(
+  TriggerReloadToken$: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN_SUCCESS, AuthActionTypes.SIGNUP_SUCCESS),
     switchMap(_ => {
       return of(new ReloadToken())

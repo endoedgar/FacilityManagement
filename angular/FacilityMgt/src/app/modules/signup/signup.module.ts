@@ -13,6 +13,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { reducers } from "../../store";
 import { EffectsModule } from "@ngrx/effects";
 import { AuthEffects } from "../../store/effects/auth.effects";
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 const MY_ROUTES: Routes = [{ path: "", component: UserSignupComponent }];
 
@@ -29,7 +30,8 @@ const MY_ROUTES: Routes = [{ path: "", component: UserSignupComponent }];
     MatFormFieldModule,
     MatInputModule,
     MatCardModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressSpinnerModule
   ]
 })
 export class SignupModule {}

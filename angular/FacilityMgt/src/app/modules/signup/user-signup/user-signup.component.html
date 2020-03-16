@@ -55,6 +55,12 @@
           Cancel
         </button>
       </div>
+      <mat-progress-spinner
+        *ngIf="loading$ | async"
+        color="primary"
+        mode="indeterminate"
+      >
+      </mat-progress-spinner>
     </form>
     <p>
       <span>Already have an account?&nbsp;</span>

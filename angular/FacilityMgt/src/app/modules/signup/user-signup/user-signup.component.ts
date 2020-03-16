@@ -4,7 +4,7 @@ import { User } from "src/app/models/User";
 import { AppState } from "src/app/store/states/app.state";
 import { SignUp, ClearErrorMessage } from "src/app/store/actions/auth.actions";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { selectAuthState, selectAuthError } from "src/app/store/selectors/auth.selectors";
+import { selectAuthState, selectAuthError, selectAuthLoading } from "src/app/store/selectors/auth.selectors";
 
 @Component({
   selector: "app-signup-login",
@@ -14,17 +14,18 @@ import { selectAuthState, selectAuthError } from "src/app/store/selectors/auth.s
 export class UserSignupComponent implements OnInit {
   user: User = new User();
   error$ = this.store.select(selectAuthError);
+  loading$ = this.store.select(selectAuthLoading);
 
   constructor(private store: Store<AppState>, private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.error$.subscribe(error => {
       if (error) {
-        this._snackBar.open(error, "Okay", {
+        this._snackBar.open(error.error.message || error.message, "Okay", {
           duration: 5000
         });
-        this.store.dispatch(new ClearErrorMessage);
       }
+      this.store.dispatch(new ClearErrorMessage);
     });
   }
 
