@@ -5,7 +5,7 @@ export const {
     selectAll: _selectAllInspections
 } = inspectionsAdapter.getSelectors();
 
-export const selectInspectionsState = createFeatureSelector<InspectionsState>("users");
+export const selectInspectionsState = createFeatureSelector<InspectionsState>("inspections");
 
 export const selectAllInspections = createSelector(
     selectInspectionsState,

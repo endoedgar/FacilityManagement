@@ -6,7 +6,7 @@ const router = Router();
 /* GET inspections listing */
 router.get('/', async (req, res, next) => {
     try {
-        res.status(200).send({ status: "success", data: await Inspection.find() });
+        res.status(200).send({ status: "success", data: await Inspection.find().populate("facility").populate({path: "inspector", select: "-password"}) });
     } catch (err) {
         return next(err);
     }
@@ -28,7 +28,7 @@ router.get('/:id', async (req, res, next) => {
 /* GET inspections of a facility */
 router.get('/facility/:facility_id', async (req, res, next) => {
     try {
-        const inspections = await Inspection.find({ "facility_id": req.params.facility_id });
+        const inspections = await Inspection.find({ "facility": req.params.facility_id });
         inspections ?
             res.status(200).send({ status: "success", data: inspections }) :
             res.status(404).send({ status: "failed", message: "Inspections not found." });
