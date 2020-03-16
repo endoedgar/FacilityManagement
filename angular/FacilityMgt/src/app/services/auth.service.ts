@@ -1,6 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { User } from '../models/User';
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
@@ -26,8 +27,12 @@ export class AuthService {
     return localStorage.getItem("token");
   }
 
-  public logIn(username: String, password: String): Observable<any> {
+  public logIn(username: string, password: string): Observable<any> {
     return this.http.post(`${this.BASE_URL}/login`, { username, password });
+  }
+
+  public patch(username: string, data : User): Observable<any> {
+    return this.http.patch(`${this.BASE_URL}/users/${username}`, data);
   }
 
   public signUp(

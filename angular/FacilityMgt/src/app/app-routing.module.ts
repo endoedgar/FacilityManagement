@@ -15,6 +15,11 @@ const routes: Routes = [
       import("./modules/signup/signup.module").then(m => m.SignupModule)
   },
   {
+    path: "settings",
+    loadChildren: () =>
+      import("./modules/settings/settings.module").then(m => m.SettingsModule)
+  },
+  {
     path: "facilities",
     loadChildren: () =>
       import("./modules/facility/facility.module").then(m => m.FacilityModule)

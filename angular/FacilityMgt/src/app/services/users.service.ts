@@ -8,6 +8,10 @@ export class UsersService {
 
   constructor(private http: HttpClient) {}
 
+  public patch(username, data): Observable<any> {
+    return this.http.patch(`${this.BASE_URL}/users/${username}`, data);
+  }
+
   public find(): Observable<any> {
     return this.http.get(`${this.BASE_URL}/users`);
   }

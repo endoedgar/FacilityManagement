@@ -10,3 +10,9 @@ button {
     background-position: center center;
   }
 }
+
+.main-area {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}

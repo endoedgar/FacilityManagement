@@ -14,7 +14,10 @@ import {
   SignUpSuccess,
   SignUpFailure,
   LoadToken,
-  ReloadToken
+  ReloadToken,
+  UpdateProfileFailure,
+  UpdateProfileSuccess,
+  UpdateProfile
 } from "../actions/auth.actions";
 import { ShowMessage } from "../actions/ui.actions";
 
@@ -74,9 +77,35 @@ export class AuthEffects {
   );
 
   @Effect()
+  UpdateProfile$: Observable<any> = this.actions.pipe(
+    ofType(AuthActionTypes.UPDATE_PROFILE),
+    map((action: UpdateProfile) => action.user),
+    switchMap(user =>
+      this.authService.patch(user.username, user).pipe(
+        map(
+          response =>
+            new UpdateProfileSuccess({
+              accessToken: response.accessToken
+            })
+        ),
+        catchError(err => of(new UpdateProfileFailure(err)))
+      )
+    )
+  );
+
+  @Effect({ dispatch: false })
+  UpdateProfileSuccess$: Observable<any> = this.actions.pipe(
+    ofType(AuthActionTypes.UPDATE_PROFILE_SUCCESS),
+    tap((response: UpdateProfileSuccess) => {
+      this.authService.setToken(response.payload.accessToken);
+      this.router.navigateByUrl("/");
+    })
+  );
+
+  @Effect()
   showMessageOnFailures$: Observable<any> = this.actions.pipe(
-    ofType(AuthActionTypes.SIGNUP_FAILURE, AuthActionTypes.LOGIN_FAILURE),
-    map((action: SignUpFailure | LogInFailure) => action.err),
+    ofType(AuthActionTypes.SIGNUP_FAILURE, AuthActionTypes.LOGIN_FAILURE, AuthActionTypes.UPDATE_PROFILE_FAILURE),
+    map((action: SignUpFailure | LogInFailure | UpdateProfileFailure) => action.err),
     switchMap(err => of(new ShowMessage(err.error.message || err.message)))
   );
 
@@ -105,7 +134,7 @@ export class AuthEffects {
 
   @Effect({ dispatch: true })
   TriggerReloadToken$: Observable<any> = this.actions.pipe(
-    ofType(AuthActionTypes.LOGIN_SUCCESS, AuthActionTypes.SIGNUP_SUCCESS),
+    ofType(AuthActionTypes.LOGIN_SUCCESS, AuthActionTypes.SIGNUP_SUCCESS, AuthActionTypes.UPDATE_PROFILE_SUCCESS),
     switchMap(_ => of(new ReloadToken()))
   );
 }

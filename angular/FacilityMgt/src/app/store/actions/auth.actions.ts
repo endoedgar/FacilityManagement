@@ -10,7 +10,10 @@ export enum AuthActionTypes {
   SIGNUP = "[Auth] Signup",
   SIGNUP_SUCCESS = "[Auth] Signup Success",
   SIGNUP_FAILURE = "[Auth] Signup Failure",
-  LOGOUT = "[Auth] Logout"
+  UPDATE_PROFILE = "[Auth] Update Profile",
+  UPDATE_PROFILE_SUCCESS = "[Auth] Update Profile Success",
+  UPDATE_PROFILE_FAILURE = "[Auth] Update Profile Failure",
+  LOGOUT = "[Auth] Logout",
 }
 
 export class LoadToken implements Action {
@@ -60,6 +63,21 @@ export class SignUpFailure implements Action {
   constructor(public readonly err: any) {}
 }
 
+export class UpdateProfile implements Action {
+  readonly type = AuthActionTypes.UPDATE_PROFILE;
+  constructor(public user : User) {}
+}
+
+export class UpdateProfileSuccess implements Action {
+  readonly type = AuthActionTypes.UPDATE_PROFILE_SUCCESS;
+  constructor(public readonly payload: { accessToken: string }) {}
+}
+
+export class UpdateProfileFailure implements Action {
+  readonly type = AuthActionTypes.UPDATE_PROFILE_FAILURE;
+  constructor(public readonly err: any) {}
+}
+
 export class LogOut implements Action {
   readonly type = AuthActionTypes.LOGOUT;
   constructor() {}
@@ -74,4 +92,7 @@ export type AllAuthActions =
   | SignUp
   | SignUpSuccess
   | SignUpFailure
+  | UpdateProfile
+  | UpdateProfileSuccess
+  | UpdateProfileFailure
   | LogOut;

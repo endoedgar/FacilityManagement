@@ -37,7 +37,13 @@
             }}</mat-list-item
           >
           <mat-divider></mat-divider>
-
+          <button mat-list-item [routerLink]="['/users', (loggedInUser$ | async)?.username]">
+            Your profile
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-list-item [routerLink]="['/settings']">
+            Settings
+          </button>
           <button mat-list-item (click)="onLogout()">
             Logout
           </button>
