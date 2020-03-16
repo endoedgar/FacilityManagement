@@ -9,7 +9,7 @@ import { MapStateService } from '../../../services/map-state.service';
 import { Subscription, Observable } from 'rxjs';
 import { selectFacilityState } from 'src/app/store/selectors/facility.selectors';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/store/states/app.states';
+import { AppState } from 'src/app/store/states/app.state';
 
 
 @Component({

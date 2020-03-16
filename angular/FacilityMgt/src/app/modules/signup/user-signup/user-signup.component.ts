@@ -1,11 +1,10 @@
 import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { User } from "src/app/models/User";
-import { Observable } from "rxjs";
-import { AppState } from "src/app/store/states/app.states";
+import { AppState } from "src/app/store/states/app.state";
 import { SignUp, ClearErrorMessage } from "src/app/store/actions/auth.actions";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { selectAuthState } from "src/app/store/selectors/auth.selectors";
+import { selectAuthState, selectAuthError } from "src/app/store/selectors/auth.selectors";
 
 @Component({
   selector: "app-signup-login",
@@ -14,17 +13,17 @@ import { selectAuthState } from "src/app/store/selectors/auth.selectors";
 })
 export class UserSignupComponent implements OnInit {
   user: User = new User();
-  getState: Observable<any>;
+  error$ = this.store.select(selectAuthError);
 
-  constructor(private store: Store<AppState>, private _snackBar: MatSnackBar) {
-    this.getState = this.store.select(selectAuthState);
-  }
+  constructor(private store: Store<AppState>, private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
-    this.getState.subscribe(state => {
-      if (state.errorMessage) {
-        this._snackBar.open(state.errorMessage, "Okay", { duration: 5000 });
-        this.store.dispatch(new ClearErrorMessage());
+    this.error$.subscribe(error => {
+      if (error) {
+        this._snackBar.open(error, "Okay", {
+          duration: 5000
+        });
+        this.store.dispatch(new ClearErrorMessage);
       }
     });
   }
