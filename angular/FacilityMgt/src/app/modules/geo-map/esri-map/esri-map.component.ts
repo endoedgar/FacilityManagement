@@ -2,7 +2,8 @@ import {
   Component,
   OnInit,
   ViewChild,
-  ElementRef
+  ElementRef,
+  AfterViewChecked
 } from "@angular/core";
 import { loadModules } from "esri-loader";
 import { MapStateService } from '../../../services/map-state.service';
@@ -10,6 +11,10 @@ import { Subscription, Observable } from 'rxjs';
 import { selectFacilityState } from 'src/app/store/selectors/facility.selectors';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/states/app.states';
+import { ClearErrorMessage } from 'src/app/store/actions/facility.actions';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { ThrowStmt } from '@angular/compiler';
 
 
 @Component({
@@ -19,29 +24,45 @@ import { AppState } from 'src/app/store/states/app.states';
 })
 export class EsriMapComponent implements OnInit {
 
+
   public mapView: __esri.MapView;
   private sub: Subscription = new Subscription();
   getState: Observable<any>;
-
+  dialogRef;
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
 
-  constructor(private msService: MapStateService, private store: Store<AppState>) {
+  constructor(public dialog: MatDialog, private msService: MapStateService, private store: Store<AppState>) {
     this.getState = this.store.select(selectFacilityState);
-   }
+
+  }
+
+  OpenDialog(graphic) {
+     this.dialogRef = this.dialog.open(ConfirmDialogComponent);
+  }
 
   // TODO : chenge it to async/await 
   public ngOnInit() {
+
+    const addFacilityImgURL = "../../../../assets/images/facility.png";
+
+
     // use esri-loader to load JSAPI modules
     return loadModules([
       'esri/Map',
       'esri/views/MapView',
-      'esri/Graphic'
+      'esri/Graphic',
+      'esri/layers/GraphicsLayer',
     ])
-      .then(([Map, MapView, Graphic]) => {
+      .then(([Map, MapView, Graphic, GraphicsLayer]) => {
         const map: __esri.Map = new Map({
           basemap: 'hybrid'
         });
+
+        var Glayer = new GraphicsLayer({
+          graphics: []
+        });
+
 
         this.mapView = new MapView({
           container: this.mapViewEl.nativeElement,
@@ -50,13 +71,16 @@ export class EsriMapComponent implements OnInit {
           map: map
         });
 
+        map.add(Glayer);
+
         this.mapView.when(
           () => {
-            const points = this.msService.getPoint();
+            const points = this.msService.getPoints();
             console.log('first load', points);
             this.sub = points.subscribe(value => {
               if (value.length) {
-                this.mapView.graphics.addMany(value);
+                //this.mapView.graphics.addMany(value);
+                Glayer.graphics.addMany(value);
                 this.sub.unsubscribe(); // we only want this once
               }
             })
@@ -66,37 +90,42 @@ export class EsriMapComponent implements OnInit {
           }
         );
 
-        this.mapView.on('click', (event: __esri.MapViewClickEvent) => {
 
-          let url = null;
-          let addGraphicFlag = false;
+
+
+        this.mapView.on('click', async (event: __esri.MapViewClickEvent) => {
+
           if (this.msService.getMapOpsMode() == "addFacility") {
-            this.mapView.graphics.removeAll();
-            url = "../../../../assets/images/facility.png";
-            addGraphicFlag = true;
-          }
 
-          const pointGraphic: __esri.Graphic = new Graphic({
-            attributes: {
-              time: new Date().getTime()
-            },
-            geometry: {
-              type: 'point',
-              longitude: event.mapPoint.longitude,
-              latitude: event.mapPoint.latitude,
-              spatialReference: event.mapPoint.spatialReference
-            },
-            symbol: {
-              type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
-              url: url,
-              width: "40px",
-              height: "40px"
-            }
-          });
+            const mPoint = [event.mapPoint.longitude, event.mapPoint.latitude]
+            const pointGraphic: __esri.Graphic = generateGraphic(mPoint, addFacilityImgURL);
 
-          if (addGraphicFlag) {
-            this.mapView.graphics.add(pointGraphic);
+            //this.mapView.graphics.add(pointGraphic);
+            Glayer.graphics.add(pointGraphic);
             this.msService.addPoint(pointGraphic);
+            this.msService.setMapOpsMode("");
+
+          } else if (this.msService.getMapOpsMode() == "deleteFacility") {
+
+            let graphic: __esri.Graphic;
+            const response = await this.mapView.hitTest(event);
+
+            if (response.results.length) {
+              graphic = response.results.filter(function (result) {
+                return result.graphic.layer === Glayer;
+              })[0].graphic;
+            }
+
+            this.OpenDialog(graphic);
+
+            this.dialogRef.afterClosed().subscribe(result => {
+              if (result){
+                console.log(graphic)
+               this.msService.delPoint(graphic);
+               Glayer.graphics.remove(graphic)
+              }
+           });
+
             this.msService.setMapOpsMode("");
           }
         });
@@ -105,46 +134,66 @@ export class EsriMapComponent implements OnInit {
 
           if (state.facility) {
             if (state.errorMessage) {
-              // this.showSnackBar(state.facility.errorMessage, "Failed");
-              // this.store.dispatch(new ClearErrorMessage);
+              showSnackBar(state.facility.errorMessage, "Failed");
+              this.store.dispatch(new ClearErrorMessage);
             } else if (state.facility.getFacilities) {
-              const url = "../../../../assets/images/facility.png";
-              console.log(this.mapView)
-              state.facility.getFacilities.data.map(point => {
-                if (!point.location.length)return;
 
-                const pointGraphic: __esri.Graphic = new Graphic({
-                  attributes: {
-                    time: new Date().getTime()
-                  },
-                  geometry: {
-                    type: 'point',
-                    longitude: point.location[0],
-                    latitude: point.location[1],
-                    spatialReference: this.mapView.spatialReference
-                  },
-                  symbol: {
-                    type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
-                    url: url,
-                    width: "40px",
-                    height: "40px"
-                  }
+              if (state.facility.getFacilities.status == "success") {
+                let mPoint = null;
+                state.facility.getFacilities.data.map(point => {
+                  if (!point.location.length) return; // ignore points without coordinates
+
+                  mPoint = [point.location[0], point.location[1]]
+                  Glayer.graphics.add(generateGraphic(mPoint, addFacilityImgURL));
+
                 });
-      
-                  this.mapView.graphics.add(pointGraphic);
-                  
-              });
-              console.log(state);
+              } else {
+                showSnackBar("Unexpected Error !", state.facility.getFacilities.status);
+              }
+
+
             } else if (state.facility.addFacility) {
               // this.showSnackBar(state.facility.addFacility.message, state.facility.addFacility.status);
               // this.store.dispatch(new addFacilitySuccess(state));
             }
           }
         });
-        
+
+        function generateGraphic(point, url) {
+          const pointGraphic: __esri.Graphic = new Graphic({
+            attributes: {
+              time: new Date().getTime()
+            },
+            geometry: {
+              type: 'point',
+              longitude: point[0],
+              latitude: point[1],
+              spatialReference: 3857 //TODO: add it to config
+            },
+            symbol: {
+              type: "picture-marker",  // autocasts as new PictureMarkerSymbol()
+              url: url,
+              width: "40px",
+              height: "40px"
+            }
+          });
+          return pointGraphic;
+        }
+
+        // TODO : add it to common place
+        function showSnackBar(msg, stat) {
+          this._snackBar.open(msg, stat, {
+            duration: 3000
+          });
+        }
+
       })
       .catch(err => {
         console.error(err);
       });
+
+
   }
+
+
 }
