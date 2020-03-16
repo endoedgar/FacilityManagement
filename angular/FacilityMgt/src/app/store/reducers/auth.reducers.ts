@@ -1,7 +1,7 @@
-import { ALL, AuthActionTypes } from "../actions/auth.actions";
+import { AuthActionTypes, AllAuthActions } from "../actions/auth.actions";
 import { initialAuthState, AuthState } from "../states/auth.state";
 
-export function reducer(state = initialAuthState, action: ALL): AuthState {
+export function reducer(state = initialAuthState, action: AllAuthActions): AuthState {
   switch (action.type) {
     case AuthActionTypes.SIGNUP:
     case AuthActionTypes.LOGIN: {
@@ -11,7 +11,7 @@ export function reducer(state = initialAuthState, action: ALL): AuthState {
         loading: true
       };
     }
-    case AuthActionTypes.SIGNUP_SUCCESS: 
+    case AuthActionTypes.SIGNUP_SUCCESS:
     case AuthActionTypes.LOGIN_SUCCESS: {
       return {
         ...state,
@@ -26,11 +26,6 @@ export function reducer(state = initialAuthState, action: ALL): AuthState {
         isAuthenticated: false,
         error: action.err,
         loading: false
-      };
-    case AuthActionTypes.CLEAR_ERROR_MESSAGE:
-      return {
-        ...state,
-        error: null
       };
     case AuthActionTypes.LOAD_TOKEN: {
       const token = action.payload.accessToken;

@@ -14,14 +14,17 @@ import {
   SignUpSuccess,
   SignUpFailure,
   LoadToken,
-  ReloadToken,
+  ReloadToken
 } from "../actions/auth.actions";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { ShowMessage } from '../actions/ui.actions';
 
 @Injectable()
 export class AuthEffects {
   constructor(
     private actions: Actions,
     private authService: AuthService,
+    private snackbar: MatSnackBar,
     private router: Router
   ) {}
 
@@ -44,7 +47,7 @@ export class AuthEffects {
   @Effect({ dispatch: false })
   LogInSuccess$: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN_SUCCESS),
-    tap((action : LogInSuccess) => {
+    tap((action: LogInSuccess) => {
       this.authService.setToken(action.payload.accessToken);
       this.router.navigateByUrl("/");
     })
@@ -78,15 +81,19 @@ export class AuthEffects {
   @Effect({ dispatch: false })
   SignUpSuccess$: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.SIGNUP_SUCCESS),
-    tap((response : SignUpSuccess) => {
+    tap((response: SignUpSuccess) => {
       this.authService.setToken(response.payload.accessToken);
       this.router.navigateByUrl("/");
     })
   );
 
-  @Effect({ dispatch: false })
-  SignUpFailure$: Observable<any> = this.actions.pipe(
-    ofType(AuthActionTypes.SIGNUP_FAILURE)
+  @Effect()
+  showMessageOnFailures$: Observable<any> = this.actions.pipe(
+    ofType(AuthActionTypes.SIGNUP_FAILURE, AuthActionTypes.LOGIN_FAILURE),
+    map((action: SignUpFailure | LogInFailure) => action.err),
+    switchMap(err => {
+      return of(new ShowMessage(err.error.message || err.message));
+    })
   );
 
   @Effect({ dispatch: false })
@@ -96,14 +103,19 @@ export class AuthEffects {
       this.authService.setToken(null);
       this.router.navigateByUrl("/");
     })
-  )
+  );
 
   @Effect({ dispatch: true })
   ReloadToken$: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.RELOAD_TOKEN),
     switchMap(_ => {
       const token = this.authService.getToken();
-      return of(new LoadToken({accessToken: token, userData: this.authService.getUserDataFromJWT(token)}))
+      return of(
+        new LoadToken({
+          accessToken: token,
+          userData: this.authService.getUserDataFromJWT(token)
+        })
+      );
     })
   );
 
@@ -111,7 +123,7 @@ export class AuthEffects {
   TriggerReloadToken$: Observable<any> = this.actions.pipe(
     ofType(AuthActionTypes.LOGIN_SUCCESS, AuthActionTypes.SIGNUP_SUCCESS),
     switchMap(_ => {
-      return of(new ReloadToken())
+      return of(new ReloadToken());
     })
   );
 }

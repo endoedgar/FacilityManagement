@@ -7,15 +7,14 @@ export enum AuthActionTypes {
   LOGIN_SUCCESS = "[Auth] Login Success",
   LOGIN_FAILURE = "[Auth] Login Failure",
   SIGNUP = "[Auth] Signup",
-  SIGNUP_SUCCESS = '[Auth] Signup Success',
-  SIGNUP_FAILURE = '[Auth] Signup Failure',
-  CLEAR_ERROR_MESSAGE = '[Auth] Clear Error Message',
+  SIGNUP_SUCCESS = "[Auth] Signup Success",
+  SIGNUP_FAILURE = "[Auth] Signup Failure",
   LOGOUT = "[Auth] Logout"
 }
 
 export class LoadToken implements Action {
   readonly type = AuthActionTypes.LOAD_TOKEN;
-  constructor(public payload: {accessToken: string, userData: object}) {}
+  constructor(public payload: { accessToken: string; userData: object }) {}
 }
 
 export class ReloadToken implements Action {
@@ -25,12 +24,12 @@ export class ReloadToken implements Action {
 
 export class LogIn implements Action {
   readonly type = AuthActionTypes.LOGIN;
-  constructor(public payload: { username: string, password: string }) {}
+  constructor(public payload: { username: string; password: string }) {}
 }
 
 export class LogInSuccess implements Action {
   readonly type = AuthActionTypes.LOGIN_SUCCESS;
-  constructor(public readonly payload: { accessToken : string }) {}
+  constructor(public readonly payload: { accessToken: string }) {}
 }
 
 export class LogInFailure implements Action {
@@ -40,22 +39,23 @@ export class LogInFailure implements Action {
 
 export class SignUp implements Action {
   readonly type = AuthActionTypes.SIGNUP;
-  constructor(public readonly payload: { name : string, username: string, password : string}) {}
+  constructor(
+    public readonly payload: {
+      name: string;
+      username: string;
+      password: string;
+    }
+  ) {}
 }
 
 export class SignUpSuccess implements Action {
   readonly type = AuthActionTypes.SIGNUP_SUCCESS;
-  constructor(public readonly payload: { accessToken : string }) {}
+  constructor(public readonly payload: { accessToken: string }) {}
 }
 
 export class SignUpFailure implements Action {
-    readonly type = AuthActionTypes.SIGNUP_FAILURE;
-    constructor(public readonly err: any) {}
-  }
-
-export class ClearErrorMessage implements Action {
-  readonly type = AuthActionTypes.CLEAR_ERROR_MESSAGE;
-  constructor() {}
+  readonly type = AuthActionTypes.SIGNUP_FAILURE;
+  constructor(public readonly err: any) {}
 }
 
 export class LogOut implements Action {
@@ -63,7 +63,7 @@ export class LogOut implements Action {
   constructor() {}
 }
 
-export type ALL =
+export type AllAuthActions =
   | LoadToken
   | ReloadToken
   | LogIn
@@ -72,5 +72,4 @@ export type ALL =
   | SignUp
   | SignUpSuccess
   | SignUpFailure
-  | ClearErrorMessage
   | LogOut;
