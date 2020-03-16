@@ -4,6 +4,7 @@ import { User } from "src/app/models/User";
 export interface UsersState extends EntityState<User> {
   loading: boolean;
   error: any;
+  selectedUserId: string;
 }
 
 export const usersAdapter: EntityAdapter<User> = createEntityAdapter<User>({
@@ -12,5 +13,6 @@ export const usersAdapter: EntityAdapter<User> = createEntityAdapter<User>({
 
 export const initialUsersState: UsersState = usersAdapter.getInitialState({
   loading: false,
-  error: null
+  error: null,
+  selectedUserId: null
 });

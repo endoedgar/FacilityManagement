@@ -14,15 +14,18 @@ import { reducers } from '../../store';
 import { EffectsModule } from '@ngrx/effects';
 import { UsersEffects } from 'src/app/store/effects/users.effects';
 import { ApplicationPipesModule } from '../pipes.module';
+import { UserDetailComponent } from './user-detail/user-detail.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
-  declarations: [UserListComponent],
+  declarations: [UserListComponent, UserDetailComponent],
   imports: [
     CommonModule,
     StoreModule.forFeature('users', reducers.users ),
     EffectsModule.forFeature([UsersEffects]),
     RouterModule.forChild([
-      {path: '', component: UserListComponent}
+      {path: '', component: UserListComponent},
+      {path: ':username', component: UserDetailComponent}
     ]),
     FormsModule,
     ReactiveFormsModule,
@@ -32,7 +35,8 @@ import { ApplicationPipesModule } from '../pipes.module';
     MatCardModule,
     MatSnackBarModule,
     MatTableModule,
-    ApplicationPipesModule
+    ApplicationPipesModule,
+    MatProgressSpinnerModule
   ]
 })
 export class UsersModule { }

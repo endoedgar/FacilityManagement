@@ -7,7 +7,10 @@ import { Observable, of } from "rxjs";
 import {
   UserActionTypes,
   LoadUsersSuccess,
-  LoadUsersFailure
+  LoadUsersFailure,
+  LoadUserFailure,
+  LoadUser,
+  LoadUserSuccess
 } from "../actions/users.actions";
 import { User } from "src/app/models/User";
 import { ShowMessage } from "../actions/ui.actions";
@@ -17,24 +20,32 @@ export class UsersEffects {
   constructor(private actions: Actions, private usersService: UsersService) {}
 
   @Effect()
-  Load: Observable<any> = this.actions.pipe(
+  loadUsers$: Observable<any> = this.actions.pipe(
     ofType(UserActionTypes.LOAD_USERS),
     switchMap(_ => {
       return this.usersService.find().pipe(
-        map((users: User[]) => {
-          return new LoadUsersSuccess(users);
-        }),
-        catchError(error => {
-          return of(new LoadUsersFailure(error));
-        })
+        map((users: User[]) => new LoadUsersSuccess(users)),
+        catchError(error => of(new LoadUsersFailure(error)))
+      );
+    })
+  );
+
+  @Effect()
+  loadUser$: Observable<any> = this.actions.pipe(
+    ofType(UserActionTypes.LOAD_USER),
+    map((action:LoadUser) => action.username),
+    switchMap(username => {
+      return this.usersService.findOne(username).pipe(
+        map((user: User) => new LoadUserSuccess(user)),
+        catchError(error => of(new LoadUserFailure(error)))
       );
     })
   );
 
   @Effect()
   showMessageOnFailures$: Observable<any> = this.actions.pipe(
-    ofType(UserActionTypes.LOAD_USERS_FAILURE),
-    map((action: LoadUsersFailure) => action.err),
+    ofType(UserActionTypes.LOAD_USERS_FAILURE, UserActionTypes.LOAD_USER_FAILURE),
+    map((action: LoadUsersFailure | LoadUserFailure) => action.err),
     switchMap(err => {
       return of(new ShowMessage(err.error.message || err.message));
     })
