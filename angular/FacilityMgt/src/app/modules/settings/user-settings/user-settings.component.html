@@ -1,6 +1,6 @@
 <mat-card class="row">
   <mat-card-header>
-    <mat-card-title>Sign up</mat-card-title>
+    <mat-card-title>Settings for {{ user?.username }}</mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <form (ngSubmit)="onSubmit()" ngNativeValidate>
@@ -21,21 +21,6 @@
       </div>
       <div>
         <mat-form-field class="form-group">
-          <mat-label for="username">Username</mat-label>
-          <input
-            matInput
-            [(ngModel)]="user.username"
-            name="username"
-            type="username"
-            required
-            class="form-control"
-            id="username"
-            placeholder="enter your username"
-          />
-        </mat-form-field>
-      </div>
-      <div>
-        <mat-form-field class="form-group">
           <mat-label for="password">Password</mat-label>
           <input
             matInput
@@ -46,6 +31,30 @@
             class="form-control"
             id="password"
             placeholder="enter a password"
+          />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field class="form-group">
+          <mat-chip-list #groupList>
+            <mat-chip
+              removeable
+              (removed)="onRemoveGroup(group)"
+              *ngFor="let group of user?.groups"
+              >{{ group }}
+              <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+          </mat-chip-list>
+          <input
+            matInput
+            name="groups"
+            class="form-control"
+            id="groups"
+            placeholder="enter groups"
+            [matChipInputFor]="groupList"
+            [matChipInputAddOnBlur]="true"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="addGroup($event)"
           />
         </mat-form-field>
       </div>
@@ -64,11 +73,19 @@
           />
         </mat-form-field>
       </div>
+      <img
+        [src]="(user?.email | gravatarUrl) + '&s=400'"
+        alt="Accurate Photo of {{ user?.name }}"
+        title="Accurate Photo of {{ user?.name }}"
+      />
       <div>
-        <button mat-button type="submit" color="primary">Submit</button>
-        <button mat-button [routerLink]="['/']" class="btn btn-success">
-          Cancel
-        </button>
+        <mat-form-field appearance="fill">
+          <mat-label>Bio</mat-label>
+          <textarea matInput [(ngModel)]="user.bio" name="bio"></textarea>
+        </mat-form-field>
+      </div>
+      <div>
+        <button mat-button type="submit" color="primary">Update profile</button>
       </div>
       <mat-progress-spinner
         *ngIf="loading$ | async"
@@ -77,9 +94,5 @@
       >
       </mat-progress-spinner>
     </form>
-    <p>
-      <span>Already have an account?&nbsp;</span>
-      <button mat-button [routerLink]="['/login']">Log in!</button>
-    </p>
   </mat-card-content>
 </mat-card>

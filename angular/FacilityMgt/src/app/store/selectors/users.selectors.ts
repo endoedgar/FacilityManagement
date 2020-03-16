@@ -12,7 +12,18 @@ export const selectAllUsers = createSelector(
     _selectAllUsers
 );
 
-export const selectUsersError = createSelector(
+export const getCurrentUsername = createSelector(
     selectUsersState,
-    state => state.errorMessage
+    (state : UsersState) => state.selectedUserId
+);
+
+export const getCurrentUser = createSelector(
+    selectUsersState,
+    getCurrentUsername,
+    state => state.entities[state.selectedUserId]
+);
+
+export const selectUsersLoading = createSelector(
+    selectUsersState,
+    state => state.loading
 );

@@ -1,35 +1,38 @@
-import { Action } from "@ngrx/store";
-import { User } from 'src/app/models/User';
+import { createAction, props } from "@ngrx/store";
+import { User } from "src/app/models/User";
 
-export enum AuthActionTypes {
-  LOAD_USERS = "[Users] Load",
-  LOAD_USERS_SUCCESS = "[Users] Load Success",
-  LOAD_USERS_FAILURE = "[Users] Load Failure",
-  CLEAR_ERROR_MESSAGE = '[Users] Clear Error Message',
-}
+export const LoadUsers = createAction("[Users] Load Users");
 
-export class LoadUsers implements Action {
-  readonly type = AuthActionTypes.LOAD_USERS;
-  constructor() {}
-}
+export const LoadUsersSuccess = createAction(
+  "[Users] Load Users Success",
+  props<{ users: User[] }>()
+);
 
-export class LoadUsersSuccess implements Action {
-  readonly type = AuthActionTypes.LOAD_USERS_SUCCESS;
-  constructor(public users: User[]) {}
-}
+export const LoadUsersFailure = createAction(
+  "[Users] Load Users Failure",
+  props<{ err: any }>()
+);
 
-export class LoadUsersFailure implements Action {
-  readonly type = AuthActionTypes.LOAD_USERS_FAILURE;
-  constructor(public payload: any) {}
-}
+export const LoadUser = createAction(
+  "[Users] Load User",
+  props<{ username: string }>()
+);
 
-export class ClearErrorMessage implements Action {
-  readonly type = AuthActionTypes.CLEAR_ERROR_MESSAGE;
-  constructor() {}
-}
+export const LoadUserSuccess = createAction(
+  "[Users] Load User Success",
+  props<{ user: User }>()
+);
 
-export type ALL =
-  | LoadUsers
-  | LoadUsersSuccess
-  | LoadUsersFailure
-  | ClearErrorMessage;
+export const LoadUserFailure = createAction(
+  "[Users] Load User Failure",
+  props<{ err: any }>()
+);
+
+export const AllUserActions = {
+  LoadUsers,
+  LoadUsersSuccess,
+  LoadUsersFailure,
+  LoadUser,
+  LoadUserSuccess,
+  LoadUserFailure
+};

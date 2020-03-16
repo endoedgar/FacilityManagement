@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
-import { UserSignupComponent } from "./user-signup/user-signup.component";
+import { UserSettingsComponent } from "./user-settings/user-settings.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { StoreModule } from "@ngrx/store";
 import { MatButtonModule } from "@angular/material/button";
@@ -14,11 +14,14 @@ import { reducers } from "../../store";
 import { EffectsModule } from "@ngrx/effects";
 import { AuthEffects } from "../../store/effects/auth.effects";
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ApplicationPipesModule } from '../pipes.module';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
 
-const MY_ROUTES: Routes = [{ path: "", component: UserSignupComponent }];
+const MY_ROUTES: Routes = [{ path: "", component: UserSettingsComponent }];
 
 @NgModule({
-  declarations: [UserSignupComponent],
+  declarations: [UserSettingsComponent],
   imports: [
     CommonModule,
     StoreModule.forFeature("auth", reducers.auth),
@@ -31,7 +34,10 @@ const MY_ROUTES: Routes = [{ path: "", component: UserSignupComponent }];
     MatInputModule,
     MatCardModule,
     MatSnackBarModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    ApplicationPipesModule,
+    MatChipsModule,
+    MatIconModule
   ]
 })
-export class SignupModule {}
+export class SettingsModule {}

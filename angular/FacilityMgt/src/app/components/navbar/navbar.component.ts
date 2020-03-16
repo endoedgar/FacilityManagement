@@ -1,9 +1,8 @@
-import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { AppState } from "src/app/store/states/app.state";
-import { Observable } from "rxjs";
 import { LogOut } from "src/app/store/actions/auth.actions";
-import { selectAuthState } from "src/app/store/selectors/auth.selectors";
+import { selectLoggedinUser } from "src/app/store/selectors/auth.selectors";
 
 @Component({
   selector: "navbar",
@@ -11,24 +10,13 @@ import { selectAuthState } from "src/app/store/selectors/auth.selectors";
   styleUrls: ["./navbar.component.scss"]
 })
 export class NavbarComponent implements OnInit {
-  getState: Observable<any>;
-  isAuthenticated: any;
-  user: any;
+  loggedInUser$ = this.store.select(selectLoggedinUser);
 
-  constructor(private store: Store<AppState>) {
-    this.getState = this.store.select(selectAuthState);
-  }
+  constructor(private store: Store<AppState>) {}
 
-  ngOnInit(): void {
-    this.getState.subscribe(state => {
-      if (state) {
-        this.isAuthenticated = state.isAuthenticated;
-        this.user = { ...state.user };
-      }
-    });
-  }
+  ngOnInit(): void {}
 
   onLogout(): void {
-    this.store.dispatch(new LogOut());
+    this.store.dispatch(LogOut());
   }
 }

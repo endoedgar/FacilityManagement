@@ -3,22 +3,22 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 
 @Injectable({ providedIn: "root" })
-export class UsersService {
+export class InspectionsService {
   private BASE_URL = "http://localhost:4000/api/v1";
 
   constructor(private http: HttpClient) {}
 
-  public patch(username, data): Observable<any> {
-    return this.http.patch(`${this.BASE_URL}/users/${username}`, data);
+  public patch(inspection_id, inspection_data): Observable<any> {
+    return this.http.patch(`${this.BASE_URL}/inspections/${inspection_id}`, inspection_data);
   }
 
   public find(): Observable<any> {
-    return this.http.get(`${this.BASE_URL}/users`);
+    return this.http.get(`${this.BASE_URL}/inspections`);
   }
 
   public findOne(
-    username: String
+    inspection_id: String
   ): Observable<any> {
-    return this.http.get(`${this.BASE_URL}/users/${username}`);
+    return this.http.get(`${this.BASE_URL}/inspections/${inspection_id}`);
   }
 }

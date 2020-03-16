@@ -1,36 +1,39 @@
-import { ALL, AuthActionTypes } from "../actions/users.actions";
 import {
-  initialUsersState,
-  UsersState,
-  usersAdapter
-} from "../states/users.state";
+  LoadUsers,
+  LoadUser,
+  LoadUserSuccess,
+  LoadUsersSuccess,
+  LoadUsersFailure,
+  LoadUserFailure
+} from "../actions/users.actions";
+import { initialUsersState, usersAdapter } from "../states/users.state";
+import { createReducer, on } from "@ngrx/store";
 
-export function reducer(state = initialUsersState, action: ALL): UsersState {
-  switch (action.type) {
-    case AuthActionTypes.LOAD_USERS: {
-      return { ...state, loading: true };
-    }
-    case AuthActionTypes.LOAD_USERS_SUCCESS: {
-      return usersAdapter.addMany(action.users, {
-        ...state,
-        errorMessage: null,
-        loading: false
-      });
-    }
-    case AuthActionTypes.LOAD_USERS_FAILURE:
-      return {
-        ...initialUsersState,
-        loading: false,
-        errorMessage: action.payload.error.error.message
-          ? action.payload.error.error.message
-          : action.payload.error.message
-      };
-    case AuthActionTypes.CLEAR_ERROR_MESSAGE:
-      return {
-        ...state,
-        errorMessage: null
-      };
-    default:
-      return state;
-  }
-}
+export const reducer = createReducer(
+  initialUsersState,
+  on(LoadUsers, LoadUser, (state, action) => ({
+    ...state,
+    selectedUserId: null,
+    loading: true
+  })),
+  on(LoadUsersSuccess, (state, action) =>
+    usersAdapter.setAll(action.users, {
+      ...state,
+      error: null,
+      loading: false
+    })
+  ),
+  on(LoadUserSuccess, (state, action) =>
+    usersAdapter.addOne(action.user, {
+      ...state,
+      error: null,
+      loading: false,
+      selectedUserId: action.user._id
+    })
+  ),
+  on(LoadUsersFailure, LoadUserFailure, (state, action) => ({
+    ...initialUsersState,
+    error: action.err,
+    loading: false
+  }))
+);
