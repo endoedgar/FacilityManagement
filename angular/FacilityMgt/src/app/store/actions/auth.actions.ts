@@ -1,4 +1,5 @@
 import { Action } from "@ngrx/store";
+import { User } from 'src/app/models/User';
 
 export enum AuthActionTypes {
   LOAD_TOKEN = "[Auth] Load Token",
@@ -14,7 +15,7 @@ export enum AuthActionTypes {
 
 export class LoadToken implements Action {
   readonly type = AuthActionTypes.LOAD_TOKEN;
-  constructor(public payload: { accessToken: string; userData: object }) {}
+  constructor(public payload: { accessToken: string; userData: User }) {}
 }
 
 export class ReloadToken implements Action {
@@ -44,6 +45,7 @@ export class SignUp implements Action {
       name: string;
       username: string;
       password: string;
+      email: string;
     }
   ) {}
 }

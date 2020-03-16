@@ -33,12 +33,15 @@ export class AuthService {
   public signUp(
     name: String,
     username: String,
-    password: String
+    password: String,
+    email: String
   ): Observable<any> {
     return this.http.post(`${this.BASE_URL}/users`, {
       name,
       username,
-      password
+      password,
+      email,
+      groups: [ "User", "Newbie" ]
     });
   }
 }

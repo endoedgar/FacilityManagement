@@ -22,7 +22,8 @@ export class UserSignupComponent implements OnInit {
     const payload = {
       name: this.user.name,
       username: this.user.username,
-      password: this.user.password
+      password: this.user.password,
+      email: this.user.email
     };
     this.store.dispatch(new SignUp(payload));
   }

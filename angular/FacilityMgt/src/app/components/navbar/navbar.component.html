@@ -27,11 +27,7 @@
       </button>
     </div>
     <div *ngIf="loggedInUser$ | async">
-      <button mat-mini-fab color="primary" [matMenuTriggerFor]="appMenu">
-        <img
-          [title]="(loggedInUser$ | async)?.username"
-          src="./assets/nyan2.svg"
-        />
+      <button class="image" [title]="(loggedInUser$ | async)?.username" mat-mini-fab color="primary" [matMenuTriggerFor]="appMenu" [style.backgroundImage]="'url(' + ((loggedInUser$ | async)?.email | gravatarUrl) + ')'">
       </button>
       <mat-menu #appMenu="matMenu" yPosition="below" xPosition="before">
         <mat-action-list>

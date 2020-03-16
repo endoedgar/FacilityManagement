@@ -5,10 +5,10 @@ POST http://localhost:4000/api/v1/users
 Content-Type: application/json
 
 {
-    "name": "admin",
-    "username": "admin",
-    "password": "admin",
-    "admin": true
+    "name": "xaxa",
+    "username": "xaxa",
+    "password": "xaxa",
+    "groups": ["admin"]
 }
 ###
 POST http://localhost:4000/api/v1/login
@@ -27,5 +27,6 @@ Content-Type: application/json
 
 {
     "username": "admin",
-    "name": "Administrator"
+    "name": "Administrator",
+    "groups": ["Administrator", "Master User", "Owner of the World", "Great", "Awesome", "Champion", "First-Rate", "Wonderful"]
 }

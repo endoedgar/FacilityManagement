@@ -52,7 +52,7 @@ export class AuthEffects {
     ofType(AuthActionTypes.SIGNUP),
     map((action: SignUp) => action.payload),
     switchMap(user =>
-      this.authService.signUp(user.name, user.username, user.password).pipe(
+      this.authService.signUp(user.name, user.username, user.password, user.email).pipe(
         map(
           response =>
             new SignUpSuccess({

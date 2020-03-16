@@ -9,13 +9,14 @@ import { MatInputModule } from "@angular/material/input";
 import { MatCardModule } from "@angular/material/card";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MatTableModule } from "@angular/material/table";
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { reducers } from '../../store';
 import { EffectsModule } from '@ngrx/effects';
 import { UsersEffects } from 'src/app/store/effects/users.effects';
 import { ApplicationPipesModule } from '../pipes.module';
 import { UserDetailComponent } from './user-detail/user-detail.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
   declarations: [UserListComponent, UserDetailComponent],
@@ -36,7 +37,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatSnackBarModule,
     MatTableModule,
     ApplicationPipesModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatChipsModule
   ]
 })
 export class UsersModule { }

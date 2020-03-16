@@ -13,7 +13,7 @@ import { selectAllUsers } from "src/app/store/selectors/users.selectors";
 })
 export class UserListComponent implements OnInit {
   dataSource: MatTableDataSource<User>;
-  displayedColumns: string[] = ["username", "name", "admin", "id"];
+  displayedColumns: string[] = ["email", "username", "name", "groups", "id"];
 
   constructor(private store: Store<AppState>) {}
 
