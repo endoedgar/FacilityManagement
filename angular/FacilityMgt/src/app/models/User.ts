@@ -6,4 +6,5 @@ export class User {
     email?: string;
     groups?: Array<string>;
     token?: string;
+    bio?: string;
 }
