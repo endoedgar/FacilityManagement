@@ -6,15 +6,16 @@ import {
   LoadUsersFailure,
   LoadUserFailure
 } from "../actions/users.actions";
-import {
-  initialUsersState,
-  usersAdapter
-} from "../states/users.state";
+import { initialUsersState, usersAdapter } from "../states/users.state";
 import { createReducer, on } from "@ngrx/store";
 
 export const reducer = createReducer(
   initialUsersState,
-  on(LoadUsers, LoadUser, (state, action) => ({ ...state, loading: true })),
+  on(LoadUsers, LoadUser, (state, action) => ({
+    ...state,
+    selectedUserId: null,
+    loading: true
+  })),
   on(LoadUsersSuccess, (state, action) =>
     usersAdapter.setAll(action.users, {
       ...state,
