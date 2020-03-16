@@ -8,17 +8,20 @@
     >
       <img src="./assets/nyan2.svg" style="width:50px;" /> Home
     </button>
+    <!-- <button mat-button [routerLink]="['/inspections']" routerLinkActive="active">
+      Inspections
+    </button> -->
     <button mat-button [routerLink]="['/inspection']" routerLinkActive="active">
-      Inspection
+      Inspections
     </button>
     <button mat-button [routerLink]="['/facilities']" routerLinkActive="active">
       Facilities
     </button>
-    <button *ngIf="isAuthenticated" mat-button [routerLink]="['/users']" routerLinkActive="active">
+    <button *ngIf="loggedInUser$ | async" mat-button [routerLink]="['/users']" routerLinkActive="active">
       Users
     </button>
     <div class="flex-spacer"></div>
-    <div *ngIf="!isAuthenticated">
+    <div *ngIf="!(loggedInUser$ | async)">
       <button mat-button [routerLink]="['/login']" routerLinkActive="active">
         Login
       </button>
@@ -26,22 +29,24 @@
         Signup
       </button>
     </div>
-    <div *ngIf="isAuthenticated">
-      <button mat-mini-fab color="primary" [matMenuTriggerFor]="appMenu">
-        <img
-          [title]="user?.username"
-          src="./assets/nyan2.svg"
-        />
+    <div *ngIf="loggedInUser$ | async">
+      <button class="image" [title]="(loggedInUser$ | async)?.username" mat-mini-fab color="primary" [matMenuTriggerFor]="appMenu" [style.backgroundImage]="'url(' + ((loggedInUser$ | async)?.email | gravatarUrl) + ')'">
       </button>
       <mat-menu #appMenu="matMenu" yPosition="below" xPosition="before">
         <mat-action-list>
           <mat-list-item
             >Signed in as {{
-              user?.username
+              (loggedInUser$ | async)?.username
             }}</mat-list-item
           >
           <mat-divider></mat-divider>
-
+          <button mat-list-item [routerLink]="['/users', (loggedInUser$ | async)?.username]">
+            Your profile
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-list-item [routerLink]="['/settings']">
+            Settings
+          </button>
           <button mat-list-item (click)="onLogout()">
             Logout
           </button>

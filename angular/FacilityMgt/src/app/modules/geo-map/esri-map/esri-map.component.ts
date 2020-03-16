@@ -10,7 +10,7 @@ import { MapStateService } from '../../../services/map-state.service';
 import { Subscription, Observable } from 'rxjs';
 import { selectFacilityState } from 'src/app/store/selectors/facility.selectors';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/store/states/app.states';
+import { AppState } from 'src/app/store/states/app.state';
 import { ClearErrorMessage } from 'src/app/store/actions/facility.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';

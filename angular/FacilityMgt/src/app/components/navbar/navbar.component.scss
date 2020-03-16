@@ -1,13 +1,22 @@
 .fixed-header {
-    position: fixed;
-    z-index: 5;
-    top: 0;
+  position: fixed;
+  z-index: 5;
+  top: 0;
 }
 
 .active {
-    background-color: darkblue;
+  background-color: darkblue;
 }
 
 .flex-spacer {
-    flex-grow: 1;
+  flex-grow: 1;
+}
+
+button {
+  &.image {
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+  }
 }
