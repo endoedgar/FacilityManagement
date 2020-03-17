@@ -11,6 +11,10 @@ executors:
             MONGODB_USERNAME: "test"
             MONGODB_PASSWORD: "test"
     working_directory: ~/working-dir
+  node_executor_angular:
+    docker:
+      - image: circleci/node:12.16.1
+    working_directory: ~/working-dir
 commands:
   test_express:
     description: "A command that tests express."
@@ -35,6 +39,9 @@ commands:
     description: "A command that tests angular project."
     steps:
       - *attach_workspace
+      - run:
+          name: 'Set env'
+          command: echo 'export NG_CLI_ANALYTICS=ci' >> $BASH_ENV
       - run:
           name: Install @angular/cli
           command: sudo npm install -g @angular/cli@latest
@@ -61,16 +68,22 @@ jobs:
           root: workspace
           paths:
             - repo
-  test:
+  test_express_project:
     executor: node_executor
     steps:
-      - test_angular
       - test_express
+  test_angular_project:
+    executor: node_executor_angular
+    steps:
+      - test_angular
 workflows:
   version: 2
   main:
     jobs:
       - checkout_code
-      - test:
+      - test_express_project:
+          requires:
+            - checkout_code
+      - test_angular_project:
           requires:
             - checkout_code
