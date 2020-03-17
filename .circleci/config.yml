@@ -40,7 +40,7 @@ commands:
           command: 'sudo npm install -g npm@latest'
       - run:
           name: Install angular-cli
-          command: 'sudo npm install -g @angular-cli'
+          command: 'sudo npm install -g angular-cli'
       - restore_cache:
           keys:
             - v1-dependencies-angular {{ checksum "workspace/repo/angular/FacilityMgt/package-lock.json" }}
