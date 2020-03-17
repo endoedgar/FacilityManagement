@@ -125,7 +125,7 @@ export class EsriMapComponent implements OnInit {
             this.dialogRef.afterClosed().subscribe(result => {
               if (result) {
                 Glayer.graphics.remove(graphic) // TODO : remove it after deleted on db
-                this.msService.delPoint(graphic);
+                //this.msService.delPoint(graphic);
               }
             });
 
@@ -172,7 +172,7 @@ export class EsriMapComponent implements OnInit {
               console.log(state)
               if (state.facility.deleteFacility.status == "success") {
                 this.showSnackBar(state.facility.deleteFacility.message, state.facility.deleteFacility.status);
-                this.store.dispatch(new DeleteFacilitySuccess(state));
+                //this.store.dispatch(new DeleteFacilitySuccess(state));
               }
             }
           }
