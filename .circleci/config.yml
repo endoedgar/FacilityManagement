@@ -8,8 +8,8 @@ executors:
       - image: circleci/node:12.16.1
       - image: circleci/mongo:latest
         environment:
-            MONGODB_USERNAME: "test"
-            MONGODB_PASSWORD: "test"
+          MONGODB_USERNAME: "test"
+          MONGODB_PASSWORD: "test"
     working_directory: ~/working-dir
   node_executor_angular:
     docker:
@@ -23,15 +23,19 @@ commands:
       - restore_cache:
           keys:
             - v1-dependencies-express {{ checksum "workspace/repo/express/package-lock.json" }}
-      - run: |
-          cd workspace/repo/express
-          npm install
+      - run:
+          name: npm install
+          command: |
+            cd workspace/repo/express
+            npm install
       - save_cache:
           paths:
             - workspace/repo/express/node_modules
           key: v1-dependencies-express {{ checksum "workspace/repo/express/package-lock.json" }}
-      - run: >
-               echo '{"port": 4000, "mongoDB": "mongodb://127.0.0.1:27017/test", "accessTokenSecret": "What is it my dears?", "apiPath": "/api/v1" }' > workspace/repo/express/config.json
+      - run:
+          name: Create Dummy Config File
+          command: >
+            echo '{"port": 4000, "mongoDB": "mongodb://127.0.0.1:27017/test", "accessTokenSecret": "What is it my dears?", "apiPath": "/api/v1" }' > workspace/repo/express/config.json
       - run: |
           cd workspace/repo/express
           npm test
@@ -45,12 +49,16 @@ commands:
       - run:
           name: Install @angular/cli
           command: sudo npm install -g @angular/cli@latest > /dev/null
-      - run: |
-          cd workspace/repo/angular/FacilityMgt
-          npm install
-      - run: |
-          cd workspace/repo/angular/FacilityMgt
-          ng build
+      - run:
+          name: npm install
+          command: |
+            cd workspace/repo/angular/FacilityMgt
+            npm install
+      - run:
+          name: ng build
+          command: |
+            cd workspace/repo/angular/FacilityMgt
+            ng build
       - save_cache:
           paths:
             - workspace/repo/angular/FacilityMgt/node_modules
