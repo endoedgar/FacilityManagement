@@ -5,7 +5,7 @@ attach_workspace: &attach_workspace
 executors:
   node_executor:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:12.16.1
       - image: circleci/mongo:latest
         environment:
             MONGODB_USERNAME: "test"
@@ -36,11 +36,8 @@ commands:
     steps:
       - *attach_workspace
       - run:
-          name: Update npm
-          command: 'sudo npm install -g npm@latest'
-      - run:
-          name: Install angular-cli
-          command: 'sudo npm install -g angular-cli'
+          name: Install @angular/cli
+          command: sudo npm install -g @angular/cli@latest
       - restore_cache:
           keys:
             - v1-dependencies-angular {{ checksum "workspace/repo/angular/FacilityMgt/package-lock.json" }}
