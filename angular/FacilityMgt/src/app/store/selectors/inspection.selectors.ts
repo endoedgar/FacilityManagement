@@ -1,5 +1,5 @@
-import { inspectionAdapter, InspectionState } from '../states/inspection.state';
 import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { inspectionAdapter, InspectionState } from '../states/inspection.state';
 
 export const {
     selectAll: _selectAllInspections
@@ -12,7 +12,25 @@ export const selectAllInspections = createSelector(
     _selectAllInspections
 );
 
-export const selectInspectionsError = createSelector(
+
+export const selectCurrentInspectionId = createSelector(
+    selectInspectionState,
+    (state: InspectionState) => state.selectedInspectionId
+);
+
+export const selectCurrentInspection = createSelector(
+    selectInspectionState,
+    selectCurrentInspectionId,
+    state => state.entities[state.selectedInspectionId]
+);
+
+
+export const selectInspectionLoading = createSelector(
+    selectInspectionState,
+    state => state.loading
+);
+
+export const selectInspectionError = createSelector(
     selectInspectionState,
     state => state.errorMessage
 );

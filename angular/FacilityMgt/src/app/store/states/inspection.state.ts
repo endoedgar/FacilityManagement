@@ -3,6 +3,7 @@ import { Inspection } from "src/app/models/Inspection";
 
 export interface InspectionState extends EntityState<Inspection> {
   selectedInspectionId: string;
+  selectedFacilityId: string;
   errorMessage: String | undefined;
   loading: Boolean;
 }
@@ -13,12 +14,13 @@ export const inspectionAdapter: EntityAdapter<Inspection> = createEntityAdapter<
 
 
 export const successAdapter: EntityAdapter<Object> = createEntityAdapter<Object>({
-
+  
 });
 
 
 export const initialInspectionsState: InspectionState = inspectionAdapter.getInitialState({
   selectedInspectionId: null,
-  errorMessage: undefined,
-  loading: false
+  selectedFacilityId: null,
+  loading: false,
+  errorMessage: undefined
 });
