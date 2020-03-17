@@ -37,7 +37,7 @@ router.post('/', json(), async (req, res, next) => {
 /* PATCH one facility */
 router.patch('/:id', json(), async (req, res, next) => {
     try {
-        const data = await Facility.updateOne({ "_id": req.params.id }, { "$set": req.body });
+        const data = await Facility.findOneAndUpdate({ "_id": req.params.id }, { "$set": req.body }, { new: true });
         res.status(202).json({ status: "success", message: "Updated Successfully!", data });
     } catch (error) {
         return next(err);

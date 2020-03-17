@@ -1,0 +1,16 @@
+<mat-grid-list cols="2">
+  <mat-grid-tile>
+    
+    <div class='esri-map-div'><app-esri-map-redux
+      (mapLoadedEvent)="mapLoadedEvent($event)"
+      >
+      </app-esri-map-redux></div>
+    
+  </mat-grid-tile>
+  <mat-grid-tile>
+    <app-add-facility></app-add-facility>
+  </mat-grid-tile>
+  
+</mat-grid-list>
+
+
