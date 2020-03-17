@@ -39,8 +39,8 @@ commands:
       - run: |
           cd workspace/repo/express
           npm test
-  test_angular:
-    description: "A command that tests angular project."
+  build_angular:
+    description: "A command that builds angular project."
     steps:
       - *attach_workspace
       - run:
@@ -67,6 +67,14 @@ commands:
             - workspace/repo/angular/FacilityMgt/node_modules
             - /usr/local/lib/node_modules
           key: v3-dependencies-angular {{ checksum "workspace/repo/angular/FacilityMgt/package-lock.json" }}
+      - run:
+          name: Compress Artifacts
+          command: |
+            cd workspace/repo/angular/FacilityMgt
+            tar -cvf dist.tar dist
+      - store_artifacts:
+          path: workspace/repo/angular/FacilityMgt/dist.tar
+          destination: dist_artifact.tar
 jobs:
   checkout_code:
     executor: node_executor
@@ -81,10 +89,10 @@ jobs:
     executor: node_executor
     steps:
       - test_express
-  test_angular_project:
+  build_angular_project:
     executor: node_executor_angular
     steps:
-      - test_angular
+      - build_angular
 workflows:
   version: 2
   main:
@@ -93,6 +101,6 @@ workflows:
       - test_express_project:
           requires:
             - checkout_code
-      - test_angular_project:
+      - build_angular_project:
           requires:
             - checkout_code
