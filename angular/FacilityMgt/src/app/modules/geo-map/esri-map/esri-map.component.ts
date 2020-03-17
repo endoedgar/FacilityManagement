@@ -45,6 +45,7 @@ export class EsriMapComponent implements OnInit {
   public ngOnInit() {
 
     const addFacilityImgURL = "../../../../assets/images/facility.png";
+    const addFacilityTempImgURL = "../../../../assets/images/facilityTemp.png";
 
 
     // use esri-loader to load JSAPI modules
@@ -64,9 +65,11 @@ export class EsriMapComponent implements OnInit {
         var Glayer = new GraphicsLayer({
           graphics: []
         });
-        
-        
 
+        var TempGlayer = new GraphicsLayer({
+          graphics: []
+        });
+        
         this.mapView = new MapView({
           container: this.mapViewEl.nativeElement,
           center: [-91.9672633, 41.01768],
@@ -74,12 +77,8 @@ export class EsriMapComponent implements OnInit {
           map: map
         });
 
-        
-        
-
         map.add(Glayer);
-
-        
+        map.add(TempGlayer);
 
         this.mapView.when(
           () => {
@@ -107,13 +106,13 @@ export class EsriMapComponent implements OnInit {
               location: [event.mapPoint.longitude, event.mapPoint.latitude]
             };
             const attr = {
-              name: "sdf",
-              type: "sdf"
+              name: "Not entered",
+              type: "Not entered"
             }
-            const pointGraphic: __esri.Graphic = generateGraphic(mPoint, attr, addFacilityImgURL);
+            const pointGraphic: __esri.Graphic = generateGraphic(mPoint, attr, addFacilityTempImgURL);
 
             //this.mapView.graphics.add(pointGraphic);
-            Glayer.graphics.add(pointGraphic);
+            TempGlayer.graphics.add(pointGraphic);
             this.msService.addPoint(pointGraphic);
             this.msService.setMapOpsMode("");
 
@@ -170,8 +169,8 @@ export class EsriMapComponent implements OnInit {
                 name: point.name,
                 type: point.type
               }
+              TempGlayer.graphics.removeAll();
               Glayer.graphics.add(generateGraphic(point, attr, addFacilityImgURL));
-
               this.showSnackBar(state.facility.addFacility.message, state.facility.addFacility.status);
               this.store.dispatch(new addFacilitySuccess(state));
             
@@ -212,7 +211,7 @@ export class EsriMapComponent implements OnInit {
                       fieldName: "type"
                     },
                     {
-                      fieldName: "{id | IdToDatePipe}"
+                      fieldName: "id"
                     }
                   ]
                 }
