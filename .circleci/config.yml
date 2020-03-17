@@ -19,8 +19,6 @@ commands:
       - restore_cache:
           keys:
             - v1-dependencies-express {{ checksum "workspace/repo/express/package-lock.json" }}
-      - run: sudo apt-get install tree
-      - run: tree
       - run: |
           cd workspace/repo/express
           npm install
@@ -40,8 +38,6 @@ commands:
       - restore_cache:
           keys:
             - v1-dependencies-angular {{ checksum "workspace/repo/angular/FacilityMgt/package-lock.json" }}
-      - run: sudo apt-get install tree
-      - run: tree
       - run: |
           cd workspace/repo/angular/FacilityMgt
           npm install
