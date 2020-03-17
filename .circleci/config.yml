@@ -51,7 +51,7 @@ commands:
           key: v1-dependencies-angular {{ checksum "workspace/repo/angular/FacilityMgt/package-lock.json" }}
       - run: |
           cd workspace/repo/angular/FacilityMgt
-          npm build
+          ng build
 jobs:
   checkout_code:
     executor: node_executor
