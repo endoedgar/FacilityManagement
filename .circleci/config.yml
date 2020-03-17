@@ -14,8 +14,6 @@ executors:
   node_executor_angular:
     docker:
       - image: circleci/node:12.16.1
-        environment:
-          NG_CLI_ANALYTICS: "ci"
     working_directory: ~/working-dir
 commands:
   test_express:
@@ -43,7 +41,7 @@ commands:
       - *attach_workspace
       - run:
           name: Install @angular/cli
-          command: sudo npm install -g @angular/cli@latest
+          command: sudo npm install -g @angular/cli@latest > /dev/null
       - restore_cache:
           keys:
             - v1-dependencies-angular {{ checksum "workspace/repo/angular/FacilityMgt/package-lock.json" }}
