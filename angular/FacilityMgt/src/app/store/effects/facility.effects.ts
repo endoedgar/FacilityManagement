@@ -10,10 +10,14 @@ import {
   addFacility,
   addFacilitySuccess,
   addFacilityFailure,
+  DeleteFacility,
+  DeleteFacilitySuccess,
+  DeleteFacilityFailure,
   GetFacilities,
   GetFacilitiesSuccess,
   GetFacilitiesFailure
 } from "../actions/facility.actions";
+import { ShowMessage } from '../actions/ui.actions';
 
 @Injectable()
 export class FacilityEffects {
@@ -31,8 +35,8 @@ export class FacilityEffects {
         map(facility => {
           return new addFacilitySuccess({'addFacility':facility});
         }),
-        catchError(error => {
-          return of(new addFacilityFailure({ error }));
+        catchError(err => {
+          return of(new addFacilityFailure({ err }));
         })
       );
     })
@@ -46,10 +50,35 @@ export class FacilityEffects {
         map(facility => {
           return new GetFacilitiesSuccess({'getFacilities':facility});
         }),
-        catchError(error => {
-          return of(new GetFacilitiesFailure({ error }));
+        catchError(err => {
+          return of(new GetFacilitiesFailure({ err }));
         })
       );
     })
+  );
+
+  @Effect()
+  DeleteFacility: Observable<any> = this.actions.pipe(
+    ofType(FacilityActionTypes.DELETE_FACILITY),
+    map((action: DeleteFacility) => action.payload),
+    switchMap(payload => {
+        return this.facilityService.deleteFacility(payload.id).pipe(
+        map(facility => {
+          return new DeleteFacilitySuccess({'deleteFacility':facility});
+        }),
+        catchError(err => {
+          return of(new DeleteFacilityFailure({ err }));
+        })
+      );
+    })
+  );
+
+  @Effect()
+  showMessageOnFailures$: Observable<any> = this.actions.pipe(
+    ofType(FacilityActionTypes.DELETE_FACILITY_FAILURE,
+      FacilityActionTypes.ADD_FACILITY_FAILURE,
+      FacilityActionTypes.GET_FACILITIES_FAILURE),
+    map((action : DeleteFacilityFailure | addFacilityFailure | GetFacilitiesFailure) => action.payload.err),
+    switchMap(err => of(ShowMessage({message: err.error.message || err.message})))
   );
 }
