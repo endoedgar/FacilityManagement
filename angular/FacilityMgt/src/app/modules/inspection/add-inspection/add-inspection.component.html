@@ -1,1 +1,28 @@
-<p>add-inspection works!</p>
+<div class="main-area">
+    <mat-progress-spinner *ngIf="loading$ | async" color="primary" mode="indeterminate"></mat-progress-spinner>
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>New Inspection</mat-card-title>
+        <mat-card-subtitle><!-- get current facility name --></mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <form class="mat-form" (ngSubmit)="onSubmit()">
+          <mat-form-field class="full-width">
+            <mat-label>Type</mat-label>
+            <input matInput placeholder="Write inspection type">
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <mat-label>Report</mat-label>
+            <textarea matInput placeholder="Write full report"></textarea>
+          </mat-form-field>
+          <mat-form-field class="full-width">
+            <mat-label>Rating</mat-label>
+            <input matInput  placeholder="Rate inspection">
+          </mat-form-field>
+          <mat-card-actions>
+            <button mat-button type="submit"  color="primary">Add Inspection</button>
+          </mat-card-actions>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>

@@ -4,7 +4,7 @@ import { map, switchMap, catchError } from "rxjs/operators";
 
 import { InspectionService } from "../../services/inspection.service";
 import { Observable, of } from "rxjs";
-import { InspectionActionTypes, getInspectionsSuccess, getInspectionsFailure, getInspectionSuccess, getInspectionFailure } from "../actions/inspection.actions";
+import { InspectionActionTypes, getInspectionsSuccess, getInspectionsFailure, getInspectionSuccess, getInspectionFailure, getInspection, getFacilityInspections, getFacilityInspectionsSuccess, getFacilityInspectionsFailure } from "../actions/inspection.actions";
 import { Inspection } from 'src/app/models/Inspection';
 
 @Injectable()
@@ -16,7 +16,6 @@ export class InspectionEffects {
         return this.actions.pipe(
             ofType(InspectionActionTypes.GET_INSPECTIONS),
             switchMap(data => {
-                console.dir("my data", data);
                 return this.inspectionService.getInspections().pipe(
                     map(response => response.data),
                     map((inspections: Inspection[]) => getInspectionsSuccess({ inspections })),
@@ -26,17 +25,36 @@ export class InspectionEffects {
         )
     });
 
-    // getInspection$ = createEffect(() => {
-    //     return this.actions.pipe(
-    //         ofType(InspectionActionTypes.GET_INSPECTION),
-    //         switchMap(data => {
-    //             console.dir("my data", data);
-    //             return this.inspectionService.getInspection("").pipe(
-    //                 map(response => response.data),
-    //                 map((inspection: Inspection) => getInspectionSuccess({ inspection })),
-    //                 catchError(error => of(getInspectionFailure({ error })))
-    //             );
-    //         })
-    //     )
-    // });
+    getInspection$ = createEffect(() => {
+        return this.actions.pipe(
+            ofType(getInspection),
+            map(action => action.inspectionId),
+            switchMap(inspectionId => {
+                console.dir("effect inspectionId", inspectionId);
+                return this.inspectionService.getInspection(inspectionId).pipe(
+                    map(response => response.data),
+                    map((inspection: Inspection) => getInspectionSuccess({ inspection })),
+                    catchError(error => of(getInspectionFailure({ error })))
+                );
+            })
+        );
+    });
+
+
+    getFacilityInspections$ = createEffect(() => {
+        return this.actions.pipe(
+            ofType(getFacilityInspections),
+            map(action => action.facilityId),
+            switchMap(facilityId => {
+                console.dir("effect facilityId", facilityId);
+                return this.inspectionService.getFacilityInspections(facilityId).pipe(
+                    map(response => response.data),
+                    map((inspections: Inspection[]) => getFacilityInspectionsSuccess({ inspections })),
+                    catchError(error => of(getFacilityInspectionsFailure({ error })))
+                );
+            })
+        );
+    });
+
+
 }

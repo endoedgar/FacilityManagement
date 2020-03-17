@@ -59,7 +59,7 @@ export const createInspectionFailure =
 
 
 export const updateInspection =
-    createAction(InspectionActionTypes.UPDATE_INSPECTION);
+    createAction(InspectionActionTypes.UPDATE_INSPECTION, props<{ inspection: Inspection }>());
 export const updateInspectionSuccess =
     createAction(InspectionActionTypes.UPDATE_INSPECTION_SUCCESS, props<{ success: string }>());
 export const updateInspectionFailure =
