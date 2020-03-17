@@ -13,6 +13,9 @@ import { AppState } from 'src/app/store/states/app.state';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { ThrowStmt } from '@angular/compiler';
+import { addFacilitySuccess, DeleteFacilitySuccess } from 'src/app/store/actions/facility.actions';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { deleteInspectionSuccess } from 'src/app/store/actions/inspection.actions';
 
 
 @Component({
@@ -30,13 +33,13 @@ export class EsriMapComponent implements OnInit {
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
 
-  constructor(public dialog: MatDialog, private msService: MapStateService, private store: Store<AppState>) {
+  constructor(private _snackBar: MatSnackBar, public dialog: MatDialog, private msService: MapStateService, private store: Store<AppState>) {
     this.getState = this.store.select(selectFacilityState);
 
   }
 
   OpenDialog(graphic) {
-     this.dialogRef = this.dialog.open(ConfirmDialogComponent);
+    this.dialogRef = this.dialog.open(ConfirmDialogComponent);
   }
 
   // TODO : chenge it to async/await 
@@ -92,8 +95,14 @@ export class EsriMapComponent implements OnInit {
 
           if (this.msService.getMapOpsMode() == "addFacility") {
 
-            const mPoint = [event.mapPoint.longitude, event.mapPoint.latitude]
-            const pointGraphic: __esri.Graphic = generateGraphic(mPoint, addFacilityImgURL);
+            let mPoint = {
+              location: [event.mapPoint.longitude, event.mapPoint.latitude]
+            };
+            const attr = {
+              name: "sdf",
+              type: "sdf"
+            }
+            const pointGraphic: __esri.Graphic = generateGraphic(mPoint, attr, addFacilityImgURL);
 
             //this.mapView.graphics.add(pointGraphic);
             Glayer.graphics.add(pointGraphic);
@@ -114,12 +123,11 @@ export class EsriMapComponent implements OnInit {
             this.OpenDialog(graphic);
 
             this.dialogRef.afterClosed().subscribe(result => {
-              if (result){
-                console.log(graphic)
-               this.msService.delPoint(graphic);
-               Glayer.graphics.remove(graphic)
+              if (result) {
+                Glayer.graphics.remove(graphic) // TODO : remove it after deleted on db
+                this.msService.delPoint(graphic);
               }
-           });
+            });
 
             this.msService.setMapOpsMode("");
           }
@@ -128,39 +136,57 @@ export class EsriMapComponent implements OnInit {
         this.getState.subscribe(state => {
 
           if (state.facility) {
-              if (state.facility.getFacilities) {
+            if (state.facility.getFacilities) {
 
               if (state.facility.getFacilities.status == "success") {
                 let mPoint = null;
                 state.facility.getFacilities.data.map(point => {
                   if (!point.location.length) return; // ignore points without coordinates
-
-                  mPoint = [point.location[0], point.location[1]]
-                  Glayer.graphics.add(generateGraphic(mPoint, addFacilityImgURL));
+                  const attr = {
+                    id: point._id,
+                    name: point.name,
+                    type: point.type
+                  }
+                  Glayer.graphics.add(generateGraphic(point, attr, addFacilityImgURL));
 
                 });
               } else {
-                showSnackBar("Unexpected Error !", state.facility.getFacilities.status);
+                this.showSnackBar("Unexpected Error !", state.facility.getFacilities.status);
               }
 
             } else if (state.facility.addFacility) {
-              // this.showSnackBar(state.facility.addFacility.message, state.facility.addFacility.status);
-              // this.store.dispatch(new addFacilitySuccess(state));
-            } else if (state.facility.deleteFacility){
-              console.log(state);
+              console.log(state.facility);
+              const point = state.facility.addFacility.data;
+
+              const attr = {
+                id: point._id,
+                name: point.name,
+                type: point.type
+              }
+              Glayer.graphics.add(generateGraphic(point, attr, addFacilityImgURL));
+
+              this.showSnackBar(state.facility.addFacility.message, state.facility.addFacility.status);
+              this.store.dispatch(new addFacilitySuccess(state));
+            
+            } else if (state.facility.deleteFacility) {
+              console.log(state)
+              if (state.facility.deleteFacility.status == "success") {
+                this.showSnackBar(state.facility.deleteFacility.message, state.facility.deleteFacility.status);
+                this.store.dispatch(new DeleteFacilitySuccess(state));
+              }
             }
           }
         });
 
-        function generateGraphic(point, url) {
+
+
+        function generateGraphic(point, attr, url) {
           const pointGraphic: __esri.Graphic = new Graphic({
-            attributes: {
-              time: new Date().getTime()
-            },
+            attributes: attr,
             geometry: {
               type: 'point',
-              longitude: point[0],
-              latitude: point[1],
+              longitude: point.location[0],
+              latitude: point.location[1],
               spatialReference: 3857 //TODO: add it to config
             },
             symbol: {
@@ -170,16 +196,12 @@ export class EsriMapComponent implements OnInit {
               height: "40px"
             }
           });
+
           return pointGraphic;
         }
 
-        // TODO : add it to common place
-        function showSnackBar(msg, stat) {
-          this._snackBar.open(msg, stat, {
-            duration: 3000
-          });
-        }
-
+       
+        
       })
       .catch(err => {
         console.error(err);
@@ -187,6 +209,11 @@ export class EsriMapComponent implements OnInit {
 
 
   }
-
+  
+  showSnackBar(msg, stat) {
+    this._snackBar.open(msg, stat, {
+      duration: 3000
+    });
+  }
 
 }
