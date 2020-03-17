@@ -43,6 +43,9 @@ commands:
     description: "A command that tests angular project."
     steps:
       - *attach_workspace
+      - run:
+          name: set-user-permissions
+          command: sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}
       - restore_cache:
           keys:
             - v3-dependencies-angular {{ checksum "workspace/repo/angular/FacilityMgt/package-lock.json" }}
