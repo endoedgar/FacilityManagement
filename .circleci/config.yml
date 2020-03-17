@@ -39,12 +39,12 @@ commands:
     description: "A command that tests angular project."
     steps:
       - *attach_workspace
+      - restore_cache:
+          keys:
+            - v3-dependencies-angular {{ checksum "workspace/repo/angular/FacilityMgt/package-lock.json" }}
       - run:
           name: Install @angular/cli
           command: sudo npm install -g @angular/cli@latest > /dev/null
-      - restore_cache:
-          keys:
-            - v2-dependencies-angular {{ checksum "workspace/repo/angular/FacilityMgt/package-lock.json" }}
       - run: |
           cd workspace/repo/angular/FacilityMgt
           npm install
@@ -54,7 +54,8 @@ commands:
       - save_cache:
           paths:
             - workspace/repo/angular/FacilityMgt/node_modules
-          key: v2-dependencies-angular {{ checksum "workspace/repo/angular/FacilityMgt/package-lock.json" }}
+            - /usr/local/lib/node_modules
+          key: v3-dependencies-angular {{ checksum "workspace/repo/angular/FacilityMgt/package-lock.json" }}
 jobs:
   checkout_code:
     executor: node_executor
