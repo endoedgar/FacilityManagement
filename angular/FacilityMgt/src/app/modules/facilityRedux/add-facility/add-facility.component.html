@@ -1,3 +1,14 @@
+<mat-card *ngIf="(mapMode$ | async) == 'NONE'" class="row">
+  <mat-card-header>
+    <mat-card-title>Action</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <button mat-button color="primary" class="btn" (click)="OnAddBtn()">
+      <mat-label>Add</mat-label>
+    </button>
+  </mat-card-content>
+</mat-card>
+
 <mat-card *ngIf="(mapMode$ | async) == 'SELECT_FACILITY'" class="row">
   <mat-card-header>
     <mat-card-title>Facility: {{ facility.name }}</mat-card-title>
