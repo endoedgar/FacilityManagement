@@ -44,17 +44,17 @@ commands:
           command: sudo npm install -g @angular/cli@latest > /dev/null
       - restore_cache:
           keys:
-            - v1-dependencies-angular {{ checksum "workspace/repo/angular/FacilityMgt/package-lock.json" }}
+            - v2-dependencies-angular {{ checksum "workspace/repo/angular/FacilityMgt/package-lock.json" }}
       - run: |
           cd workspace/repo/angular/FacilityMgt
           npm install
-      - save_cache:
-          paths:
-            - workspace/repo/angular/FacilityMgt/node_modules
-          key: v1-dependencies-angular {{ checksum "workspace/repo/angular/FacilityMgt/package-lock.json" }}
       - run: |
           cd workspace/repo/angular/FacilityMgt
           ng build
+      - save_cache:
+          paths:
+            - workspace/repo/angular/FacilityMgt/node_modules
+          key: v2-dependencies-angular {{ checksum "workspace/repo/angular/FacilityMgt/package-lock.json" }}
 jobs:
   checkout_code:
     executor: node_executor
