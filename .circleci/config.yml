@@ -35,11 +35,15 @@ commands:
     description: "A command that tests angular project."
     steps:
       - *attach_workspace
+      - run:
+          name: Update npm
+          command: 'sudo npm install -g npm@latest'
+      - run:
+          name: Install angular-cli
+          command: 'sudo npm install -g @angular-cli'
       - restore_cache:
           keys:
             - v1-dependencies-angular {{ checksum "workspace/repo/angular/FacilityMgt/package-lock.json" }}
-      - run: |
-          sudo npm install -g angular-cli
       - run: |
           cd workspace/repo/angular/FacilityMgt
           npm install
@@ -63,8 +67,8 @@ jobs:
   test:
     executor: node_executor
     steps:
-      - test_express
       - test_angular
+      - test_express
 workflows:
   version: 2
   main:
