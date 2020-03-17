@@ -40,7 +40,7 @@ commands:
             - v1-dependencies-angular {{ checksum "workspace/repo/angular/FacilityMgt/package-lock.json" }}
       - run: |
           cd workspace/repo/angular/FacilityMgt
-          npm install -g angular-cli
+          sudo npm install -g angular-cli
           npm install
       - save_cache:
           paths:
