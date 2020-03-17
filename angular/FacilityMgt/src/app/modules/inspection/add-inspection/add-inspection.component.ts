@@ -20,5 +20,7 @@ export class AddInspectionComponent implements OnInit {
   ngOnInit(): void {
 
   }
-
+  onSubmit(){
+    
+  }
 }
