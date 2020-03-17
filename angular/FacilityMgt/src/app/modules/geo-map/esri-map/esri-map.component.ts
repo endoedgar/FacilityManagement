@@ -65,8 +65,6 @@ export class EsriMapComponent implements OnInit {
           graphics: []
         });
         
-        
-
         this.mapView = new MapView({
           container: this.mapViewEl.nativeElement,
           center: [-91.9672633, 41.01768],
