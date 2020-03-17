@@ -13,7 +13,7 @@ import { AppState } from 'src/app/store/states/app.state';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { ThrowStmt } from '@angular/compiler';
-import { addFacilitySuccess, DeleteFacilitySuccess } from 'src/app/store/actions/facility.actions';
+import { addFacilitySuccess } from 'src/app/store/actions/facility.actions';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { deleteInspectionSuccess } from 'src/app/store/actions/inspection.actions';
 
@@ -125,7 +125,7 @@ export class EsriMapComponent implements OnInit {
             this.dialogRef.afterClosed().subscribe(result => {
               if (result) {
                 Glayer.graphics.remove(graphic) // TODO : remove it after deleted on db
-                this.msService.delPoint(graphic);
+                //this.msService.delPoint(graphic);
               }
             });
 
@@ -172,7 +172,7 @@ export class EsriMapComponent implements OnInit {
               console.log(state)
               if (state.facility.deleteFacility.status == "success") {
                 this.showSnackBar(state.facility.deleteFacility.message, state.facility.deleteFacility.status);
-                this.store.dispatch(new DeleteFacilitySuccess(state));
+                //this.store.dispatch(new DeleteFacilitySuccess(state));
               }
             }
           }
