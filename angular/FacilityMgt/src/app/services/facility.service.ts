@@ -16,6 +16,10 @@ export class FacilityService {
     return this.http.post(`${this.BASE_URL}/facilities/`, { name, type, location });
   }
 
+  public updateFacility(id : String, name: String, type: String, location: number[] ): Observable<any> {
+    return this.http.patch(`${this.BASE_URL}/facilities/${id}`, { name, type, location });
+  }
+
   public deleteFacility(id: String): Observable<any> {
     return this.http.delete(`${this.BASE_URL}/facilities/${id}`);
   }
