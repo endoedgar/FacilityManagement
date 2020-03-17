@@ -4,7 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Store } from "@ngrx/store";
 import { Facility } from 'src/app/models/Facility';
 import { AppState } from 'src/app/store/states/app.state';
-import { addFacility, ClearErrorMessage, addFacilitySuccess, GetFacilities } from 'src/app/store/actions/facility.actions';
+import { addFacility, addFacilitySuccess, GetFacilities } from 'src/app/store/actions/facility.actions';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { selectFacilityState } from 'src/app/store/selectors/facility.selectors';
 
@@ -43,10 +43,7 @@ export class AddFacilityComponent implements OnInit, OnDestroy {
     this.getState.subscribe(state => {
 
       if (state.facility) {
-        if (state.errorMessage) {
-          this.showSnackBar(state.facility.errorMessage, "Failed");
-          this.store.dispatch(new ClearErrorMessage);
-        } else if (state.facility.getFacilities) {
+         if (state.facility.getFacilities) {
           //console.log(state);
         } else if (state.facility.addFacility) {
           this.showSnackBar(state.facility.addFacility.message, state.facility.addFacility.status);
@@ -59,19 +56,27 @@ export class AddFacilityComponent implements OnInit, OnDestroy {
 
 
 
-    this.point$ = this.msService.getPoint();
+    this.point$ = this.msService.getPoints();
     this.list = this.point$.subscribe({
       next: x => {
         if (x.length) {
-          this.mapPoint = this.findPointValue(x)
-          this.locationX.nativeElement.value = this.mapPoint[0]; // Longtitude
-          this.locationY.nativeElement.value = this.mapPoint[1]; // Latitude
-          this.editmode = true;
+          const mode = this.msService.getMapOpsMode();
+          if (mode == "addFacility") {
+            this.mapPoint = this.findPointValue(x)
+            this.locationX.nativeElement.value = this.mapPoint[0]; // Longtitude
+            this.locationY.nativeElement.value = this.mapPoint[1]; // Latitude
+            this.editmode = true;
+            this.msService.setMapOpsMode("");
+          }else if(mode == "deleteFacility"){
+
+            this.msService.setMapOpsMode("");
+          }
+          
         }
       },
       error: err => console.error('error in subscriber', err),
       complete: () => console.log('complete')
-    })
+    });
 
   }
 
@@ -111,7 +116,7 @@ export class AddFacilityComponent implements OnInit, OnDestroy {
 
   showSnackBar(msg, stat) {
     this._snackBar.open(msg, stat, {
-      duration: 5000
+      duration: 3000
     });
   }
 
