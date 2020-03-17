@@ -27,11 +27,30 @@ commands:
       - save_cache:
           paths:
             - workspace/repo/express/node_modules
-          key: v1-dependencies-maven {{ checksum "workspace/repo/express/package-lock.json" }}
+          key: v1-dependencies-express {{ checksum "workspace/repo/express/package-lock.json" }}
       - run: >
                echo '{"port": 4000, "mongoDB": "mongodb://127.0.0.1:27017/test", "accessTokenSecret": "What is it my dears?", "apiPath": "/api/v1" }' > workspace/repo/express/config.json
       - run: |
           cd workspace/repo/express
+          npm test
+  test_angular:
+    description: "A command that tests angular project."
+    steps:
+      - *attach_workspace
+      - restore_cache:
+          keys:
+            - v1-dependencies-angular {{ checksum "workspace/repo/angular/FacilityMgt/package-lock.json" }}
+      - run: sudo apt-get install tree
+      - run: tree
+      - run: |
+          cd workspace/repo/angular/FacilityMgt
+          npm install
+      - save_cache:
+          paths:
+            - workspace/repo/angular/FacilityMgt/node_modules
+          key: v1-dependencies-angular {{ checksum "workspace/repo/angular/FacilityMgt/package-lock.json" }}
+      - run: |
+          cd workspace/repo/angular/FacilityMgt
           npm test
 jobs:
   checkout_code:
@@ -47,6 +66,7 @@ jobs:
     executor: node_executor
     steps:
       - test_express
+      - test_angular
 workflows:
   version: 2
   main:
