@@ -13,9 +13,15 @@ export class FacilityService {
   }
 
   public addFacility(name: String, type: String, location: number[] ): Observable<any> {
-    console.dir( "new request ... ");
-    
     return this.http.post(`${this.BASE_URL}/facilities/`, { name, type, location });
+  }
+
+  public updateFacility(id : String, name: String, type: String, location: number[] ): Observable<any> {
+    return this.http.patch(`${this.BASE_URL}/facilities/${id}`, { name, type, location });
+  }
+
+  public deleteFacility(id: String): Observable<any> {
+    return this.http.delete(`${this.BASE_URL}/facilities/${id}`);
   }
 
   public getFacilities(): Observable<any> { 

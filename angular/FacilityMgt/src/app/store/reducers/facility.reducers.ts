@@ -18,9 +18,28 @@ export function reducer(state = initialFacilityState, action: ALL): FacilityStat
     case FacilityActionTypes.ADD_FACILITY_FAILURE: {
       return {
         ...state,
-        errorMessage: action.payload.error.error.message
-        ? action.payload.error.error.message
-        : action.payload.error.message
+        errorMessage: action.payload.err.error.message
+        ? action.payload.err.error.message
+        : action.payload.err.message
+      };
+    }
+    case FacilityActionTypes.DELETE_FACILITY: {
+      return {
+        ...state,
+        errorMessage: null
+      };
+    }
+    case FacilityActionTypes.DELETE_FACILITY_SUCCESS:
+      return {
+        ...state,
+        errorMessage: null
+      };
+    case FacilityActionTypes.DELETE_FACILITY_FAILURE: {
+      return {
+        ...state,
+        errorMessage: action.payload.err.error.message
+        ? action.payload.err.error.message
+        : action.payload.err.message
       };
     }
     case FacilityActionTypes.GET_FACILITIES: {
@@ -38,9 +57,9 @@ export function reducer(state = initialFacilityState, action: ALL): FacilityStat
     case FacilityActionTypes.GET_FACILITIES_FAILURE: {
       return {
         ...state,
-        errorMessage: action.payload.error.error.message
-        ? action.payload.error.error.message
-        : action.payload.error.message
+        errorMessage: action.payload.err.error.message
+        ? action.payload.err.error.message
+        : action.payload.err.message
       };
     }
     default:

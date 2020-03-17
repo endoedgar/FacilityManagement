@@ -24,7 +24,7 @@ export class UserListComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(LoadUsers());
 
-    this.store.pipe(select(selectAllUsers)).subscribe(users => {
+    this.store.select(selectAllUsers).subscribe(users => {
       this.dataSource = new MatTableDataSource(users);
     });
   }

@@ -7,8 +7,10 @@ export enum FacilityActionTypes {
     GET_FACILITIES = "[FACILITY] GetFacilities",
     GET_FACILITIES_SUCCESS = "[FACILITY] GetFacilities Success",
     GET_FACILITIES_FAILURE = "[FACILITY] GetFacilities Failure",
-    CLEAR_ERROR_MESSAGE = "[FACILITY] Clear Error Message"
-}
+    DELETE_FACILITY = "[FACILITY] DeleteFacility",
+    DELETE_FACILITY_SUCCESS = "[FACILITY] DeleteFacility Success",
+    DELETE_FACILITY_FAILURE = "[FACILITY] DeleteFacility Failure",
+    }
 
 export class addFacility implements Action {
     readonly type = FacilityActionTypes.ADD_FACILITY;
@@ -23,8 +25,26 @@ export class addFacilitySuccess implements Action {
 
 export class addFacilityFailure implements Action {
     readonly type = FacilityActionTypes.ADD_FACILITY_FAILURE;
+    constructor(public payload: { err: any }) { }
+}
+
+export class DeleteFacility implements Action {
+    readonly type = FacilityActionTypes.DELETE_FACILITY;
+    constructor(public payload: any) { }
+   
+}
+
+export class DeleteFacilitySuccess implements Action {
+    readonly type = FacilityActionTypes.DELETE_FACILITY_SUCCESS;
     constructor(public payload: any) { }
 }
+
+export class DeleteFacilityFailure implements Action {
+    readonly type = FacilityActionTypes.DELETE_FACILITY_FAILURE;
+    constructor(public payload: { err: any }) { }
+}
+
+
 
 export class GetFacilities implements Action {
     readonly type = FacilityActionTypes.GET_FACILITIES;
@@ -39,15 +59,8 @@ export class GetFacilitiesSuccess implements Action {
 
 export class GetFacilitiesFailure implements Action {
     readonly type = FacilityActionTypes.GET_FACILITIES_FAILURE;
-    constructor(public payload: any) { }
+    constructor(public payload: { err: any }) { }
 }
-
-
-export class ClearErrorMessage implements Action {
-    readonly type = FacilityActionTypes.CLEAR_ERROR_MESSAGE;
-    constructor() {}
-  }
-
 
 
 export type ALL =
@@ -57,4 +70,6 @@ export type ALL =
     | GetFacilities
     | GetFacilitiesSuccess
     | GetFacilitiesFailure
-    | ClearErrorMessage;
+    | DeleteFacility
+    | DeleteFacilitySuccess
+    | DeleteFacilityFailure;
