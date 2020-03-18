@@ -40,11 +40,14 @@ router.get('/facility/:facility_id', async (req, res, next) => {
 
 
 /* POST one inspection */
-router.post('/', json(), async (req, res, next) => {
-    await new Inspection(req.body).save((err, data) => {
-        if (err) return next(err);
+router.post('/', authenticateJWT, json(), async (req, res, next) => {
+    try {
+        const data = await new Inspection({...req.body, inspector: req.user._id }).save();
+        await data.populate("facility").populate({path: "inspector", select: "-password"}).execPopulate();
         res.status(201).json({ status: "success", message: "Created Successfully!", data });
-    }).populate("facility").populate({path: "inspector", select: "-password"}) ;
+    } catch (err) {
+        return next(err);
+    }
 });
 
 
