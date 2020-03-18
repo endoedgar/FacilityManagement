@@ -4,7 +4,6 @@ import {
     initialInspectionsState,
     inspectionAdapter,
 } from "../states/inspection.state";
-import { inspectionsAdapter } from '../states/inspections.state';
 
 export const reducer = createReducer(initialInspectionsState,
     on(getInspections, getInspection,
@@ -64,7 +63,7 @@ export const reducer = createReducer(initialInspectionsState,
         errorMessage: error.message
     })),
     on(deleteInspectionSuccess, (state, action) => 
-    inspectionsAdapter.removeOne(action.inspection._id, {
+    inspectionAdapter.removeOne(action.inspection._id, {
         ...state,
         loading: false,
         errorMessage: null
