@@ -123,9 +123,11 @@ export class FacilityReduxEffects {
     switchMap(facility => {
       return this.facilityService.deleteFacility(facility._id).pipe(
         map(_ => {
+          console.log(_)
           return DeleteFacilitySuccess({ facility });
         }),
         catchError(err => {
+          console.log(err)
           return of(DeleteFacilityFailure({ err }));
         })
       );

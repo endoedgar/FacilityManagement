@@ -7,7 +7,8 @@ import {
   GetFacilities,
   ChangeMode,
   updateFacility,
-  SelectFacility
+  SelectFacility,
+  DeleteFacility
 } from "src/app/store/actions/facility-redux.actions";
 import {
   selectFacilitiesMapMode$,
@@ -61,10 +62,10 @@ export class AddFacilityReduxComponent implements OnInit, OnDestroy {
   onSubmit(): void {
     const { _id, name, type, location } = this.facility;
 
-    if(this.mapMode == MapModeEnum.CREATE_FACILITY) {
+    if (this.mapMode == MapModeEnum.CREATE_FACILITY) {
       this.store.dispatch(addFacility({ facility: { name, type, location } }));
     } else {
-      this.store.dispatch(updateFacility({facility: { _id, name, type, location } }))
+      this.store.dispatch(updateFacility({ facility: { _id, name, type, location } }))
     }
   }
 
@@ -72,11 +73,16 @@ export class AddFacilityReduxComponent implements OnInit, OnDestroy {
     this.store.dispatch(ChangeMode({ mode: MapModeEnum.CREATE_FACILITY }));
   }
 
-  OnEditBtn():void {
+  OnEditBtn(): void {
     this.store.dispatch(ChangeMode({ mode: MapModeEnum.EDIT_FACILITY }));
   }
-  
-  OnDeleteBtn(): void {}
+
+  OnDeleteBtn(): void { 
+    const { _id, name, type, location } = this.facility;
+
+    this.store.dispatch(ChangeMode({mode : MapModeEnum.DELETE_FACILITY}))
+    this.store.dispatch(DeleteFacility({ facility: { _id, name, type, location } }))
+  }
 
   OnCancelBtn(): void {
     this.store.dispatch(ChangeMode({ mode: MapModeEnum.NONE }));

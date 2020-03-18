@@ -48,7 +48,12 @@ export const updateFacilityFailure = createAction(
 
 export const DeleteFacility = createAction(
   "[FACILITY-REDUX] DeleteFacility",
-  props<{ facility: FacilityRedux }>()
+  props<{ facility: {
+    _id: string;
+    name: string;
+    type: string;
+    location: number[];
+  }; }>()
 );
 
 export const DeleteFacilitySuccess = createAction(

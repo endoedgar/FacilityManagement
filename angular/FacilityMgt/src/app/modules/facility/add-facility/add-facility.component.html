@@ -3,12 +3,12 @@
     <mat-card-title>1. Pick Location</mat-card-title>
   </mat-card-header>
   <mat-card-content>
-    <button mat-button color="primary" class="btn btn-primary" (click)="OnAddBtn()">
+    <button [style.backgroundColor]="addColor" mat-button color="primary" class="btn btn-primary" (click)="OnAddBtn()">
      <img class="facilityIcon" src="../../../../assets/images/facility.png">
      <br>
      <mat-label >Add </mat-label>
     </button>
-    <button mat-button color="primary" class="btn btn-primary" (click)="OnDeleteBtn()">
+    <button [style.backgroundColor]="deleteColor" mat-button color="primary" class="btn btn-primary" (click)="OnDeleteBtn()">
       <img class="facilityIcon" src="../../../../assets/images/facility-delete.png">
       <br>
       <mat-label >Delete </mat-label>
