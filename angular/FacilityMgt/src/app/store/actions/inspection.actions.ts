@@ -1,6 +1,8 @@
 import { createAction, props } from "@ngrx/store";
 import { Inspection } from 'src/app/models/Inspection';
 import { Update } from '@ngrx/entity';
+import { InspectionMapModeEnum } from '../states/inspection.state';
+import { FacilityRedux } from 'src/app/models/FacilityRedux';
 
 export enum InspectionActionTypes {
     GET_INSPECTIONS = "[Inspection] Get Inspections",
@@ -23,7 +25,9 @@ export enum InspectionActionTypes {
     DELETE_INSPECTION_FAILURE = "[Inspection] Delete Inspection Failure",
 
     SELECT_INSPECTION = "[Inspection] Select Inspection",
-    DESELECT_INSPECTION = "[Inspection] Deselect Inspection"
+    DESELECT_INSPECTION = "[Inspection] Deselect Inspection",
+
+    CHANGE_MAP_MODE = "[Inspection] Change Map Mode"
 }
 
 export const selectInspection = createAction(
@@ -86,3 +90,6 @@ export const deleteInspectionSuccess =
     createAction(InspectionActionTypes.DELETE_INSPECTION_SUCCESS, props<{ inspection: Inspection }>());
 export const deleteInspectionFailure =
     createAction(InspectionActionTypes.DELETE_INSPECTION_FAILURE, props<{ error: any }>());
+
+export const changeInspectionMapMode = 
+    createAction(InspectionActionTypes.CHANGE_MAP_MODE, props<{ mode: InspectionMapModeEnum }>());

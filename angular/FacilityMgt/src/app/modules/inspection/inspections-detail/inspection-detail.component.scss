@@ -1,0 +1,32 @@
+.mat-card {
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.mat-button {
+  position: relative;
+  float: right;
+}
+
+.main-area {
+  margin-top: 30px;
+}
+
+mat-card-actions {
+  display: flex;
+}

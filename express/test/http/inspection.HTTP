@@ -17,10 +17,10 @@ GET http://localhost:4000/api/v1/inspections/facility/5e6d380d16ad027734cee0c7
 
 POST  http://localhost:4000/api/v1/inspections
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJncm91cHMiOlsiQWRtaW5pc3RyYXRvciIsIlVzZXIiXSwiX2lkIjoiNWU2ZjQyMzZhNjEyMGY1MWNkNWEyZTY0IiwibmFtZSI6IkVkZ2FyIEVuZG8iLCJ1c2VybmFtZSI6ImVuZG9lZGdhciIsImVtYWlsIjoiZW5kb2VkZ2FyanVuaW9yQGdtYWlsLmNvbSIsIl9fdiI6MCwiYmlvIjoiVGhpcyBpcyBhIGJpby4gSSBjYW4gdHlwZSB3aGF0ZXZlciBJIHdhbnQgaGVyZS4iLCJpYXQiOjE1ODQ1MDU5OTZ9.hM4jUOrTPgmbrUZqDisFavd6bLT1G6l6vIUSOrIo1es
 
 {
-    "facility_id": "5e6ac55b61295e04f44774c3",
-    "inspector_id": "5e6ab6ace51c3a2f1f1a1b1b",
+    "facility": "5e70d7e97c820a4dcb354058",
     "type": "Health",
     "report": "Peter has Corona", 
     "rating": "0.5"

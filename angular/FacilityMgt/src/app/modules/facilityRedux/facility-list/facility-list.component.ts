@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "src/app/store/states/app.state";
 import { MatTableDataSource } from "@angular/material/table";
-import { Facility } from 'src/app/models/Facility';
+import { FacilityRedux } from 'src/app/models/FacilityRedux';
 import { selectAllFacilities$, selectFacilitiesLoading$ } from 'src/app/store/selectors/facility-redux.selectors';
 import { GetFacilities } from 'src/app/store/actions/facility-redux.actions';
 
@@ -12,7 +12,7 @@ import { GetFacilities } from 'src/app/store/actions/facility-redux.actions';
   styleUrls: ["./facility-list.component.scss"]
 })
 export class FacilityListComponent implements OnInit {
-  dataSource: MatTableDataSource<Facility>;
+  dataSource: MatTableDataSource<FacilityRedux>;
   displayedColumns: string[] = ["name", "type", "id"];
   loading$ = this.store.select(selectFacilitiesLoading$);
 

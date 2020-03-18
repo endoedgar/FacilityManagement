@@ -34,3 +34,8 @@ export const selectInspectionError = createSelector(
     selectInspectionState,
     state => state.errorMessage
 );
+
+export const selectInspectionMapMode = createSelector(
+    selectInspectionState,
+    state => state.mapMode
+);

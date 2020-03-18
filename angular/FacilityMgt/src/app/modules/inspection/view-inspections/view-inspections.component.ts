@@ -1,50 +1,60 @@
-import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { MatTableDataSource } from '@angular/material/table';
-import { Observable } from 'rxjs';
-import { Inspection } from 'src/app/models/Inspection';
-import { AppState } from 'src/app/store/states/app.state';
-import { getInspections, selectInspection, deleteInspection } from 'src/app/store/actions/inspection.actions';
-import { selectAllInspections, selectInspectionLoading } from 'src/app/store/selectors/inspection.selectors';
-import { InspectionDetailsComponent } from '../inspection-details/inspection-details.component';
-import { MatDialogRef, MatDialog } from '@angular/material/dialog';
+import { Component, OnInit } from "@angular/core";
+import { Store } from "@ngrx/store";
+import { combineLatest } from "rxjs";
+import { AppState } from "src/app/store/states/app.state";
+import {
+  getInspections,
+  changeInspectionMapMode,
+  getFacilityInspections
+} from "src/app/store/actions/inspection.actions";
+import {
+  selectInspectionLoading,
+  selectInspectionMapMode
+} from "src/app/store/selectors/inspection.selectors";
+import { MatDialog } from "@angular/material/dialog";
+import { GetFacilities } from "src/app/store/actions/facility-redux.actions";
+import {
+  selectFacilitiesLoading$,
+  getCurrentFacility$
+} from "src/app/store/selectors/facility-redux.selectors";
+import { map, distinct, distinctUntilChanged } from "rxjs/operators";
+import { InspectionMapModeEnum } from "src/app/store/states/inspection.state";
 
 @Component({
-  selector: 'app-view-inspections',
-  templateUrl: './view-inspections.component.html',
-  styleUrls: ['./view-inspections.component.scss']
+  selector: "app-view-inspections",
+  templateUrl: "./view-inspections.component.html",
+  styleUrls: ["./view-inspections.component.scss"]
 })
 export class ViewInspectionsComponent implements OnInit {
-  inspectionsDS: MatTableDataSource<Inspection>;
-  loading$ = this.store.select(selectInspectionLoading);
-  columnsToDisplay = ["facility", "type", "rating", "inspector", "id", "edit", "delete"];
+  mapMode$ = this.store.select(selectInspectionMapMode);
+  selectedFacility$ = this.store.select(getCurrentFacility$);
 
-  constructor(private store: Store<AppState>, public dialog: MatDialog) { }
+  loading$ = combineLatest(
+    this.store.select(selectInspectionLoading),
+    this.store.select(selectFacilitiesLoading$)
+  ).pipe(map(([a, b]) => a || b));
+
+  constructor(private store: Store<AppState>, public dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.store.dispatch(getInspections());
-    this.store.select(selectAllInspections).subscribe(state => {
-      this.inspectionsDS = new MatTableDataSource<Inspection>(state);
+    this.store.dispatch(GetFacilities());
+
+    combineLatest(
+      this.selectedFacility$.pipe(distinctUntilChanged()),
+      this.mapMode$
+    ).subscribe(([facility, mapMode]) => {
+      if (mapMode == InspectionMapModeEnum.NONE)
+        facility
+          ? this.store.dispatch(
+              getFacilityInspections({ facilityId: facility._id })
+            )
+          : this.store.dispatch(getInspections());
     });
   }
 
-  editInspectionDialog(inspection: Inspection, event): void {
-    event.stopPropagation();
-    this.store.dispatch(selectInspection({ inspection }));
-    const dialogRef = this.dialog.open(InspectionDetailsComponent, {
-      width: '250px'
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('result', result);
-      console.log('The dialog was closed');
-    });
+  createInspection() {
+    this.store.dispatch(
+      changeInspectionMapMode({ mode: InspectionMapModeEnum.CREATE_INSPECTION })
+    );
   }
-
-  deleteInspection(inspection: Inspection, event) {
-    event.stopPropagation();
-    if (confirm("Are You Sure?")) {
-      this.store.dispatch(deleteInspection({ inspection }));
-    }
-  }
-
 }

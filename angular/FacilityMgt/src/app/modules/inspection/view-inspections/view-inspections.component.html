@@ -1,45 +1,53 @@
 <div class="main-area">
-    <mat-progress-spinner *ngIf="loading$ | async" color="primary" mode="indeterminate"></mat-progress-spinner>
-    <table mat-table [dataSource]="inspectionsDS">
-        <ng-container matColumnDef="facility">
-            <th mat-header-cell *matHeaderCellDef> Facility </th>
-            <td mat-cell *matCellDef="let inspection"> {{inspection.facility.name}} </td>
-        </ng-container>
-        <ng-container matColumnDef="type">
-            <th mat-header-cell *matHeaderCellDef> Type </th>
-            <td mat-cell *matCellDef="let inspection"> {{inspection.type}} </td>
-        </ng-container>
-        <ng-container matColumnDef="rating">
-            <th mat-header-cell *matHeaderCellDef> Rating </th>
-            <td mat-cell *matCellDef="let inspection"> {{inspection.rating}} </td>
-        </ng-container>
-        <ng-container matColumnDef="inspector">
-            <th mat-header-cell *matHeaderCellDef> Inspector </th>
-            <td mat-cell *matCellDef="let inspection"> {{inspection.inspector.name}} </td>
-        </ng-container>
-        <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef>Created On</th>
-            <td mat-cell *matCellDef="let element">
-                {{ element?._id | idToDate | date: "medium" }}
-            </td>
-        </ng-container>
-        <ng-container matColumnDef="edit">
-            <th mat-header-cell *matHeaderCellDef> Edit </th>
-            <td mat-cell *matCellDef="let inspection" >
-                <button mat-button (click)="editInspectionDialog(inspection, $event)">
-                    <mat-icon>edit</mat-icon>
-                </button>
-            </td>
-        </ng-container>
-        <ng-container matColumnDef="delete">
-            <th mat-header-cell *matHeaderCellDef> Edit </th>
-            <td mat-cell *matCellDef="let inspection" >
-                <button mat-button (click)="deleteInspection(inspection, $event)">
-                    <mat-icon>delete</mat-icon>
-                </button>
-            </td>
-        </ng-container>
-        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-        <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
-    </table>
+  <div class="map-area">
+    <app-esri-map-redux></app-esri-map-redux>
+  </div>
+  <div class="table-area">
+    <div>
+      <mat-card class="row">
+        <mat-card-content>
+          <div #mapViewNode></div>
+          <mat-progress-spinner
+            *ngIf="loading$ | async"
+            color="primary"
+            mode="indeterminate"
+          ></mat-progress-spinner>
+          <div *ngIf="!(loading$ | async)">
+            <h1 *ngIf="(selectedFacility$ | async)">
+              {{ (selectedFacility$ | async)?.name }} Inspections
+            </h1>
+            <h1 *ngIf="!(selectedFacility$ | async)">All Inspections</h1>
+            <button
+              mat-button
+              *ngIf="
+                (selectedFacility$ | async) && (mapMode$ | async) == 'NONE'
+              "
+              (click)="createInspection()"
+            >
+              Create New Inspection for this Facility
+            </button>
+            <app-inspections-table
+              *ngIf="
+                !['CREATE_INSPECTION', 'EDIT_INSPECTION'].includes(
+                  mapMode$ | async
+                )
+              "
+            ></app-inspections-table>
+            <app-inspection-add-edit
+              *ngIf="
+                ['CREATE_INSPECTION', 'EDIT_INSPECTION'].includes(
+                  mapMode$ | async
+                )
+              "
+            ></app-inspection-add-edit>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      <app-inspection-detail
+        *ngIf="
+          !['CREATE_INSPECTION', 'EDIT_INSPECTION'].includes(mapMode$ | async)
+        "
+      ></app-inspection-detail>
+    </div>
+  </div>
 </div>
