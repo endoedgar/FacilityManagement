@@ -1,22 +1,26 @@
-<mat-grid-list cols="3">
- 
-  
-  <mat-grid-tile>
+<div class="bounds">
     
-    <div class='esri-map-div'><app-esri-map-redux
-      (mapLoadedEvent)="mapLoadedEvent($event)"
-      >
-      </app-esri-map-redux></div>
-    
-  </mat-grid-tile>
-  <mat-grid-tile>
-    <app-add-facility></app-add-facility>
-  </mat-grid-tile>
-  <mat-grid-tile>
-    <app-facility-list></app-facility-list>
-  </mat-grid-tile>
+  <div class="content" 
+       fxLayout="row" 
+       fxLayout.xs="column" 
+       fxFlexFill >
+       
+      <div fxFlex="40"  >
+        <app-add-facility></app-add-facility>
+        <hr>
+        <app-facility-list></app-facility-list>
+       
+      </div>
+      <div fxFlex="60"   >
+        <div class='esri-map-div'><app-esri-map-redux
+          (mapLoadedEvent)="mapLoadedEvent($event)"
+          >
+        </app-esri-map-redux></div>
+        
+      </div>  
+  </div>
   
-  
-</mat-grid-list>
+</div>
+
 
 

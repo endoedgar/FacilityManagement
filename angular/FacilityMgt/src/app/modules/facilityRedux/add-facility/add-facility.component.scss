@@ -1,13 +1,45 @@
 .mat-card {
-  max-width: 400px;
+  max-width: 100%;
   margin-left: auto;
   margin-right: auto;
 }
+
 mat-form-field {
   width: 100%;
 }
-.facilityIcon{
+
+.facilityIcon {
   height: 50px;
   width: 50px;
 }
 
+.row {
+  min-height: 31vh;
+}
+
+.table {
+  display: block;
+}
+
+.header-row {
+  display: flex;
+  align-items: right;
+  min-height: 48px;
+  padding: 0 24px;
+}
+
+.item-cell {
+  min-width: 100px;
+  float: right;
+  font: bold;
+  opacity: 75%;
+  text-align: left;
+}
+
+.cell,
+.header-cell {
+  flex: 1;
+  overflow: hidden;
+  word-wrap: break-word;
+  align-items: right;
+}

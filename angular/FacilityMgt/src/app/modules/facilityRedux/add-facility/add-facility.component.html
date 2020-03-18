@@ -1,118 +1,141 @@
-<mat-card *ngIf="(mapMode$ | async) == 'NONE'" class="row">
-  <mat-card-header>
-    <mat-card-title>Action</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <button mat-button color="primary" class="btn" (click)="OnAddBtn()">
-      <mat-label>Add</mat-label>
-    </button>
-  </mat-card-content>
-</mat-card>
-
-<mat-card *ngIf="(mapMode$ | async) == 'SELECT_FACILITY'" class="row">
-  <mat-card-header>
-    <mat-card-title>Facility: {{ facility.name }}</mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <p>Type: {{ facility.type }}</p>
-    <p>Longitude: {{ facility.location[0] }}</p>
-    <p>Latitude: {{ facility.location[1] }}</p>
-    <button mat-button color="primary" class="btn" (click)="OnEditBtn()">
-      <mat-label>Edit</mat-label>
-    </button>
-    <button mat-button color="primary" class="btn" (click)="OnDeleteBtn()">
-      <mat-label>Delete</mat-label>
-    </button>
-    <button
-      mat-button
-      type="button"
-      class="btn btn-default"
-      (click)="OnCancelBtn()"
-    >
-      Cancel
-    </button>
-  </mat-card-content>
-</mat-card>
-<mat-card
-  class="row"
-  *ngIf="['CREATE_FACILITY', 'EDIT_FACILITY'].includes(mapMode$ | async)"
->
-  <mat-card-header>
-    <mat-card-title
+<div class="main-area">
+  <mat-card *ngIf="(mapMode$ | async) == 'NONE'" class="row">
+    <mat-card-header>
+      <mat-card-title>Action</mat-card-title>
+      
+    </mat-card-header>
+    <mat-card-content>
+      <hr>
+      <button mat-button color="primary" class="btn" (click)="OnAddBtn()">
+        <img class="facilityIcon" [src]=addFacilityImgURL/><br>
+        <mat-label>Add</mat-label>
+      </button>
+    </mat-card-content>
+  </mat-card>
+  
+  <mat-card *ngIf="(mapMode$ | async) == 'SELECT_FACILITY'" class="row">
+    <mat-card-header>
+      <mat-card-title>Facility: {{ facility.name }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <hr>
+        <table>
+            <tr class="header-row">
+            <td class=" item-cell">Type  </td>
+            <td class="cell">{{ facility.type }} </td>
+            </tr>
+            <tr class="header-row">
+            <td class=" item-cell">Longitude  </td>
+            <td class="cell">{{ facility.location[0] }} </td>
+            </tr>
+            <tr class="header-row">
+            <td class=" item-cell">Latitue </td>
+            <td class="cell">{{ facility.location[1] }} </td>
+            </tr>
+            <tr class="header-row">
+            <td class=" item-cell">Date </td>
+            <td class="cell">{{ facility._id | idToDate | date: "medium" }} </td>
+            </tr>
+        </table>
+      
+      <button mat-button color="primary" class="btn" (click)="OnEditBtn()">
+        <mat-label>Edit</mat-label>
+      </button>
+      <button mat-button color="primary" class="btn" (click)="OnDeleteBtn()">
+        <mat-label>Delete</mat-label>
+      </button>
+      <button
+        mat-button
+        type="button"
+        class="btn btn-default"
+        (click)="OnCancelBtn()"
       >
-      {{ (mapMode$ | async) == "CREATE_FACILITY" ? "Add" : "Edit" }}
-      Facility</mat-card-title
-    >
-  </mat-card-header>
-  <mat-card-content>
-    <form (ngSubmit)="onSubmit()" ngNativeValidate>
-      <mat-form-field class="form-group">
-        <mat-label for="name">Name</mat-label>
-        <input
-          matInput
-          [(ngModel)]="facility.name"
-          name="name"
-          type="text"
-          required
-          class="form-control"
-          id="name"
-          placeholder="Enter Facility Name"
-        />
-      </mat-form-field>
-      <mat-form-field class="form-group">
-        <mat-label for="type">Type</mat-label>
-        <input
-          matInput
-          [(ngModel)]="facility.type"
-          name="type"
-          type="text"
-          required
-          class="form-control"
-          id="type"
-          placeholder="Enter Facility Type"
-        />
-      </mat-form-field>
-      <mat-form-field class="form-group">
-        <mat-label for="locationX">Longitude</mat-label>
-        <input
-          #locationX
-          matInput
-          [(ngModel)]="facility.location[0]"
-          name="locationX"
-          type="text"
-          required
-          disabled
-          class="form-control"
-          id="locationX"
-          placeholder="Enter X Coordinate"
-        />
-      </mat-form-field>
-      <mat-form-field class="form-group">
-        <mat-label for="locationY">Latitude</mat-label>
-        <input
-          #locationY
-          matInput
-          [(ngModel)]="facility.location[1]"
-          name="locationY"
-          type="text"
-          required
-          disabled
-          class="form-control"
-          id="locationY"
-          placeholder="Enter Y Coordinate"
-        />
-      </mat-form-field>
-      <div>
-        <button mat-button type="submit" class="btn btn-primary">Submit</button>
-        <button
-          mat-button
-          type="button"
-          class="btn btn-default"
-          (click)="OnCancelBtn()"
+        Cancel
+      </button>
+    </mat-card-content>
+  </mat-card>
+  <mat-card
+    class="row"
+    *ngIf="['CREATE_FACILITY', 'EDIT_FACILITY'].includes(mapMode$ | async)"
+  >
+    <mat-card-header>
+      <mat-card-title
         >
-          Cancel
-        </button>
-      </div>
-    </form>
-  </mat-card-content>
-</mat-card>
+        {{ (mapMode$ | async) == "CREATE_FACILITY" ? "Add" : "Edit" }}
+        Facility</mat-card-title
+      >
+    </mat-card-header>
+    <mat-card-content>
+      <form (ngSubmit)="onSubmit()" ngNativeValidate>
+        <mat-form-field class="form-group">
+          <mat-label for="name">Name</mat-label>
+          <input
+            matInput
+            [(ngModel)]="facility.name"
+            name="name"
+            type="text"
+            required
+            class="form-control"
+            id="name"
+            placeholder="Enter Facility Name"
+          />
+        </mat-form-field>
+        <mat-form-field class="form-group">
+          <mat-label for="type">Type</mat-label>
+          <input
+            matInput
+            [(ngModel)]="facility.type"
+            name="type"
+            type="text"
+            required
+            class="form-control"
+            id="type"
+            placeholder="Enter Facility Type"
+          />
+        </mat-form-field>
+        <mat-form-field class="form-group">
+          <mat-label for="locationX">Longitude</mat-label>
+          <input
+            #locationX
+            matInput
+            [(ngModel)]="facility.location[0]"
+            name="locationX"
+            type="text"
+            required
+            disabled
+            class="form-control"
+            id="locationX"
+            placeholder="Enter X Coordinate"
+          />
+        </mat-form-field>
+        <mat-form-field class="form-group">
+          <mat-label for="locationY">Latitude</mat-label>
+          <input
+            #locationY
+            matInput
+            [(ngModel)]="facility.location[1]"
+            name="locationY"
+            type="text"
+            required
+            disabled
+            class="form-control"
+            id="locationY"
+            placeholder="Enter Y Coordinate"
+          />
+        </mat-form-field>
+        <div>
+          <button mat-button type="submit" class="btn btn-primary">Submit</button>
+          <button
+            mat-button
+            type="button"
+            class="btn btn-default"
+            (click)="OnCancelBtn()"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+    
+</div>

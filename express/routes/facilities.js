@@ -1,10 +1,13 @@
 const { Router, json } = require('express');
 const Facility = require('../schemas/facility');
+const isValidFacility = require('../middlewares/isValidFacility');
+const authenticateJWT = require('../middlewares/authenticateJWT');
+
 
 const router = Router();
 
 /* GET facilities listing */
-router.get('/', async (req, res, next) => {
+router.get('/', authenticateJWT,async (req, res, next) => {
     try {
         res.status(200).send({ status: "success", data: await Facility.find() });
     } catch (err) {
@@ -13,7 +16,7 @@ router.get('/', async (req, res, next) => {
 });
 
 /* GET one facility */
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', authenticateJWT, async (req, res, next) => {
     try {
         const facility = await Facility.findOne({ "_id": req.params.id });
         facility ? res.status(200).send(facility) : res.status(404).send({ message: "Facility not found." });
@@ -24,7 +27,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 /* POST one facility */
-router.post('/', json(), async (req, res, next) => {
+router.post('/', json(), authenticateJWT, isValidFacility, async (req, res, next) => {
     try {
         const data = await new Facility(req.body).save();
         res.status(201).json({ status: "success", message: "Created Successfully!", data });
@@ -35,7 +38,7 @@ router.post('/', json(), async (req, res, next) => {
 });
 
 /* PATCH one facility */
-router.patch('/:id', json(), async (req, res, next) => {
+router.patch('/:id', json(), authenticateJWT, async (req, res, next) => {
     try {
         const data = await Facility.findOneAndUpdate({ "_id": req.params.id }, { "$set": req.body }, { new: true });
         res.status(202).json({ status: "success", message: "Updated Successfully!", data });
@@ -45,7 +48,7 @@ router.patch('/:id', json(), async (req, res, next) => {
 });
 
 /* DELETE one facility */
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', authenticateJWT, async (req, res, next) => {
     try {
         await Facility.deleteOne({ "_id": req.params.id });
         res.status(202).json({ status: "success", message: "Deleted Successfully!" });
