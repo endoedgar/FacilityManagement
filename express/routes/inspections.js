@@ -1,5 +1,6 @@
 const { Router, json } = require('express');
 const Inspection = require('../schemas/inspection');
+const authenticateJWT = require('../middlewares/authenticateJWT');
 
 const router = Router();
 
@@ -43,15 +44,16 @@ router.post('/', json(), async (req, res, next) => {
     await new Inspection(req.body).save((err, data) => {
         if (err) return next(err);
         res.status(201).json({ status: "success", message: "Created Successfully!", data });
-    });
+    }).populate("facility").populate({path: "inspector", select: "-password"}) ;
 });
 
 
 /* PATCH one inspection */
-router.patch('/:id', json(), async (req, res, next) => {
+router.patch('/:id', authenticateJWT, json(), async (req, res, next) => {
     try {
-        await Inspection.updateOne({ "_id": req.params.id }, { "$set": req.body });
-        res.status(202).json({ status: "success", message: "Updated Successfully!" });
+        req.body.inspector = req.user._id;
+        const data = await Inspection.findOneAndUpdate({ "_id": req.params.id }, { "$set": req.body }, { new: true }).populate("facility").populate({path: "inspector", select: "-password"}) ;
+        res.status(202).json({ status: "success", message: "Updated Successfully!", data  });
     } catch (err) {
         return next(err);
     }

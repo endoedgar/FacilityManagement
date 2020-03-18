@@ -1,16 +1,16 @@
 import { createReducer, on } from '@ngrx/store';
-import { getInspections, getInspectionsSuccess, getInspectionsFailure, getInspection, getInspectionSuccess, getInspectionFailure, getFacilityInspections, getFacilityInspectionsSuccess, getFacilityInspectionsFailure, createInspection, createInspectionSuccess, createInspectionFailure, deleteInspection, deleteInspectionSuccess, deleteInspectionFailure, updateInspection, updateInspectionSuccess, updateInspectionFailure } from "../actions/inspection.actions";
+import { getInspections, getInspectionsSuccess, getInspectionsFailure, getInspection, getInspectionSuccess, getInspectionFailure, getFacilityInspections, getFacilityInspectionsSuccess, getFacilityInspectionsFailure, createInspection, createInspectionSuccess, createInspectionFailure, deleteInspection, deleteInspectionSuccess, deleteInspectionFailure, updateInspection, updateInspectionSuccess, updateInspectionFailure, selectInspection, deselectInspection } from "../actions/inspection.actions";
 import {
     initialInspectionsState,
     inspectionAdapter,
-    successAdapter
 } from "../states/inspection.state";
+import { inspectionsAdapter } from '../states/inspections.state';
 
 export const reducer = createReducer(initialInspectionsState,
-    on(getInspections, getInspection, 
-        getFacilityInspections, createInspection, 
-        updateInspection, deleteInspection, 
-        state => ({ ...state, selectedInspectionId: null, loading: true })),
+    on(getInspections, getInspection,
+        getFacilityInspections, createInspection,
+        updateInspection, deleteInspection,
+        state => ({ ...state, loading: true })),
     on(getInspectionsSuccess,
         (state, { inspections }) => inspectionAdapter.addMany(inspections, {
             ...state,
@@ -34,10 +34,10 @@ export const reducer = createReducer(initialInspectionsState,
         errorMessage: error.message
     })),
     on(getFacilityInspectionsSuccess, (state, { inspections }) => inspectionAdapter.addMany(inspections, {
-            ...state,
-            loading: false,
-            errorMessage: null
-        })),
+        ...state,
+        loading: false,
+        errorMessage: null
+    })),
     on(getFacilityInspectionsFailure, (state, { error }) => ({
         ...state,
         loading: false,
@@ -53,7 +53,7 @@ export const reducer = createReducer(initialInspectionsState,
         loading: false,
         errorMessage: error.message
     })),
-    on(updateInspectionSuccess, (state, { success }) => successAdapter.addOne(success, {
+    on(updateInspectionSuccess, (state, action) => inspectionAdapter.updateOne(action.inspection, {
         ...state,
         loading: false,
         errorMessage: null
@@ -63,14 +63,18 @@ export const reducer = createReducer(initialInspectionsState,
         loading: false,
         errorMessage: error.message
     })),
-    on(deleteInspectionSuccess, (state, { success }) => successAdapter.addOne(success, {
+    on(deleteInspectionSuccess, (state, action) => inspectionsAdapter.removeOne(action.inspection._id, {
         ...state,
-        errorMessage: null,
-        loading: false
+        loading: false,
+        errorMessage: null
     })),
     on(deleteInspectionFailure, (state, { error }) => ({
         ...state,
         loading: false,
         errorMessage: error.message
     })),
+    on(selectInspection, (state, action) => ({
+        ...state,
+        selectedInspectionId: action.inspection._id
+    }))
 );

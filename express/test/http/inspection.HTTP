@@ -2,6 +2,11 @@ GET http://localhost:4000/api/v1/inspections
 
 ###
 
+DELETE  http://localhost:4000/api/v1/inspections/5e7147dac8fd9926c66ddee6
+
+
+###
+
 GET http://localhost:4000/api/v1/inspections/5e6d6a188a489e21525699af
 
 ###
@@ -28,9 +33,6 @@ Content-Type: application/json
 
 {
     "report": "Sink is broken and Chairs are broken",
-    "rating": "2.5"
+    "rating": "1.5"
 }
 
-###
-
-DELETE  http://localhost:4000/api/v1/inspections/5e6d674fffe1501aae2a24dc
