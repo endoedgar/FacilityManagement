@@ -22,11 +22,6 @@ const routes: Routes = [
   {
     path: "facilities",
     loadChildren: () =>
-      import("./modules/facility/facility.module").then(m => m.FacilityModule)
-  },
-  {
-    path: "facilitiesRedux",
-    loadChildren: () =>
       import("./modules/facilityRedux/facilityRedux.module").then(m => m.FacilityReduxModule)
   },
   {
