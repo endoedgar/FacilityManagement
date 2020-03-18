@@ -17,6 +17,9 @@ import { selectFacilityState } from 'src/app/store/selectors/facility.selectors'
 export class AddFacilityComponent implements OnInit, OnDestroy {
   @ViewChild('locationX') locationX: ElementRef;
   @ViewChild('locationY') locationY: ElementRef;
+  
+  addColor = "white";
+  deleteColor = "white";
 
   facility: Facility = new Facility();
   getState: Observable<any>;
@@ -104,10 +107,15 @@ export class AddFacilityComponent implements OnInit, OnDestroy {
 
   OnAddBtn(): void {
     this.msService.setMapOpsMode("addFacility");
+    this.addColor = "lightblue";
+    this.deleteColor = "white";
+  
   }
 
   OnDeleteBtn(): void {
     this.msService.setMapOpsMode("deleteFacility");
+    this.addColor = "white";
+    this.deleteColor = "lightblue";
   }
 
   findPointValue(point: any) {

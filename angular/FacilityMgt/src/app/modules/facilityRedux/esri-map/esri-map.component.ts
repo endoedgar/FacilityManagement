@@ -46,12 +46,13 @@ export class EsriMapComponent implements OnInit {
   @ViewChild("mapViewNode") private mapViewEl: ElementRef;
 
   static readonly addFacilityImgURL = "../../../../assets/images/facility.png";
+  static readonly addFacilityTempImgURL = "../../../../assets/images/facilityTemp.png";
 
   constructor(
     public dialog: MatDialog,
     private store: Store<AppState>,
     private idToDatePipe: IdToDatePipe
-  ) {}
+  ) { }
 
   OpenDialog(graphic) {
     this.dialogRef = this.dialog.open(ConfirmDialogComponent);
@@ -90,7 +91,6 @@ export class EsriMapComponent implements OnInit {
     });
   }
 
-  // TODO : chenge it to async/await
   public async ngOnInit() {
     await this.initModules();
 
@@ -117,6 +117,15 @@ export class EsriMapComponent implements OnInit {
       this.store.select(getCurrentFacility$),
       this.mapMode$
     ).subscribe(([facilities, selectedFacility, mapMode]) => {
+
+      // disable info template 
+      if (mapMode == MapModeEnum.CREATE_FACILITY) {
+        this.mapView.popup.autoOpenEnabled = false;
+      }else{
+        this.mapView.popup.autoOpenEnabled = true;
+      }
+
+      // TODO : chenge it to hide display insted of remove all graphics
       Glayer.graphics.removeAll();
       facilities
         .filter(
@@ -141,11 +150,14 @@ export class EsriMapComponent implements OnInit {
     fromEvent(this.mapViewEl.nativeElement, "click")
       .pipe(withLatestFrom(this.mapMode$))
       .subscribe(async ([event, mapMode]: [any, MapModeEnum]) => {
+
+
         const screenPoint = {
           x: event.layerX,
           y: event.layerY
         };
 
+        // using self pattern ;-)
         const self = this;
 
         switch (mapMode) {
@@ -157,7 +169,7 @@ export class EsriMapComponent implements OnInit {
                   _id: "NEW_FACILITY",
                   location: [longitude, latitude],
                   name: "NEW FACILITY",
-                  type: ""
+                  type: "NEW FACILITY"
                 }
               })
             );
@@ -177,23 +189,46 @@ export class EsriMapComponent implements OnInit {
   }
 
   generateGraphic(facility: FacilityRedux, selected: boolean, imgUrl: string) {
+    const drivenDate = this.idToDatePipe.transform(facility._id);
+    const enrichedFacility = {...facility, "date" : drivenDate  }
+
     const pointGraphic: __esri.Graphic = new this.Graphic({
-      attributes: facility,
+      attributes: enrichedFacility,
       geometry: {
         type: "point",
-        longitude: facility.location[0],
-        latitude: facility.location[1],
+        longitude: enrichedFacility.location[0],
+        latitude: enrichedFacility.location[1],
         spatialReference: 3857 //TODO: add it to config
       },
       symbol: {
         type: "picture-marker", // autocasts as new PictureMarkerSymbol()
         url: imgUrl,
         angle: selected ? 20 : 0,
-        width: selected ? "70px" : "40px",
-        height: selected ? "70px" : "40px"
+        width: selected ? "40px" : "40px",
+        height: selected ? "40px" : "40px"
+      },
+      popupTemplate: {
+        title: "{name}",
+        content: [
+          {
+            type: "fields",
+            fieldInfos: [
+              {
+                fieldName: "type",
+                label: "Facility Type"
+              },
+              {
+                fieldName: "date" ,
+                label: "Date"
+              }
+            ]
+          }
+        ]
       }
     });
 
     return pointGraphic;
   }
+
+  
 }

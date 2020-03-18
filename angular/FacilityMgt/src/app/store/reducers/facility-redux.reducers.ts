@@ -60,7 +60,8 @@ export const reducer = createReducer(
   on(DeleteFacility, (state, action) => ({
     ...state,
     error: null,
-    loading: true
+    loading: true,
+    mapMode: MapModeEnum.NONE
   })),
   on(DeleteFacilitySuccess, (state, action) =>
     facilityAdapter.removeOne(action.facility._id, {
@@ -68,6 +69,7 @@ export const reducer = createReducer(
       error: null,
       loading: false
     })
+    
   ),
   on(GetFacilities, (state, action) => ({
     ...state,
