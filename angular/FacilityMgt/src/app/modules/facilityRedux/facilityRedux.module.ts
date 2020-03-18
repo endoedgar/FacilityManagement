@@ -12,6 +12,7 @@ import { MyMaterialModule } from "../material.module";
 import { EsriMapComponent } from "./esri-map/esri-map.component";
 import { ConfirmDialogComponent } from "./confirm-dialog/confirm-dialog.component";
 import { IdToDatePipe } from 'src/app/pipes/id-to-date.pipe';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 @NgModule({
   declarations: [
     AddFacilityReduxComponent,
@@ -26,7 +27,8 @@ import { IdToDatePipe } from 'src/app/pipes/id-to-date.pipe';
     RouterModule.forChild([{ path: "", component: BodyReduxComponent }]),
     FormsModule,
     ReactiveFormsModule,
-    MyMaterialModule
+    MyMaterialModule,
+    MatProgressSpinnerModule
   ],
   providers: [ IdToDatePipe ]
 })
