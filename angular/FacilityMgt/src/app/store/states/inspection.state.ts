@@ -13,11 +13,6 @@ export const inspectionAdapter: EntityAdapter<Inspection> = createEntityAdapter<
 });
 
 
-export const successAdapter: EntityAdapter<Object> = createEntityAdapter<Object>({
-  
-});
-
-
 export const initialInspectionsState: InspectionState = inspectionAdapter.getInitialState({
   selectedInspectionId: null,
   selectedFacilityId: null,

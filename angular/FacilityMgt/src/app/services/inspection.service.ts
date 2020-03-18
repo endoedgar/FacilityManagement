@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Inspection } from '../models/Inspection';
 
 @Injectable({
   providedIn: 'root'
@@ -26,16 +27,16 @@ export class InspectionService {
     return this.http.get(`${this.BASE_URL}/inspections/facility/${facility_Id}`);
   }
 
-  public addInspection(inspection: { inspector_id: string, facility_Id: string, type: string, report: string, rating: Number }): Observable<any> {
+  public createInspection(inspection: Inspection): Observable<any> {
     console.dir("post request ... ");
     return this.http.post(`${this.BASE_URL}/inspections/`, inspection);
   }
 
-  public editInspection(inspection_id: string, inspection: { inspector_id?: string, facility_Id?: string, type?: string, report?: string, rating?: Number }): Observable<any> {
-    console.dir("patch request ... ");
-    return this.http.patch(`${this.BASE_URL}/inspections/${inspection_id}`, inspection);
+  public updateInspection(inspection: Inspection): Observable<any> {
+    console.dir("patch request ... ", inspection);
+    return this.http.patch(`${this.BASE_URL}/inspections/${inspection._id}`, inspection);
   }
-  
+
   public deleteInspection(inspection_id: string): Observable<any> {
     console.dir("delete request ... ");
     return this.http.delete(`${this.BASE_URL}/inspections/${inspection_id}`);

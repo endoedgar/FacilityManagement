@@ -9,22 +9,21 @@ import { MatCardModule } from '@angular/material/card';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { ViewInspectionsComponent } from './view-inspections/view-inspections.component';
-import { AddInspectionComponent } from './add-inspection/add-inspection.component';
 import { InspectionDetailsComponent } from './inspection-details/inspection-details.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { ApplicationPipesModule } from '../pipes.module';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialogModule } from '@angular/material/dialog';
+import { BrowserModule } from '@angular/platform-browser';
 
 
 const MY_ROUTES: Routes = [
   { path: '', component: ViewInspectionsComponent },
-  { path: ':inspection_id', component: InspectionDetailsComponent },
-  { path: 'facility/:facility_id', component: AddInspectionComponent },
 ];
 
 @NgModule({
-  declarations: [ViewInspectionsComponent, AddInspectionComponent, InspectionDetailsComponent],
+  declarations: [ViewInspectionsComponent, InspectionDetailsComponent],
   imports: [
     CommonModule,
     RouterModule.forChild(MY_ROUTES),
@@ -38,7 +37,8 @@ const MY_ROUTES: Routes = [
     MatCardModule,
     MatSnackBarModule,
     MatTableModule,
-    MatIconModule
+    MatIconModule,
+    MatDialogModule
   ]
 })
 

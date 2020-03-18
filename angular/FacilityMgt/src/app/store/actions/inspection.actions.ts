@@ -1,5 +1,6 @@
 import { createAction, props } from "@ngrx/store";
 import { Inspection } from 'src/app/models/Inspection';
+import { Update } from '@ngrx/entity';
 
 export enum InspectionActionTypes {
     GET_INSPECTIONS = "[Inspection] Get Inspections",
@@ -19,8 +20,20 @@ export enum InspectionActionTypes {
     UPDATE_INSPECTION_FAILURE = "[Inspection] Update Inspection Failure",
     DELETE_INSPECTION = "[Inspection] Delete Inspection",
     DELETE_INSPECTION_SUCCESS = "[Inspection] Delete Inspection Success",
-    DELETE_INSPECTION_FAILURE = "[Inspection] Delete Inspection Failure"
+    DELETE_INSPECTION_FAILURE = "[Inspection] Delete Inspection Failure",
+
+    SELECT_INSPECTION = "[Inspection] Select Inspection",
+    DESELECT_INSPECTION = "[Inspection] Deselect Inspection"
 }
+
+export const selectInspection = createAction(
+    InspectionActionTypes.SELECT_INSPECTION,
+    props<{ inspection: Inspection }>()
+);
+
+export const deselectInspection = createAction(
+    InspectionActionTypes.DESELECT_INSPECTION
+);
 
 export const getInspections =
     createAction(InspectionActionTypes.GET_INSPECTIONS);
@@ -61,15 +74,15 @@ export const createInspectionFailure =
 export const updateInspection =
     createAction(InspectionActionTypes.UPDATE_INSPECTION, props<{ inspection: Inspection }>());
 export const updateInspectionSuccess =
-    createAction(InspectionActionTypes.UPDATE_INSPECTION_SUCCESS, props<{ success: string }>());
+    createAction(InspectionActionTypes.UPDATE_INSPECTION_SUCCESS, props<{ inspection: Update<Inspection> }>());
 export const updateInspectionFailure =
     createAction(InspectionActionTypes.UPDATE_INSPECTION_FAILURE, props<{ error: any }>());
 
 
 
 export const deleteInspection =
-    createAction(InspectionActionTypes.DELETE_INSPECTION);
+    createAction(InspectionActionTypes.DELETE_INSPECTION, props<{ inspection: Inspection }>());
 export const deleteInspectionSuccess =
-    createAction(InspectionActionTypes.DELETE_INSPECTION_SUCCESS, props<{ success: string }>());
+    createAction(InspectionActionTypes.DELETE_INSPECTION_SUCCESS, props<{ inspection: Inspection }>());
 export const deleteInspectionFailure =
     createAction(InspectionActionTypes.DELETE_INSPECTION_FAILURE, props<{ error: any }>());
