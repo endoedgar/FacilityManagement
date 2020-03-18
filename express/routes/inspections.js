@@ -29,7 +29,7 @@ router.get('/:id', async (req, res, next) => {
 /* GET inspections of a facility */
 router.get('/facility/:facility_id', async (req, res, next) => {
     try {
-        const inspections = await Inspection.find({ "facility": req.params.facility_id });
+        const inspections = await Inspection.find({ "facility": req.params.facility_id }).populate("facility").populate({path: "inspector", select: "-password"});
         inspections ?
             res.status(200).send({ status: "success", data: inspections }) :
             res.status(404).send({ status: "failed", message: "Inspections not found." });
