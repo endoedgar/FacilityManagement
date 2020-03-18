@@ -63,7 +63,8 @@ export const reducer = createReducer(initialInspectionsState,
         loading: false,
         errorMessage: error.message
     })),
-    on(deleteInspectionSuccess, (state, action) => inspectionsAdapter.removeOne(action.inspection._id, {
+    on(deleteInspectionSuccess, (state, action) => 
+    inspectionsAdapter.removeOne(action.inspection._id, {
         ...state,
         loading: false,
         errorMessage: null
