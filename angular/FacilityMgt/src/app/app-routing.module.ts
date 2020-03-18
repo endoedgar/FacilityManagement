@@ -34,11 +34,6 @@ const routes: Routes = [
     loadChildren: () =>
       import("./modules/users/users.module").then(m => m.UsersModule)
   },
-  {
-    path: "inspections",
-    loadChildren: () =>
-      import("./modules/inspections/inspections.module").then(m => m.InspectionsModule)
-  },
   { path: "**", component: DummyComponent }
 ];
 

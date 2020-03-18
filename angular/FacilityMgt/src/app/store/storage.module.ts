@@ -8,7 +8,6 @@ import { environment } from "src/environments/environment";
 
 import { AuthEffects } from "./effects/auth.effects";
 import { UsersEffects } from "./effects/users.effects";
-import { InspectionsEffects } from "./effects/inspections.effects";
 import { UIEffects } from "./effects/ui.effects";
 import { InspectionEffects } from "./effects/inspection.effects";
 import { FacilityReduxEffects } from "./effects/facility-redux.effects";
@@ -20,7 +19,6 @@ import { FacilityReduxEffects } from "./effects/facility-redux.effects";
       AuthEffects,
       FacilityReduxEffects,
       UsersEffects,
-      InspectionsEffects,
       InspectionEffects,
       UIEffects
     ]),
