@@ -9,7 +9,6 @@ import { Store } from "@ngrx/store";
 import { AppState } from "src/app/store/states/app.state";
 import { MatDialog } from "@angular/material/dialog";
 import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import {
   selectFacilitiesLoading$,
   selectAllFacilities$
@@ -17,10 +16,9 @@ import {
 import { IdToDatePipe } from "src/app/pipes/id-to-date.pipe";
 import { combineLatest, fromEvent, concat } from "rxjs";
 import { FacilityRedux } from "src/app/models/FacilityRedux";
-import { map, withLatestFrom } from "rxjs/operators";
+import { withLatestFrom } from "rxjs/operators";
 import {
   SelectFacility,
-  addFacilitySuccess,
   AddNewFacilityObjectOnMap
 } from "src/app/store/actions/facility-redux.actions";
 import { MapModeEnum } from "src/app/store/states/facility-redux.state";
@@ -50,7 +48,6 @@ export class EsriMapComponent implements OnInit {
   static readonly addFacilityImgURL = "../../../../assets/images/facility.png";
 
   constructor(
-    private _snackBar: MatSnackBar,
     public dialog: MatDialog,
     private store: Store<AppState>,
     private idToDatePipe: IdToDatePipe
@@ -114,6 +111,7 @@ export class EsriMapComponent implements OnInit {
 
     await this.mapView.when();
 
+    // Each time something happens on Facility State including map mode
     combineLatest(
       this.store.select(selectAllFacilities$),
       this.store.select(getCurrentFacility$),
@@ -139,9 +137,10 @@ export class EsriMapComponent implements OnInit {
         });
     });
 
+    // Every single click on Map
     fromEvent(this.mapViewEl.nativeElement, "click")
       .pipe(withLatestFrom(this.mapMode$))
-      .subscribe(async([event, mapMode]: [any, MapModeEnum]) => {
+      .subscribe(async ([event, mapMode]: [any, MapModeEnum]) => {
         const screenPoint = {
           x: event.layerX,
           y: event.layerY
@@ -168,97 +167,13 @@ export class EsriMapComponent implements OnInit {
             const response = await this.mapView.hitTest(screenPoint);
             if (response.results.length) {
               const facility: FacilityRedux =
-              response.results[0].graphic.attributes;
+                response.results[0].graphic.attributes;
 
               self.store.dispatch(SelectFacility({ facility }));
             }
             break;
         }
       });
-    /*this.mapView.on("click", async (event: __esri.MapViewClickEvent) => {
-          this.mapView.popup.autoOpenEnabled = true;
-          if (this.msService.getMapOpsMode() == "addFacility") {
-            let mPoint = {
-              location: [event.mapPoint.longitude, event.mapPoint.latitude]
-            };
-            const attr = {
-              name: "sdf",
-              type: "sdf"
-            };
-            const pointGraphic: __esri.Graphic = generateGraphic(
-              mPoint,
-              attr,
-              addFacilityImgURL
-            );
-
-            //this.mapView.graphics.add(pointGraphic);
-            Glayer.graphics.add(pointGraphic);
-            this.msService.addPoint(pointGraphic);
-            this.msService.setMapOpsMode("");
-          } else if (this.msService.getMapOpsMode() == "deleteFacility") {
-            let graphic: __esri.Graphic;
-            const response = await this.mapView.hitTest(event);
-
-            if (response.results.length) {
-              graphic = response.results.filter(function(result) {
-                return result.graphic.layer === Glayer;
-              })[0].graphic;
-            }
-
-            this.OpenDialog(graphic);
-
-            this.dialogRef.afterClosed().subscribe(result => {
-              if (result) {
-                Glayer.graphics.remove(graphic); // TODO : remove it after deleted on db
-                //this.msService.delPoint(graphic);
-              }
-            });
-            this.msService.setMapOpsMode("");
-          }
-        });*/
-
-    /*this.getState.subscribe(state => {
-          if (state.facility) {
-            if (state.facility.getFacilities) {
-              if (state.facility.getFacilities.status == "success") {
-                let mPoint = null;
-                state.facility.getFacilities.data.map();
-              } else {
-                this.showSnackBar(
-                  "Unexpected Error !",
-                  state.facility.getFacilities.status
-                );
-              }
-            } else if (state.facility.addFacility) {
-              console.log(state.facility);
-              const point = state.facility.addFacility.data;
-
-              const attr = {
-                id: point._id,
-                name: point.name,
-                type: point.type
-              };
-              Glayer.graphics.add(
-                generateGraphic(point, attr, addFacilityImgURL)
-              );
-
-              this.showSnackBar(
-                state.facility.addFacility.message,
-                state.facility.addFacility.status
-              );
-              this.store.dispatch(addFacilitySuccess(state));
-            } else if (state.facility.deleteFacility) {
-              console.log(state);
-              if (state.facility.deleteFacility.status == "success") {
-                this.showSnackBar(
-                  state.facility.deleteFacility.message,
-                  state.facility.deleteFacility.status
-                );
-                //this.store.dispatch(new DeleteFacilitySuccess(state));
-              }
-            }
-          }
-        });*/
   }
 
   generateGraphic(facility: FacilityRedux, selected: boolean, imgUrl: string) {
@@ -280,11 +195,5 @@ export class EsriMapComponent implements OnInit {
     });
 
     return pointGraphic;
-  }
-
-  showSnackBar(msg, stat) {
-    this._snackBar.open(msg, stat, {
-      duration: 3000
-    });
   }
 }

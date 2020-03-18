@@ -38,6 +38,7 @@ export class EsriMapComponent implements OnInit {
   public async ngOnInit() {
 
     const addFacilityImgURL = "../../../../assets/images/facility.png";
+    const addFacilityTempImgURL = "../../../../assets/images/facilityTemp.png";
 
     // use esri-loader to load JSAPI modules
     try {
