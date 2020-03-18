@@ -54,9 +54,7 @@ export class EsriMapComponent implements OnInit {
     private idToDatePipe: IdToDatePipe
   ) { }
 
-  OpenDialog(graphic) {
-    this.dialogRef = this.dialog.open(ConfirmDialogComponent);
-  }
+  
 
   public async initModules(): Promise<any> {
     // use esri-loader to load JSAPI modules
@@ -124,6 +122,9 @@ export class EsriMapComponent implements OnInit {
       }else{
         this.mapView.popup.autoOpenEnabled = true;
       }
+
+      // hide info-template after delete ...
+      this.mapView.popup.close();
 
       // TODO : chenge it to hide display insted of remove all graphics
       Glayer.graphics.removeAll();
@@ -230,5 +231,10 @@ export class EsriMapComponent implements OnInit {
     return pointGraphic;
   }
 
+  OpenDialog(graphic) {
+    this.dialogRef = this.dialog.open(ConfirmDialogComponent);
+  }
+ 
+  
   
 }
