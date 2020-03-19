@@ -24,6 +24,11 @@ commands:
           command: |
             cd workspace/repo
             npm install
+      - run:
+          name: npm run build
+          command: |
+            cd workspace/repo
+            npm run build
       - save_cache:
           paths:
             - workspace/repo/node_modules
@@ -32,9 +37,11 @@ commands:
           name: Create Dummy Secrets Config File
           command: >
             echo '{"mongoDB": "mongodb://127.0.0.1:27017/test", "accessTokenSecret": "What is it my dears?" }' > workspace/repo/express/secrets.json
-      - run: |
-          cd workspace/repo
-          npm run test_express
+      - run:
+          name: Test Express
+          command: |
+            cd workspace/repo
+            npm run test_express
       - run:
           name: Compress Artifacts
           command: |
