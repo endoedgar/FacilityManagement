@@ -30,7 +30,7 @@ commands:
             cd workspace/repo
             npm run build
       - run: sudo apt-get install tree
-      - run: tree
+      - run: tree -I 'node_modules|cache|test_*'
       - save_cache:
           paths:
             - workspace/repo/node_modules
