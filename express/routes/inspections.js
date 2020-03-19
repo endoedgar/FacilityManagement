@@ -1,6 +1,7 @@
 const { Router, json } = require('express');
 const Inspection = require('../schemas/inspection');
 const authenticateJWT = require('../middlewares/authenticateJWT');
+const isValidInspection = require('../middlewares/isValidInspection');
 
 const router = Router();
 
@@ -40,10 +41,10 @@ router.get('/facility/:facility_id', async (req, res, next) => {
 
 
 /* POST one inspection */
-router.post('/', authenticateJWT, json(), async (req, res, next) => {
+router.post('/', authenticateJWT, json(), isValidInspection, async (req, res, next) => {
     try {
-        req.body.inspector = req.user._id;
-        const data = await new Inspection(req.body).save();
+        const data = await new Inspection({ ...req.body, inspector: req.user._id }).save();
+        await data.populate("facility").populate({ path: "inspector", select: "-password" }).execPopulate();
         res.status(201).json({ status: "success", message: "Created Successfully!", data });
     } catch (err) {
         return next(err);
