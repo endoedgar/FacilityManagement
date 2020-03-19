@@ -29,6 +29,8 @@ commands:
           command: |
             cd workspace/repo
             npm run build
+      - run: sudo apt-get install tree
+      - run: tree
       - save_cache:
           paths:
             - workspace/repo/node_modules
