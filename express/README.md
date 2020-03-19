@@ -460,7 +460,7 @@ Inserts a new inspection on success.
     "__v": 0
 }
 ```
-##### 422:
+##### 400:
 ```json
 {
   "status": "failed",

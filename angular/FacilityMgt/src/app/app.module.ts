@@ -7,14 +7,15 @@ import { AppComponent } from "./components/app/app.component";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MyMaterialModule } from './modules/material.module';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { DummyComponent } from './components/dummyComponent/dummy.component';
+import { ErrorComponent } from './components/error/error.component';
 import { httpInterceptProviders } from './http-interceptors';
 import { ApplicationPipesModule } from './modules/pipes.module';
 import { StorageModule } from './store/storage.module';
 import { AppRoutingModule } from './app-routing.module';
+import { HomeComponent } from './components/home/home.component';
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, DummyComponent, FooterComponent],
+  declarations: [AppComponent, NavbarComponent, ErrorComponent, HomeComponent, FooterComponent],
   imports: [
     BrowserModule,
     StorageModule,
