@@ -1,13 +1,81 @@
 .main{
-    max-height: 500px;
 }
 
-img{
+.asaad {
     max-width: 30%;
     height: auto;
     float: left;
+    margin-right: 50px;
 }
 
 .title{
     font-weight: bold;
 }
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+
+  dl p {
+    margin: 0px;
+  }
+
+  
+  .image-dalia {
+    background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+    background-size: cover;
+  }
+
+  .card-container {
+      //display: flex;
+      //justify-content: center;
+  }
+
+  .card {
+    //flex: 1;
+    margin: 50px;
+  }
+
+  .team-members {
+      padding-top: 60px;
+      clear: left;
+  }
+
+[class*="col-"] {
+    float: left;
+    padding: 15px;
+    border: 1px solid red;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  .row::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+
+ /* For mobile phones: */
+[class*="col-"] {
+    width: 100%;
+  }
+  
+  @media only screen and (min-width: 768px) {
+    /* For desktop: */
+    .col-1 {width: 8.33%;}
+    .col-2 {width: 16.66%;}
+    .col-3 {width: 25%;}
+    .col-4 {width: 33.33%;}
+    .col-5 {width: 41.66%;}
+    .col-6 {width: 50%;}
+    .col-7 {width: 58.33%;}
+    .col-8 {width: 66.66%;}
+    .col-9 {width: 75%;}
+    .col-10 {width: 83.33%;}
+    .col-11 {width: 91.66%;}
+    .col-12 {width: 100%;}
+  }
