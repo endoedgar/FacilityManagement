@@ -1,27 +1,21 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import { loadModules } from "esri-loader";
 import {
-  selectFacilityState$,
   getCurrentFacility$,
-  selectFacilitiesMapMode$
 } from "src/app/store/selectors/facility-redux.selectors";
 import { Store } from "@ngrx/store";
 import { AppState } from "src/app/store/states/app.state";
 import { MatDialog } from "@angular/material/dialog";
-import { ConfirmDialogComponent } from "../confirm-dialog/confirm-dialog.component";
 import {
   selectFacilitiesLoading$,
   selectAllFacilities$
 } from "src/app/store/selectors/facility-redux.selectors";
-import { IdToDatePipe } from "src/app/pipes/id-to-date.pipe";
 import { combineLatest, fromEvent, concat } from "rxjs";
 import { FacilityRedux } from "src/app/models/FacilityRedux";
 import { withLatestFrom } from "rxjs/operators";
-import {
-  SelectFacility,
-  AddNewFacilityObjectOnMap
-} from "src/app/store/actions/facility-redux.actions";
-import { MapModeEnum } from "src/app/store/states/facility-redux.state";
+import { SelectFacility, DeselectFacility } from "src/app/store/actions/facility-redux.actions";
+import { selectInspectionMapMode } from 'src/app/store/selectors/inspection.selectors';
+import { InspectionMapModeEnum } from 'src/app/store/states/inspection.state';
 
 @Component({
   selector: "app-esri-map-redux",
@@ -30,10 +24,10 @@ import { MapModeEnum } from "src/app/store/states/facility-redux.state";
 })
 export class EsriMapComponent implements OnInit {
   loading$ = this.store.select(selectFacilitiesLoading$);
-  mapMode$ = this.store.select(selectFacilitiesMapMode$);
+  mapMode$ = this.store.select(selectInspectionMapMode);
+  currentFacility : FacilityRedux;
 
   public mapView: __esri.MapView;
-  getState = this.store.select(selectFacilityState$);
   dialogRef;
 
   Map: typeof import("esri/Map");
@@ -50,11 +44,8 @@ export class EsriMapComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    private store: Store<AppState>,
-    private idToDatePipe: IdToDatePipe
+    private store: Store<AppState>
   ) { }
-
-  
 
   public async initModules(): Promise<any> {
     // use esri-loader to load JSAPI modules
@@ -92,9 +83,7 @@ export class EsriMapComponent implements OnInit {
   public async ngOnInit() {
     await this.initModules();
 
-    const Glayer = new this.GraphicsLayer({
-      graphics: []
-    });
+    const Glayer = new this.GraphicsLayer({graphics: []});
 
     this.mapView = new this.MapView({
       container: this.mapViewEl.nativeElement,
@@ -115,26 +104,10 @@ export class EsriMapComponent implements OnInit {
       this.store.select(getCurrentFacility$),
       this.mapMode$
     ).subscribe(([facilities, selectedFacility, mapMode]) => {
-
-      // disable info template 
-      if (mapMode == MapModeEnum.CREATE_FACILITY) {
-        this.mapView.popup.autoOpenEnabled = false;
-      }else{
-        this.mapView.popup.autoOpenEnabled = true;
-      }
-
-      // hide info-template after delete ...
-      this.mapView.popup.close();
-
-      // TODO : chenge it to hide display insted of remove all graphics
       Glayer.graphics.removeAll();
       facilities
         .filter(
-          facility =>
-            facility.location.length &&
-            (mapMode != MapModeEnum.EDIT_FACILITY ||
-              (mapMode == MapModeEnum.EDIT_FACILITY &&
-                selectedFacility == facility))
+          facility => facility.location.length
         )
         .map(facility => {
           Glayer.graphics.add(
@@ -150,55 +123,38 @@ export class EsriMapComponent implements OnInit {
     // Every single click on Map
     fromEvent(this.mapViewEl.nativeElement, "click")
       .pipe(withLatestFrom(this.mapMode$))
-      .subscribe(async ([event, mapMode]: [any, MapModeEnum]) => {
-
-
+      .subscribe(async ([event, mapMode]: [any, InspectionMapModeEnum]) => {
         const screenPoint = {
           x: event.layerX,
           y: event.layerY
         };
 
-        // using self pattern ;-)
-        const self = this;
-
         switch (mapMode) {
-          case MapModeEnum.CREATE_FACILITY:
-            const { latitude, longitude } = this.mapView.toMap(event);
-            this.store.dispatch(
-              AddNewFacilityObjectOnMap({
-                facility: {
-                  _id: "NEW_FACILITY",
-                  location: [longitude, latitude],
-                  name: "NEW FACILITY",
-                  type: "NEW FACILITY"
-                }
-              })
-            );
-            break;
-          case MapModeEnum.NONE:
-          case MapModeEnum.SELECT_FACILITY:
+          case InspectionMapModeEnum.NONE:
+          case InspectionMapModeEnum.CREATE_INSPECTION:
             const response = await this.mapView.hitTest(screenPoint);
             if (response.results.length) {
-              const facility: FacilityRedux =
-                response.results[0].graphic.attributes;
+              const facility: FacilityRedux = response.results[0].graphic.attributes;
 
-              self.store.dispatch(SelectFacility({ facility }));
+              if(this.currentFacility == facility)
+                this.store.dispatch(DeselectFacility());
+              else
+                this.store.dispatch(SelectFacility({ facility }));
             }
             break;
         }
       });
+
+      this.store.select(getCurrentFacility$).subscribe(facility => this.currentFacility = facility);
   }
 
   generateGraphic(facility: FacilityRedux, selected: boolean, imgUrl: string) {
-    const drivenDate = this.idToDatePipe.transform(facility._id);
-    const enrichedFacility = {...facility, "date" : drivenDate  }
-
     const pointGraphic: __esri.Graphic = new this.Graphic({
-      attributes: enrichedFacility,
+      attributes: facility,
       geometry: {
         type: "point",
-        longitude: enrichedFacility.location[0],
-        latitude: enrichedFacility.location[1],
+        longitude: facility.location[0],
+        latitude: facility.location[1],
         spatialReference: 3857 //TODO: add it to config
       },
       symbol: {
@@ -207,34 +163,9 @@ export class EsriMapComponent implements OnInit {
         angle: selected ? 20 : 0,
         width: selected ? "40px" : "40px",
         height: selected ? "40px" : "40px"
-      },
-      popupTemplate: {
-        title: "{name}",
-        content: [
-          {
-            type: "fields",
-            fieldInfos: [
-              {
-                fieldName: "type",
-                label: "Facility Type"
-              },
-              {
-                fieldName: "date" ,
-                label: "Date"
-              }
-            ]
-          }
-        ]
       }
     });
 
     return pointGraphic;
   }
-
-  OpenDialog(graphic) {
-    this.dialogRef = this.dialog.open(ConfirmDialogComponent);
-  }
- 
-  
-  
 }

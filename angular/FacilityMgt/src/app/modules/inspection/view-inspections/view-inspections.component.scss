@@ -1,8 +1,4 @@
-table {
-    width: 100%;
-}
-  
-button {
+ button {
   &.image {
     background-color: transparent;
     background-repeat: no-repeat;
@@ -13,6 +9,24 @@ button {
   
 .main-area {
   display: flex;
-  align-items: center;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.map-area {
+  flex: 2;
+  margin-right: 30px;
+}
+
+.table-area {
+  flex: 1;
+}
+
+app-esri-map-redux {
+  display: flex;
+  flex: 1;
+}
+
+app-inspections-table {
+  flex-grow: 1;
 }

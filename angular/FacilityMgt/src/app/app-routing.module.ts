@@ -22,11 +22,6 @@ const routes: Routes = [
   {
     path: "facilities",
     loadChildren: () =>
-      import("./modules/facility/facility.module").then(m => m.FacilityModule)
-  },
-  {
-    path: "facilitiesRedux",
-    loadChildren: () =>
       import("./modules/facilityRedux/facilityRedux.module").then(m => m.FacilityReduxModule)
   },
   {
@@ -38,11 +33,6 @@ const routes: Routes = [
     path: "users",
     loadChildren: () =>
       import("./modules/users/users.module").then(m => m.UsersModule)
-  },
-  {
-    path: "inspections",
-    loadChildren: () =>
-      import("./modules/inspections/inspections.module").then(m => m.InspectionsModule)
   },
   { path: "**", component: DummyComponent }
 ];

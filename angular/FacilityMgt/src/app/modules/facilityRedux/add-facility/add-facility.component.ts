@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subscription } from "rxjs";
-import { Store } from "@ngrx/store";
+import { Store, createAction, props } from "@ngrx/store";
 import { AppState } from "src/app/store/states/app.state";
 import {
   addFacility,
   GetFacilities,
   ChangeMode,
   updateFacility,
-  SelectFacility
+  DeleteFacility
 } from "src/app/store/actions/facility-redux.actions";
 import {
   selectFacilitiesMapMode$,
@@ -15,7 +15,10 @@ import {
 } from "src/app/store/selectors/facility-redux.selectors";
 import { FacilityRedux } from "src/app/models/FacilityRedux";
 import { MapModeEnum } from 'src/app/store/states/facility-redux.state';
-import { map } from 'rxjs/operators';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import { ShowMessage } from 'src/app/store/actions/ui.actions';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: "app-add-facility",
@@ -27,6 +30,7 @@ export class AddFacilityReduxComponent implements OnInit, OnDestroy {
   mapMode$ = this.store.select(selectFacilitiesMapMode$);
   mapModeString$ = this.store.select(selectFacilitiesMapMode$).subscribe(console.log);
   facility$ = this.store.select(getCurrentFacility$);
+  addFacilityImgURL = "../../../../assets/images/facility.png";
 
   mapMode: MapModeEnum;
   facility: FacilityRedux = {
@@ -35,8 +39,10 @@ export class AddFacilityReduxComponent implements OnInit, OnDestroy {
     name: null,
     type: null
   };
+  public delConfirmationDialog = null;
 
-  constructor(private store: Store<AppState>) {
+
+  constructor(private store: Store<AppState>, public dialog: MatDialog, public snackbar: MatSnackBar) {
     // get all facilities from the db
     this.store.dispatch(GetFacilities());
   }
@@ -59,24 +65,51 @@ export class AddFacilityReduxComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
+
+    // ignore it if no geolocation for the facility
+    // its also handled on the server side --isValidFacility.js middleware
+    if (this.facility.location[0] == null || this.facility.location[1] == null) {
+      const message = "select a location from the map, please";
+      this.snackbar.open(message, "Invalid", {
+        duration: 5000
+      });
+      return;
+    }
+
+
     const { _id, name, type, location } = this.facility;
 
-    if(this.mapMode == MapModeEnum.CREATE_FACILITY) {
+    if (this.mapMode == MapModeEnum.CREATE_FACILITY) {
       this.store.dispatch(addFacility({ facility: { name, type, location } }));
     } else {
-      this.store.dispatch(updateFacility({facility: { _id, name, type, location } }))
+      this.store.dispatch(updateFacility({ facility: { _id, name, type, location } }))
     }
   }
 
   OnAddBtn(): void {
+
     this.store.dispatch(ChangeMode({ mode: MapModeEnum.CREATE_FACILITY }));
   }
 
-  OnEditBtn():void {
+  OnEditBtn(): void {
     this.store.dispatch(ChangeMode({ mode: MapModeEnum.EDIT_FACILITY }));
   }
-  
-  OnDeleteBtn(): void {}
+
+  OnDeleteBtn(): void {
+
+    this.openDialog();
+    this.delConfirmationDialog.afterClosed().subscribe(result => {
+      if (result) {
+        const { _id, name, type, location } = this.facility;
+        this.store.dispatch(ChangeMode({ mode: MapModeEnum.DELETE_FACILITY }))
+        this.store.dispatch(DeleteFacility({ facility: { _id, name, type, location } }))
+      }
+    });
+  }
+
+  openDialog(): void {
+    this.delConfirmationDialog = this.dialog.open(ConfirmDialogComponent);
+  }
 
   OnCancelBtn(): void {
     this.store.dispatch(ChangeMode({ mode: MapModeEnum.NONE }));

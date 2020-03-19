@@ -5,7 +5,8 @@ export enum MapModeEnum {
   NONE = "NONE",
   CREATE_FACILITY = "CREATE_FACILITY",
   SELECT_FACILITY = "SELECT_FACILITY",
-  EDIT_FACILITY = "EDIT_FACILITY"
+  EDIT_FACILITY = "EDIT_FACILITY",
+  DELETE_FACILITY = "DELETE_FACILITY"
 };
 
 export interface FacilityReduxState extends EntityState<FacilityRedux> {

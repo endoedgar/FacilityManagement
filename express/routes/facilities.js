@@ -7,7 +7,7 @@ const authenticateJWT = require('../middlewares/authenticateJWT');
 const router = Router();
 
 /* GET facilities listing */
-router.get('/', async (req, res, next) => {
+router.get('/', authenticateJWT,async (req, res, next) => {
     try {
         res.status(200).send({ status: "success", data: await Facility.find() });
     } catch (err) {
@@ -16,7 +16,7 @@ router.get('/', async (req, res, next) => {
 });
 
 /* GET one facility */
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', authenticateJWT, async (req, res, next) => {
     try {
         const data = await Facility.findOne({ "_id": req.params.id });
         data ?
