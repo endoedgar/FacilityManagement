@@ -34,7 +34,8 @@ async function main() {
   app.use(handleRequestErrors);
   app.use(handleErrors);
 
-  return app.listen(port, _ => console.log(`Listening on port ${port}`));
+  server = app.listen(process.env.PORT || port, _ => console.log(`Listening on port ${server.address().port}`));
+  return server;
 }
 
 module.exports = main;
