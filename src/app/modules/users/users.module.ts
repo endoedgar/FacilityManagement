@@ -17,6 +17,7 @@ import { ApplicationPipesModule } from '../pipes.module';
 import { UserDetailComponent } from './user-detail/user-detail.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [UserListComponent, UserDetailComponent],
@@ -38,7 +39,8 @@ import { MatChipsModule } from '@angular/material/chips';
     MatTableModule,
     ApplicationPipesModule,
     MatProgressSpinnerModule,
-    MatChipsModule
+    MatChipsModule,
+    MatPaginatorModule
   ]
 })
 export class UsersModule { }
