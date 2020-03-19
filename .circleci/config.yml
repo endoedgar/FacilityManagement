@@ -11,69 +11,37 @@ executors:
           MONGODB_USERNAME: "test"
           MONGODB_PASSWORD: "test"
     working_directory: ~/working-dir
-  node_executor_angular:
-    docker:
-      - image: circleci/node:12.16.1
-    working_directory: ~/working-dir
 commands:
-  test_express:
-    description: "A command that tests express."
+  build_project:
+    description: "A command that tests express and builds the angular project."
     steps:
       - *attach_workspace
       - restore_cache:
           keys:
-            - v1-dependencies-express {{ checksum "workspace/repo/express/package-lock.json" }}
+            - v1-dependencies {{ checksum "workspace/repo/package-lock.json" }}
       - run:
           name: npm install
           command: |
-            cd workspace/repo/express
+            cd workspace/repo
             npm install
       - save_cache:
           paths:
-            - workspace/repo/express/node_modules
-          key: v1-dependencies-express {{ checksum "workspace/repo/express/package-lock.json" }}
+            - workspace/repo/node_modules
+          key: v1-dependencies {{ checksum "workspace/repo/package-lock.json" }}
       - run:
-          name: Create Dummy Config File
+          name: Create Dummy Secrets Config File
           command: >
-            echo '{"port": 4000, "mongoDB": "mongodb://127.0.0.1:27017/test", "accessTokenSecret": "What is it my dears?", "apiPath": "/api/v1" }' > workspace/repo/express/config.json
+            echo '{"mongoDB": "mongodb://127.0.0.1:27017/test", "accessTokenSecret": "What is it my dears?" }' > workspace/repo/express/secrets.json
       - run: |
-          cd workspace/repo/express
-          npm test
-  build_angular:
-    description: "A command that builds angular project."
-    steps:
-      - *attach_workspace
-      - run:
-          name: set-user-permissions
-          command: sudo chown -R $(whoami) $(npm config get prefix)/{lib/node_modules,bin,share}
-      - restore_cache:
-          keys:
-            - v3-dependencies-angular {{ checksum "workspace/repo/angular/FacilityMgt/package-lock.json" }}
-      - run:
-          name: Install @angular/cli
-          command: sudo npm install -g @angular/cli@latest > /dev/null
-      - run:
-          name: npm install
-          command: |
-            cd workspace/repo/angular/FacilityMgt
-            npm install
-      - run:
-          name: ng build
-          command: |
-            cd workspace/repo/angular/FacilityMgt
-            ng build
-      - save_cache:
-          paths:
-            - workspace/repo/angular/FacilityMgt/node_modules
-            - /usr/local/lib/node_modules
-          key: v3-dependencies-angular {{ checksum "workspace/repo/angular/FacilityMgt/package-lock.json" }}
+          cd workspace/repo
+          npm run test_express
       - run:
           name: Compress Artifacts
           command: |
-            cd workspace/repo/angular/FacilityMgt
+            cd workspace/repo
             tar -cvf dist.tar dist
       - store_artifacts:
-          path: workspace/repo/angular/FacilityMgt/dist.tar
+          path: workspace/repo/dist.tar
           destination: dist_artifact.tar
 jobs:
   checkout_code:
@@ -85,22 +53,15 @@ jobs:
           root: workspace
           paths:
             - repo
-  test_express_project:
+  build_angular_project:
     executor: node_executor
     steps:
-      - test_express
-  build_angular_project:
-    executor: node_executor_angular
-    steps:
-      - build_angular
+      - build_project
 workflows:
   version: 2
   main:
     jobs:
       - checkout_code
-      - test_express_project:
-          requires:
-            - checkout_code
       - build_angular_project:
           requires:
             - checkout_code
