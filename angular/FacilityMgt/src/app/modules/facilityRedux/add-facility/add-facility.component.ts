@@ -87,7 +87,6 @@ export class AddFacilityReduxComponent implements OnInit, OnDestroy {
   }
 
   OnAddBtn(): void {
-
     this.store.dispatch(ChangeMode({ mode: MapModeEnum.CREATE_FACILITY }));
   }
 
