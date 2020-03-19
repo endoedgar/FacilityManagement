@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import { MatTableDataSource } from "@angular/material/table";
 import { Inspection } from "src/app/models/Inspection";
 import { AppState } from "src/app/store/states/app.state";
@@ -12,6 +12,7 @@ import {
   deselectInspection
 } from "src/app/store/actions/inspection.actions";
 import { Subscription } from "rxjs";
+import { MatPaginator } from "@angular/material/paginator";
 
 @Component({
   selector: "app-inspections-table",
@@ -21,15 +22,10 @@ import { Subscription } from "rxjs";
 export class InspectionsTableComponent implements OnInit, OnDestroy {
   subscriptions$: Subscription[];
   inspectionsDS: MatTableDataSource<Inspection>;
-  columnsToDisplay = [
-    "facility",
-    "type",
-    "rating",
-    "inspector",
-    "id"
-  ];
+  columnsToDisplay = ["facility", "type", "rating", "inspector", "id"];
   currentInspection$ = this.store.select(selectCurrentInspection);
   currentInspection;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
   constructor(private store: Store<AppState>) {}
 
@@ -40,6 +36,7 @@ export class InspectionsTableComponent implements OnInit, OnDestroy {
       ),
       this.store.select(selectAllInspections).subscribe(state => {
         this.inspectionsDS = new MatTableDataSource<Inspection>(state);
+        setTimeout(_ => (this.inspectionsDS.paginator = this.paginator));
       })
     ];
   }

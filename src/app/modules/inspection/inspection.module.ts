@@ -18,6 +18,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { EsriMapComponent } from './esri-map/esri-map.component';
 import { InspectionsTableComponent } from './inspections-table/inspections-table.component';
 import { InspectionDetailComponent } from './inspections-detail/inspection-detail.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 const MY_ROUTES: Routes = [
@@ -40,7 +41,8 @@ const MY_ROUTES: Routes = [
     MatSnackBarModule,
     MatTableModule,
     MatIconModule,
-    MatDialogModule
+    MatDialogModule,
+    MatPaginatorModule
   ]
 })
 
