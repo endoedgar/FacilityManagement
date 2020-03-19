@@ -1,6 +1,9 @@
 # FacilityManagement
 https://miu-facility-management.herokuapp.com/
 
+## API Documentation
+[API Documentation](./express/README.MD)
+
 ## Enjoying the AWESOME!
 
 To run this locally:
