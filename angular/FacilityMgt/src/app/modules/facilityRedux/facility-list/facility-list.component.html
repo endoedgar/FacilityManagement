@@ -37,7 +37,7 @@
         <tr
           mat-row
           *matRowDef="let row; columns: displayedColumns"
-          [routerLink]="['/users/', row.name]"
+          (click)="openFacility(row)"
         ></tr>
       </table>
 
