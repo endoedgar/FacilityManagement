@@ -1,6 +1,6 @@
 {
-  "name": "angular-cli-esri-map",
-  "version": "0.0.0",
+  "name": "miu-facility-management",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "node express/app.js",
@@ -8,9 +8,10 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "ng build --output-path dist",
+    "heroku-postbuild": "ng build --output-path dist --prod",
     "test_express": "mocha express/test --exit"
   },
+  "heroku-run-build-script": true,
   "private": true,
   "dependencies": {
     "@angular/animations": "^9.0.6",
