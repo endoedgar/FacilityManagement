@@ -35,7 +35,6 @@ import { ApplicationPipesModule } from '../pipes.module';
     ApplicationPipesModule,
     FormsModule,
     ReactiveFormsModule,
-    ApplicationPipesModule,
     MatProgressSpinnerModule
   ],
   providers: [IdToDatePipe]
