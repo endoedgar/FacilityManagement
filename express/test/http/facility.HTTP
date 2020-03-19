@@ -2,7 +2,7 @@ GET http://localhost:4000/api/v1/facilities
 
 ###
 
-GET http://localhost:4000/api/v1/facilities/5e6b22cd1f2e2101ee32b0a
+GET http://localhost:4000/api/v1/facilities/5e71a25d21d3345f6cf11e87
 
 ###
 
@@ -23,7 +23,7 @@ Content-Type: application/json
 {
     "name": "Hildenbrand Hall",
     "type": "Dorm",
-    "location": [4321, 1234]
+    "location": [-91.96868369731011, 41.016623596247186]
 }
 
 ###

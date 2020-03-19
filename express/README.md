@@ -460,6 +460,13 @@ Inserts a new inspection on success.
     "__v": 0
 }
 ```
+##### 400:
+```json
+{
+  "status": "failed",
+  "message": "Data is Not Valid. Bad Request, My Dear!"
+}
+```
 ##### 500:
 ```json
 {

@@ -2,12 +2,12 @@ GET http://localhost:4000/api/v1/inspections
 
 ###
 
-DELETE  http://localhost:4000/api/v1/inspections/5e7147dac8fd9926c66ddee6
+DELETE  http://localhost:4000/api/v1/inspections/5e721d7b94f4c9471f2991b8
 
 
 ###
 
-GET http://localhost:4000/api/v1/inspections/5e6d6a188a489e21525699af
+GET http://localhost:4000/api/v1/inspections/5e721d7b94f4c9471f2991b8
 
 ###
 
