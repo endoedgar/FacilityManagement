@@ -18,8 +18,10 @@ router.get('/', authenticateJWT,async (req, res, next) => {
 /* GET one facility */
 router.get('/:id', authenticateJWT, async (req, res, next) => {
     try {
-        const facility = await Facility.findOne({ "_id": req.params.id });
-        facility ? res.status(200).send(facility) : res.status(404).send({ message: "Facility not found." });
+        const data = await Facility.findOne({ "_id": req.params.id });
+        data ?
+            res.status(200).send({ status: "success", facility: data }) :
+            res.status(404).send({ status: "failed", message: "Facility not found." });
     } catch (err) {
         return next(err);
     }
@@ -27,7 +29,7 @@ router.get('/:id', authenticateJWT, async (req, res, next) => {
 });
 
 /* POST one facility */
-router.post('/', json(), authenticateJWT, isValidFacility, async (req, res, next) => {
+router.post('/', authenticateJWT, json(), isValidFacility, async (req, res, next) => {
     try {
         const data = await new Facility(req.body).save();
         res.status(201).json({ status: "success", message: "Created Successfully!", data });
@@ -38,7 +40,7 @@ router.post('/', json(), authenticateJWT, isValidFacility, async (req, res, next
 });
 
 /* PATCH one facility */
-router.patch('/:id', json(), authenticateJWT, async (req, res, next) => {
+router.patch('/:id', authenticateJWT, json(), async (req, res, next) => {
     try {
         const data = await Facility.findOneAndUpdate({ "_id": req.params.id }, { "$set": req.body }, { new: true });
         res.status(202).json({ status: "success", message: "Updated Successfully!", data });

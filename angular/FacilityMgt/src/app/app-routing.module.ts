@@ -1,9 +1,10 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { DummyComponent } from "./components/dummyComponent/dummy.component";
+import { ErrorComponent } from "./components/error/error.component";
+import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [
-  { path: "", component: DummyComponent, pathMatch: "full" },
+  { path: "", component: HomeComponent, pathMatch: "full" },
   {
     path: "login",
     loadChildren: () =>
@@ -34,7 +35,7 @@ const routes: Routes = [
     loadChildren: () =>
       import("./modules/users/users.module").then(m => m.UsersModule)
   },
-  { path: "**", component: DummyComponent }
+  { path: "**", component: ErrorComponent }
 ];
 
 @NgModule({

@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild, OnDestroy } from "@angular/core";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "src/app/store/states/app.state";
 import { MatTableDataSource } from "@angular/material/table";
-import { Facility } from 'src/app/models/Facility';
 import { selectAllFacilities$, selectFacilitiesLoading$, getCurrentFacility$, selectFacilitiesMapMode$ } from 'src/app/store/selectors/facility-redux.selectors';
 import { GetFacilities, ChangeMode, SelectFacility } from 'src/app/store/actions/facility-redux.actions';
 import { MatPaginator } from '@angular/material/paginator';
@@ -18,7 +17,7 @@ import { Subscription } from 'rxjs';
 export class FacilityListComponent implements OnInit, OnDestroy {
   
   subscriptions$: Subscription[];
-  dataSource: MatTableDataSource<Facility>;
+  dataSource: MatTableDataSource<FacilityRedux>;
   displayedColumns: string[] = ["name", "type", "id"];
   loading$ = this.store.select(selectFacilitiesLoading$);
   facility$ = this.store.select(getCurrentFacility$);

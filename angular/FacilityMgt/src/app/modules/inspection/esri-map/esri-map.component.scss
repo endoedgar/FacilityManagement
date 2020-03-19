@@ -1,0 +1,12 @@
+/* import the required JSAPI css */
+@import url('https://js.arcgis.com/4.12/esri/css/main.css');
+
+.esri-view {
+  cursor: pointer;
+  min-height: 400px;
+}
+
+.mat-card {
+  width: 100%;
+}
+
