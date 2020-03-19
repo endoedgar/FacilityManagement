@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { accessTokenSecret } = require('../config.json');
+const { accessTokenSecret } = require("./loadSecrets");
 
 module.exports.getJWT = function(user) {
     const {password, ...userObject} = user;

@@ -1,25 +1,26 @@
-const  request = require('supertest');
+const request = require("supertest");
 
-const { apiPath } = require('../config.json');
+const { apiPath } = require("../config.json");
 
-describe('loading express', function () {
+describe("loading express", function() {
   let server;
-  beforeEach(async function () {
-    server = await require('../server')();
+  beforeEach(async function() {
+    server = await require("../server")();
   });
-  afterEach(function (done) {
+  afterEach(function(done) {
     server.close(done);
   });
 
-  it(`responds to ${apiPath}/users`, function testUsers(done) {
-  request(server)
-    .get(`${apiPath}/users`)
-    .expect(401, done);
+  it(`responds 401 to ${apiPath}/users`, function testUsers(done) {
+    request(server)
+      .get(`${apiPath}/users`)
+      .expect(401, done);
   });
 
-  it('404 everything else', function testPath(done) {
+  it("html to everything else", function testPath(done) {
     request(server)
-      .get('/foo/bar')
-      .expect(404, done);
+      .get("/foo/bar")
+      .expect('Content-type', /html/)
+      .expect(200, done);
   });
 });
