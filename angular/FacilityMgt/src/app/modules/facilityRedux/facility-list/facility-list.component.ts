@@ -51,4 +51,3 @@ export class FacilityListComponent implements OnInit, OnDestroy {
   }
 
 }
-
