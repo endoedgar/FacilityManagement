@@ -1,12 +1,12 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+
+import { environment } from '../../environments/environment';
 import { User } from '../models/User';
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
-  private BASE_URL = "http://localhost:4000/api/v1";
-
   constructor(private http: HttpClient) {}
 
   public setToken(token : string): void {
@@ -28,11 +28,11 @@ export class AuthService {
   }
 
   public logIn(username: string, password: string): Observable<any> {
-    return this.http.post(`${this.BASE_URL}/login`, { username, password });
+    return this.http.post(`${environment.apiUrl}/login`, { username, password });
   }
 
   public patch(username: string, data : User): Observable<any> {
-    return this.http.patch(`${this.BASE_URL}/users/${username}`, data);
+    return this.http.patch(`${environment.apiUrl}/users/${username}`, data);
   }
 
   public signUp(
@@ -41,7 +41,7 @@ export class AuthService {
     password: String,
     email: String
   ): Observable<any> {
-    return this.http.post(`${this.BASE_URL}/users`, {
+    return this.http.post(`${environment.apiUrl}/users`, {
       name,
       username,
       password,
