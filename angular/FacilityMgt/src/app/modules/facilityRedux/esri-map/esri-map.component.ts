@@ -16,7 +16,7 @@ import {
 import { IdToDatePipe } from "src/app/pipes/id-to-date.pipe";
 import { combineLatest, fromEvent, concat, Subscription } from "rxjs";
 import { FacilityRedux } from "src/app/models/FacilityRedux";
-import { withLatestFrom } from "rxjs/operators";
+import { withLatestFrom, map } from "rxjs/operators";
 import {
   SelectFacility,
   AddNewFacilityObjectOnMap
@@ -32,7 +32,8 @@ export class EsriMapComponent implements OnInit {
   loading$ = this.store.select(selectFacilitiesLoading$);
   mapMode$ = this.store.select(selectFacilitiesMapMode$);
   facility$ = this.store.select(getCurrentFacility$);
-  
+
+  mapModeString$ = this.store.select(selectFacilitiesMapMode$).subscribe(console.log);
 
   public mapView: __esri.MapView;
   getState = this.store.select(selectFacilityState$);
@@ -64,7 +65,7 @@ export class EsriMapComponent implements OnInit {
     private idToDatePipe: IdToDatePipe
   ) { }
 
-  
+
 
   public async initModules(): Promise<any> {
     // use esri-loader to load JSAPI modules
@@ -129,7 +130,7 @@ export class EsriMapComponent implements OnInit {
       // disable info template 
       if (mapMode == MapModeEnum.CREATE_FACILITY) {
         this.mapView.popup.autoOpenEnabled = false;
-      }else{
+      } else {
         this.mapView.popup.autoOpenEnabled = true;
       }
 
@@ -212,12 +213,11 @@ export class EsriMapComponent implements OnInit {
           this.mapMode = mapMode
         })
       ];
-
   }
 
   generateGraphic(facility: FacilityRedux, selected: boolean, imgUrl: string) {
     const drivenDate = this.idToDatePipe.transform(facility._id);
-    const enrichedFacility = {...facility, "date" : drivenDate  }
+    const enrichedFacility = { ...facility, "date": drivenDate }
 
     const pointGraphic: __esri.Graphic = new this.Graphic({
       attributes: enrichedFacility,
@@ -245,7 +245,7 @@ export class EsriMapComponent implements OnInit {
                 label: "Facility Type"
               },
               {
-                fieldName: "date" ,
+                fieldName: "date",
                 label: "Date"
               }
             ]
