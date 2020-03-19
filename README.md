@@ -2,7 +2,7 @@
 https://miu-facility-management.herokuapp.com/
 
 ## API Documentation
-[API Documentation](https://github.com/endoedgar/FacilityManagement/tree/MakeItDeployableOnHeroku/express)
+[API Documentation](https://github.com/endoedgar/FacilityManagement/tree/master/express)
 
 ## Enjoying the AWESOME!
 
