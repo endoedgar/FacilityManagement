@@ -14,7 +14,7 @@ import {
   selectAllFacilities$
 } from "src/app/store/selectors/facility-redux.selectors";
 import { IdToDatePipe } from "src/app/pipes/id-to-date.pipe";
-import { combineLatest, fromEvent, concat } from "rxjs";
+import { combineLatest, fromEvent, concat, Subscription } from "rxjs";
 import { FacilityRedux } from "src/app/models/FacilityRedux";
 import { withLatestFrom } from "rxjs/operators";
 import {
@@ -31,6 +31,8 @@ import { MapModeEnum } from "src/app/store/states/facility-redux.state";
 export class EsriMapComponent implements OnInit {
   loading$ = this.store.select(selectFacilitiesLoading$);
   mapMode$ = this.store.select(selectFacilitiesMapMode$);
+  facility$ = this.store.select(getCurrentFacility$);
+  
 
   public mapView: __esri.MapView;
   getState = this.store.select(selectFacilityState$);
@@ -41,6 +43,14 @@ export class EsriMapComponent implements OnInit {
   Graphic: any;
   GraphicsLayer: typeof import("esri/layers/GraphicsLayer");
   Color: typeof import("esri/Color");
+  subscriptions$: Subscription[];
+  mapMode: MapModeEnum;
+  facility: FacilityRedux = {
+    location: [null, null],
+    _id: null,
+    name: null,
+    type: null
+  };
 
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild("mapViewNode") private mapViewEl: ElementRef;
@@ -187,6 +197,22 @@ export class EsriMapComponent implements OnInit {
             break;
         }
       });
+
+      this.subscriptions$ = [
+        this.facility$.subscribe(facility => {
+  
+          if (facility) {
+            // this.mapView.zoom = 13;  // Sets the zoom LOD to 13
+            const obj = { target: facility.location, center: facility.location, scale: this.mapView.scale , zoom: this.mapView.zoom };
+            //const ops = {  duration: 1000, easing: "easeInOutQuad"};
+            this.mapView.goTo(obj);  // Sets the center point of the view at a specified lon/lat
+           }
+        }),
+        this.mapMode$.subscribe(mapMode => {
+          this.mapMode = mapMode
+        })
+      ];
+
   }
 
   generateGraphic(facility: FacilityRedux, selected: boolean, imgUrl: string) {
@@ -234,7 +260,4 @@ export class EsriMapComponent implements OnInit {
   OpenDialog(graphic) {
     this.dialogRef = this.dialog.open(ConfirmDialogComponent);
   }
- 
-  
-  
 }
