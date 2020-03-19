@@ -2,12 +2,21 @@ import { Component, OnInit, ViewChild, OnDestroy } from "@angular/core";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "src/app/store/states/app.state";
 import { MatTableDataSource } from "@angular/material/table";
-import { selectAllFacilities$, selectFacilitiesLoading$, getCurrentFacility$, selectFacilitiesMapMode$ } from 'src/app/store/selectors/facility-redux.selectors';
-import { GetFacilities, ChangeMode, SelectFacility } from 'src/app/store/actions/facility-redux.actions';
-import { MatPaginator } from '@angular/material/paginator';
-import { MapModeEnum } from 'src/app/store/states/facility-redux.state';
-import { FacilityRedux } from 'src/app/models/FacilityRedux';
-import { Subscription } from 'rxjs';
+import {
+  selectAllFacilities$,
+  selectFacilitiesLoading$,
+  getCurrentFacility$,
+  selectFacilitiesMapMode$
+} from "src/app/store/selectors/facility-redux.selectors";
+import {
+  GetFacilities,
+  ChangeMode,
+  SelectFacility
+} from "src/app/store/actions/facility-redux.actions";
+import { MatPaginator } from "@angular/material/paginator";
+import { MapModeEnum } from "src/app/store/states/facility-redux.state";
+import { FacilityRedux } from "src/app/models/FacilityRedux";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: "app-facility-list",
@@ -15,7 +24,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ["./facility-list.component.scss"]
 })
 export class FacilityListComponent implements OnInit, OnDestroy {
-  
   subscriptions$: Subscription[];
   dataSource: MatTableDataSource<FacilityRedux>;
   displayedColumns: string[] = ["name", "type", "id"];
@@ -31,14 +39,16 @@ export class FacilityListComponent implements OnInit, OnDestroy {
   };
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
-  constructor(private store: Store<AppState>) { }
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit() {
     this.store.dispatch(GetFacilities());
-    this.store.select(selectAllFacilities$).subscribe(facility => {
-      this.dataSource = new MatTableDataSource(facility);
-      this.dataSource.paginator = this.paginator;
-    });
+    this.subscriptions$ = [
+      this.store.select(selectAllFacilities$).subscribe(facility => {
+        this.dataSource = new MatTableDataSource(facility);
+        this.dataSource.paginator = this.paginator;
+      })
+    ];
   }
 
   ngOnDestroy(): void {
@@ -47,8 +57,6 @@ export class FacilityListComponent implements OnInit, OnDestroy {
 
   openFacility(row) {
     this.store.dispatch(ChangeMode({ mode: MapModeEnum.SELECT_FACILITY }));
-    this.store.dispatch(SelectFacility({facility:row}));
+    this.store.dispatch(SelectFacility({ facility: row }));
   }
-
 }
-
